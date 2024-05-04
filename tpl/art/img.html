@@ -1,0 +1,48 @@
+{{template "./tpl/base.html"}}
+{{define "title"}} img art {{end}}
+
+{{block "content" .}}
+
+<h1 class="lead my-3">img art title : {{ .Title }}</h1>
+
+<form class="card" method="POST" enctype="multipart/form-data">
+
+        <div class="card-footer">
+            <div class="mb-2">
+                <input
+                    type="file"
+                    name="file"
+                    class="form-control"
+                />
+                <div id="help" class="form-text"></div>
+            </div>
+            <div class="m-2 ">
+                <button type="submit" class="btn btn-outline-primary btn-sm">
+                    submit
+                </button>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+{{ if ne .Img nil }}
+<div class="card">
+<figure class="m-3">
+    <img src="{{ .Img }}" height="128">
+<figcaption>
+    <span class="d-block">{{ .Img }}</span>
+</figcaption>
+</figure>
+</div>
+
+<a class="btn btn-outline-danger btn-sm m-2" href="/del-img-art?id={{.Id}}" role="button">
+    del img
+</a>
+{{ else }}
+null
+{{ end }}
+
+
+{{end}}

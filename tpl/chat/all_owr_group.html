@@ -1,0 +1,71 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} owner group {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">all owner group</h1>
+	
+{{ range . }}
+
+<div class="card">
+	
+<div class="card-body">
+<ul class="list-group list-group-flush">
+
+	<li class="list-group-item">
+	<span class="d-block">
+		<span class="badge text-bg-primary">completed:</span> {{ .Completed }}
+	</span>
+	<span class="badge text-bg-light">id:</span> {{ .Id }},
+	<span class="badge text-bg-light">author:</span> {{ .Owner }}
+	</li>
+	<li class="list-group-item">
+		<sup>title:</sup> {{ .Title }}
+	</li>
+	<li class="list-group-item">
+		<sup>description:</sup> {{ .Description }}
+	</li>
+
+	<li class="list-group-item">
+	{{ if ne .Img nil }}
+	<sup class="d-block">img:</sup>
+	<figure class="m-2">
+		<img src="{{ .Img }}" height="64">
+	</figure>
+	{{ else }}
+	null
+	{{ end }}
+	</li>
+
+	<li class="list-group-item">
+	<sup>created:</sup>
+	<time>
+	{{ .Created_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	</li>
+	<li class="list-group-item">
+	{{ if ne .Updated_at nil }}
+	<sup>updated:</sup> 
+	<time>
+	{{ .Updated_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	{{ else }}
+		there are no updates
+	{{ end }}
+	</li>
+</ul>
+</div>
+
+<div class="card-footer">
+<a class="btn btn-outline-primary btn-sm" href="/detail-group?id={{ .Id }}" role="button">
+	details
+</a>
+</div>
+
+</div>
+
+<hr>
+
+{{ end }}
+	  
+{{ end }}

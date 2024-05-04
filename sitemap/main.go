@@ -1,0 +1,5 @@
+package sitemap
+
+
+func init() {
+}

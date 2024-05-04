@@ -1,0 +1,60 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} all user subscription {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">all subscription</h1>
+	
+{{ range . }}
+
+<div class="card">
+<div class="card-body">
+	
+<ul class="list-group list-group-flush">
+
+	<li class="list-group-item">
+		<span class="badge text-bg-primary">completed:</span> {{ .Completed }}
+	</li>
+
+	<li class="list-group-item">
+		{{ if ne .To_user nil }}
+		<span class="badge text-bg-light">to user:</span> {{ .To_user }}
+		{{ else }}
+		<span class="badge text-bg-light">to group:</span> {{ .To_group }}
+		{{ end }}
+	</li>
+
+	<li class="list-group-item">
+		<span class="badge text-bg-light">id:</span> {{ .Id }},
+		<span class="badge text-bg-light">owner:</span> {{ .Owner }}
+	</li>
+	
+	<li class="list-group-item">
+		<sup>title:</sup> {{ .Title }}
+	</li>
+
+	<li class="list-group-item">
+	<sup>created:</sup>
+	<time>
+	{{ .Created_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	</li>
+	<li class="list-group-item">
+	{{ if ne .Updated_at nil }}
+	<sup>updated:</sup> 
+	<time>
+	{{ .Updated_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	{{ else }}
+		there are no updates
+	{{ end }}
+	</li>
+</ul>
+</div>
+</div>
+
+<hr>
+
+{{ end }}
+	  
+{{ end }}

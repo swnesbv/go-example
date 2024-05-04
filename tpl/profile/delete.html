@@ -1,0 +1,16 @@
+
+{{ template "./tpl/base.html" }}
+{{ define "title" }} delete user {{ end }}
+
+{{ block "content" .}}
+
+<h1 class="container lead my-3">delete user: {{ .Items }}</h1>
+	
+<form class="card" method="POST">
+<div class="card-footer">
+	<input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-3">
+</div>
+	
+</form>
+	  
+{{ end }}

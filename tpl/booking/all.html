@@ -1,0 +1,76 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} all booking {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">all booking</h1>
+	
+{{ range . }}
+
+<div class="card">
+
+<div class="card-body">
+<ul class="list-group list-group-flush">
+
+	<li class="list-group-item">
+		<span class="badge text-bg-light">id</span>{{ .Id }},
+		<span class="badge text-bg-light">owner</span>{{ .Owner }}
+	</li>
+
+	{{ if ne .St_date nil }}
+	<li class="list-group-item">
+		<small class="badge text-bg-light">start d</small>
+		{{ .St_date.Format "2006-01-02" }}
+		<small class="badge text-bg-light">end d</small>
+		{{ .En_date.Format "2006-01-02" }}
+	</li>
+	{{ end }}
+	{{ if ne .St_hour nil }}
+	<li class="list-group-item">
+		<small class="badge text-bg-light">start h</small>
+		{{ .St_hour.Format "2006-01-02 15:04:05" }}
+		<small class="badge text-bg-light">end h</small>
+		{{ .En_hour.Format "2006-01-02 15:04:05" }}
+	</li>
+	{{ end }}
+
+	<li class="list-group-item">
+		<sup>title</sup> {{ .Title }}
+	</li>
+	<li class="list-group-item">
+		<sup>completed</sup> {{ .Completed }}
+	</li>
+
+	<li class="list-group-item">
+	<sup>created:</sup>
+	<time>
+	{{ .Created_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	</li>
+	<li class="list-group-item">
+	{{ if ne .Updated_at nil }}
+	<sup>updated:</sup> 
+	<time>
+	{{ .Updated_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	{{ else }}
+		there are no updates
+	{{ end }}
+	</li>
+</ul>
+
+</div>
+
+<div class="card-footer">
+<a class="btn btn-outline-primary btn-sm" href="/id-bkg?id={{ .Id }}" role="button">
+	details
+</a>
+</div>
+
+</div>
+
+<hr>
+
+{{ end }}
+	  
+{{ end }}

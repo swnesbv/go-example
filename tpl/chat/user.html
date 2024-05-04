@@ -1,0 +1,83 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} chat user {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="lead m-3">🗨️ Chat <small>user: ( {{ .Uid }}, {{ .Uemail }} )</small></h1>
+
+<div class="card p-2 mb-2">
+    {{ range .T }}
+        to: ( {{ .User_id }}, {{ .Email }} )
+    {{ end }}
+</div>
+
+<div class="card">
+    {{ range .I }}
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <sup class="float-end mt-2">coming</sup>
+            {{ .Coming }}
+        </li>
+    </ul>
+    {{ end }}
+</div>
+
+<hr>
+
+<div class="card"> 
+    <div id="msg" class="card-body mb-3"></div>
+</div>
+
+<div class="card">
+<div class="card-body mb-3">
+    
+    <form class="card p-2 mb-1" method="POST">
+        <sup class="mt-2 ms-2">message</sup>
+        <div class="card-body">
+            <input name="message" type="text" id="messageinput" class="form-control" value="Lorem ipsum">
+        </div>
+
+        <div class="card-footer">
+            <input id="btnmsg"  type="button" value="send" class="btn btn-sm btn-outline-primary my-2">
+        </div>
+
+    </form>
+
+    <div id="target"></div>
+</div>
+</div>
+
+<script>
+
+let add_msg = document.querySelector("#msg");
+
+let btnmsg = document.querySelector("#btnmsg");
+let user = document.getElementById("#user");
+let messageinput = document.getElementById("messageinput");
+
+let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+let ws_str = ws_scheme + "://" + window.location.host + "/user/us?id=" + {{ .Ssc }};
+let ws = new WebSocket(ws_str);
+
+
+ws.onmessage = function (event) {
+
+    let data = JSON.parse(event.data);
+
+    add_msg.innerHTML +=
+        '<div class="shadow w-75 list-group-item float-end my-1">' +  data.message + '</div>'
+};
+
+btnmsg.addEventListener("click", (event) => {
+    message = messageinput.value;
+
+    ws.send(JSON.stringify(
+        {"message": message}
+    ));
+    event.preventDefault();
+    messageinput.value = "";
+});
+
+</script>
+
+{{ end }}

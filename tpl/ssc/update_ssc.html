@@ -1,0 +1,30 @@
+{{ template "./tpl/base.html" }}
+{{ define "title"}} update subscription {{ end }}
+
+{{ block "content" .}}
+
+<h1 class="container lead my-3">approve or reject..? <small>update form: {{ .Title }}</small></h1>
+<p>{{ .Description }}</p>
+	
+<form class="card" method="POST">
+
+    <div class="card-body">
+
+    <div class="m-3">
+        <sup class="float-start mb-2">completed</sup>
+        <input
+            checked
+            type="checkbox"
+            name="completed"
+        />
+    </div>
+
+    </div>
+
+    <div class="card-footer">
+    <input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
+    </div>
+
+</form>
+	  
+{{end}}

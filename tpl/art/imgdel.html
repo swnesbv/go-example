@@ -1,0 +1,27 @@
+{{template "./tpl/base.html"}}
+{{define "title"}} del img art {{end}}
+
+{{block "content" .}}
+
+<h1 class="lead my-3">del img art title : {{ .Title }}</h1>
+
+<div class="card">
+
+{{ if ne .Img nil }}
+<figure class="m-2">
+    <img src="{{ .Img }}" height="256">
+</figure>
+{{ else }}
+no img
+{{ end }}
+
+<form class="card" method="POST">
+
+<div class="card-footer">
+<input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
+</div>
+    
+</form>
+</div>
+
+{{end}}

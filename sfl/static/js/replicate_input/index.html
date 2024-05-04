@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Replicate.js Plugin Examples</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.2/flatly/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container row m-5">
+
+<form action="" method="post" id="formID">
+
+    <div class="jumbotron mt-3" data-x-wrapper="list_start">
+        
+        <div class="d-flex my-2" data-x-group>
+            <input type="datetime-local" name="list_start" class="ml-2">
+            <div class="ml-2">
+                <button type="button" class="btn btn-danger" data-remove-btn>-</button>
+                <button type="button" class="btn btn-primary" data-add-btn>+</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="action-buttons">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="./replicate.js"></script>
+
+<script>
+    const selector = '[data-x-wrapper]';
+    let options = {
+        disableNaming: '[data-disable-naming]',
+        wrapper: selector,
+        group: '[data-x-group]',
+        addBtn: '[data-add-btn]',
+        removeBtn: '[data-remove-btn]'
+    };
+
+    $(selector).replicate(options);
+
+    // const form = $('#formID');
+
+    // $(form).on('submit', (e) => {
+    //     e.preventDefault();
+
+    //     console.log($(e.target).serializeArray())
+    // })
+
+</script>
+
+</body>
+
+</html>

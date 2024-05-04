@@ -1,0 +1,104 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} chat title {{ end }}
+
+
+{{ block "content" . }}
+
+<style>
+    #messages {
+        flex-grow: 1;
+        overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    #messages div {
+        background: rgb(33 30 57);
+        padding: 0.5rem 0.75rem;
+        width: fit-content;
+        border-radius: 1.5rem;
+    }
+
+    form {
+        position: relative;
+    }
+
+    input {
+        width: 100%;
+        min-width: 0;
+        font-family: "Inter", sans-serif;
+        background: rgb(52, 39, 88);
+        color: rgb(255 255 255);
+        border-radius: 1.5rem;
+        padding: 0.75rem 3rem 0.75rem 1rem;
+        border: none;
+        font-size: 1.2rem;
+    }
+
+    ::placeholder {
+        color: rgb(255 255 255 / 50%);
+    }
+
+    button {
+        position: absolute;
+        top: 0.3rem;
+        right: 0.4rem;
+        font-size: 1.75rem;
+        font-family: "Inter", sans-serif;
+        background: none;
+        color: rgb(255 255 255);
+        padding: 0;
+        border-radius: 2rem;
+        border: none;
+    }
+</style>
+
+
+<h1>🗨️ Chat</h1>
+<div id="messages"></div>
+<form>
+    <input
+        id="message"
+        placeholder="Message"
+        aria-label="Message"
+        required
+        autofocus
+    />
+    <button aria-label="Send">✉️</button>
+</form>
+
+
+<script>
+
+    let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+    let websocket_str = `${ws_scheme}://${window.location.host}/ws`;
+    let ws = new WebSocket(websocket_str);
+
+    ws.addEventListener("open", (e) => {
+        console.log("open", e);
+    });
+    ws.addEventListener("message", (e) => {
+        console.log("message", e);
+        const messages = document.getElementById("messages");
+        const message = document.createElement("div");
+        message.textContent = e.data;
+        messages.appendChild(message);
+        messages.scrollTop = messages.scrollHeight;
+    });
+    ws.addEventListener("close", (e) => {
+        console.log("close", e);
+    });
+    ws.addEventListener("error", (e) => {
+        console.error("error", e);
+    });
+
+    document.querySelector("form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const input = document.getElementById("message");
+        ws.send(input.value);
+        input.value = "";
+    });
+</script>
+
+{{ end }}

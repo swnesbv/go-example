@@ -1,0 +1,62 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} all user subscription {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">all to group subscription</h1>
+	
+{{ range . }}
+<ul class="list-group list-group-flush">
+
+	<li class="list-group-item">
+		<sup>id:</sup> {{ .Id }},
+		<sup>owner:</sup> {{ .Owner }}
+	</li>
+	<li class="list-group-item">
+		<sup>title:</sup> {{ .Title }}
+	</li>
+
+	<li class="list-group-item">
+		{{ if ne .To_user nil }}
+		<sup>to user:</sup> {{ .To_user }}
+		{{ else }}
+		<sup>to group:</sup> {{ .To_group }}
+		{{ end }}
+	</li>
+	<li class="list-group-item">
+		<sup>completed:</sup> {{ .Completed }}
+	</li>
+
+
+	<li class="list-group-item">
+	<sup>created:</sup>
+	<time>
+	{{ .Created_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	</li>
+	<li class="list-group-item">
+	{{ if ne .Updated_at nil }}
+	<sup>updated:</sup> 
+	<time>
+	{{ .Updated_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	{{ else }}
+		there are no updates
+	{{ end }}
+	</li>
+
+</ul>
+
+<div class="card my-2">
+<div class="card-footer">
+<a class="btn btn-outline-primary btn-sm" href="/group-ssc?id={{ .Id }}" role="button">
+	accept subscription
+</a>
+</div>
+</div>
+
+<hr>
+
+{{ end }}
+	  
+{{ end }}

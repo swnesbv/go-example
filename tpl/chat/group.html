@@ -1,0 +1,126 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} group chat {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="lead my-3">group 🗨️ Chat</h1>
+
+<div class="card">
+
+<div class="card-header">
+    <h2 class="lead"><small>group:</small> {{ .D.Title }}</h2>
+</div>
+
+<div class="card-body">
+<ul class="list-group list-group-flush">
+
+    <li class="list-group-item">
+        <span class="badge text-bg-light">id:</span> {{ .D.Id }}, <span class="badge text-bg-light">author:</span> {{ .D.Owner }}
+    </li>
+    <li class="list-group-item">
+        <sup>title:</sup> {{ .D.Title }}
+    </li>
+    <li class="list-group-item">
+        <sup>description:</sup> {{ .D.Description }}
+    </li>
+
+    <li class="list-group-item">
+    <sup>created:</sup>
+    <time>
+    {{ .D.Created_at.Format "2006-01-02 15:04:05" }}
+    </time>
+    </li>
+
+    <li class="list-group-item">
+    {{ if ne .D.Updated_at nil }}
+    <sup>updated:</sup> 
+    <time>
+    {{ .D.Updated_at.Format "2006-01-02 15:04:05" }}
+    </time>
+    {{ else }}
+        there are no updates
+    {{ end }}
+    </li>
+</ul>
+</div>
+
+{{ if ne .D.Img nil }}
+<figure class="m-2">
+    <img src="{{ .D.Img }}" height="256">
+</figure>
+{{ else }}
+no img
+{{ end }}
+
+</div>
+
+<h2 class="lead m-3">message</h2>
+
+<div class="card">
+    {{ range .I }}
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <sup class="float-end mt-2">coming</sup>
+            {{ .Coming }}
+        </li>
+    </ul>
+    {{ end }}
+</div>
+
+<div class="card m-3"> 
+    <div id="msg" class="card-body"></div>
+</div>
+
+<div class="card"> 
+<div class="card-body mb-3">
+    
+    <form class="card p-2 mb-1" method="POST">
+        <sup class="mt-2 ms-2">message</sup>
+        <div class="card-body">
+            <input name="message" type="text" id="messageinput" class="form-control" value="Lorem ipsum">
+        </div>
+
+        <div class="card-footer">
+            <input id="btnmsg"  type="button" value="send" class="btn btn-sm btn-outline-primary my-2">
+        </div>
+
+    </form>
+
+    <div id="target"></div>
+</div>
+</div>
+
+<script>
+
+let add_msg = document.querySelector("#msg");
+
+let btnmsg = document.querySelector("#btnmsg");
+let user = document.getElementById("#user");
+let messageinput = document.getElementById("messageinput");
+
+let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+let ws_str = ws_scheme + "://" + window.location.host + "/group/rs?id=" +{{ .D.Id }};
+let ws = new WebSocket(ws_str);
+
+
+ws.onmessage = function (event) {
+
+    let data = JSON.parse(event.data);
+
+    add_msg.innerHTML +=
+        '<div class="shadow w-75 list-group-item float-end my-1">' +  data.message + '</div>'
+};
+
+btnmsg.addEventListener("click", (event) => {
+    message = messageinput.value;
+
+    ws.send(JSON.stringify(
+        {"message": message}
+    ));
+    event.preventDefault();
+    messageinput.value = "";
+});
+
+</script>
+
+{{ end }}

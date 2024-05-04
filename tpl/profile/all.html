@@ -1,0 +1,53 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} all user {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">all user</h1>
+
+{{ if .Auth }}
+<span>author: {{ .Auth }}</span>
+<hr>
+{{ end }}
+
+{{ if .Auth }}
+
+{{ range .I }}
+<ul class="list-group list-group-flush">
+
+	<li class="list-group-item">
+	<span class="badge text-bg-light">name</span>{{ .Username }}
+	</li>
+	<li class="list-group-item">
+	<span class="badge text-bg-light">email</span>{{ .Email }}
+	</li>
+
+	<li class="card">
+	<div class="card-footer">
+	<a class="btn btn-outline-primary btn-sm m-2" href="/adduser-ssc?id={{ .User_id }}" role="button">
+		add subscription
+	</a>
+	</div>
+	</li>
+</ul>
+
+<hr>
+
+{{ end }}
+
+{{ else }}
+
+<ul class="list-group list-group-flush">
+{{ range .I }}
+	<li class="list-group-item">
+	<span class="badge text-bg-light">name</span>{{ .Username }}
+	</li>
+	<li class="list-group-item">
+	<span class="badge text-bg-light">email</span>{{ .Email }}
+	</li>
+{{ end }}
+</ul>
+
+{{ end }}
+
+{{ end }}

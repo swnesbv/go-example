@@ -1,0 +1,28 @@
+{{template "./tpl/base.html"}}
+{{define "title"}} export csv art {{end}}
+
+{{block "content" .}}
+
+<h1 class="lead my-3">export csv art</h1>
+<form class="card" method="POST" enctype="multipart/form-data">
+
+        <div class="card-footer">
+            <div class="mb-2">
+                <input
+                    type="file"
+                    name="file"
+                    class="form-control"
+                />
+                <div id="help" class="form-text"></div>
+            </div>
+            <div class="m-2 ">
+                <button type="submit" class="btn btn-outline-primary btn-sm">
+                    submit
+                </button>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+{{end}}

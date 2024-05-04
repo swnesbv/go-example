@@ -1,0 +1,19 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} search article {{ end }}
+
+{{block "content" .}}
+
+<h1 class="container lead mt-3">search</h1>
+<div class="card">
+    <div class="card-body">
+
+        {{ range . }}
+            <a class="page-link" href="/detail-art?id={{ .Id }}">
+                {{ .Title }}
+            </a>
+        {{ end }}
+
+    </div>
+</div>
+
+{{ end }}

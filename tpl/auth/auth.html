@@ -1,0 +1,20 @@
+{{template "./tpl/base.html"}}
+{{define "title"}} auth token {{end}}
+
+{{block "content" .}}
+	
+	<h1 class="container lead my-3">auth token</h1>
+
+<ul class="list-group list-group-flush">
+
+	<li class="list-group-item">
+		<sup>user_id:</sup> {{.User_id}}
+	</li>
+	<li class="list-group-item">
+		<sup>email:</sup> {{ .Email }}
+	</li>
+
+</ul>
+
+	  
+{{end}}

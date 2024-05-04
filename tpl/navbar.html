@@ -1,0 +1,374 @@
+{{template "./tpl/base.html"}}
+
+
+{{block "navbar" .}}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-5">
+    <div class="container-fluid">
+        <a href="/"><img
+            src="/static/appimg/logo.svg"
+            alt="logo"
+            height="32"
+        /></a>
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-expanded="false"
+                >&</a
+            >
+            <ul class="dropdown-menu">
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/login">login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/signup"
+                        >signup</a
+                    >
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/onauth">on auth</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/auth"
+                        >auth</a
+                    >
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                profile
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/alluser">all user</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/update-name"
+                        >update name</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/update-password"
+                        >update password</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/send-email"
+                        >send email</a
+                    >
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/delete-user"
+                        >delete user</a
+                    >
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                article
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/article"
+                        >home article</a
+                    >
+                </li>
+                
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creativity"
+                        >creativity</a
+                    >
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/article"
+                        >home article</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/allarticle"
+                        >all article</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/author-id-article"
+                        >author id article</a
+                    >
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                csv
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/csv-imp-art"
+                        >article import csv</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/csv-exp-art"
+                        >article export csv</a
+                    >
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/csv-imp-rcg"
+                        >schedule import csv</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/csv-exp-rcg"
+                        >schedule export csv</a
+                    >
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                chat
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/chat"
+                        >home chat</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-group"
+                        >all group</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/owner-group"
+                        >owner group</a
+                    >
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creat-group"
+                        >creat group</a
+                    >
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                subscription
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/subscription">all subscription</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-ssc">owner subscription</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-touser-ssc"
+                        >all to user ssc</a
+                    >
+                </li>
+                
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-toroom-ssc"
+                        >all- to group ssc</a
+                    >
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                sch & rcg
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creat-schedule">creat schedule</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-selection">selection</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-schedule">all schedule</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-recording">all recording</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creat-period"
+                        >creat period</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-sch-search"
+                        >all sch search</a
+                    >
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                prv & bkg
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creat-period-days">creat period days</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creat-period-hours">creat period hours</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/search-period-days">search days period</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/search-period-hours">search hours period</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-prv-days">all days prv</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-prv-hours">all hours prv</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creat-days">creat prv days</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creat-hours">creat prv hours</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-bkg">all bkg</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/creat-bkg">creat bkg</a>
+                </li>
+
+            </ul>
+        </li>
+
+        </ul>
+
+        <form class="d-flex" action="/search">
+        <input
+            class="form-control me-2"
+            name="q"
+            type="search"
+            placeholder="search to article"
+            aria-label="search"
+        />
+
+        <button class="btn btn-outline-success" type="submit">
+            search
+        </button>
+
+        </form>
+
+        </div>
+    </div>
+</nav>
+
+{{end}}

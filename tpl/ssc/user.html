@@ -1,0 +1,75 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} to user subscription {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">to user subscription</h1>
+	
+{{ range . }}
+
+<div class="card">
+
+<div class="card-header">
+<a class="btn btn-outline-primary btn-sm" href="/user?id={{ .Id }}" role="button">
+	<span class="badge text-bg-primary">to chat user</span> {{ .Id }}
+</a>
+</div>
+
+<div class="card-body">
+
+<ul class="list-group list-group-flush">
+
+	<li class="list-group-item">
+		{{ if ne .To_user nil }}
+		<span class="badge text-bg-light">to user:</span> {{ .To_user }}
+		{{ else }}
+		<span class="badge text-bg-light">to group:</span> {{ .To_group }}
+		{{ end }}
+	</li>
+
+	<li class="list-group-item">
+		<span class="badge text-bg-light">id:</span> {{ .Id }},
+		<span class="badge text-bg-light">owner:</span> {{ .Owner }}
+	</li>
+
+	<li class="list-group-item">
+		<sup>title:</sup> {{ .Title }}
+	</li>
+
+	<li class="list-group-item">
+		<sup>completed:</sup> {{ .Completed }}
+	</li>
+
+
+	<li class="list-group-item">
+	<sup>created:</sup>
+	<time>
+	{{ .Created_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	</li>
+	<li class="list-group-item">
+	{{ if ne .Updated_at nil }}
+	<sup>updated:</sup> 
+	<time>
+	{{ .Updated_at.Format "2006-01-02 15:04:05" }}
+	</time>
+	{{ else }}
+		there are no updates
+	{{ end }}
+	</li>
+</ul>
+
+<div class="card-footer">
+<a class="btn btn-outline-primary btn-sm m-2" href="/user-ssc?id={{ .Id }}" role="button">
+	accept subscription
+</a>
+</div>
+
+</div>
+</div>
+
+<hr>
+
+{{ end }}
+	  
+{{ end }}
