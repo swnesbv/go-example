@@ -67,13 +67,12 @@ func UpName(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 
-		user := User{
-			Username: r.FormValue("username"),
-		}
+		owner := cls.User_id
+		username := r.FormValue("username")
 
 		sqlstr := "UPDATE users SET username=$2, updated_at=$3 WHERE user_id=$1"
 
-		_, err := conn.Exec(sqlstr, cls.User_id, user.Username, time.Now())
+		_, err := conn.Exec(sqlstr, owner,username,time.Now())
 
 		if err != nil {
 			fmt.Fprintf(w, "err Exec..! : %+v\n", err)
@@ -110,12 +109,13 @@ func UpPass(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 
+		owner := cls.User_id
 		password := r.FormValue("password")
 		hash, _  := hashPassword(password)
 
 		sqlstr := "UPDATE users SET password=$2, updated_at=$3 WHERE user_id=$1"
 
-		_, err := conn.Exec(sqlstr, cls.User_id,hash,time.Now())
+		_, err := conn.Exec(sqlstr, owner,hash,time.Now())
 
 		if err != nil {
 			fmt.Fprintf(w, "err Exec..! : %+v\n", err)
@@ -190,10 +190,11 @@ func VerifyEmail(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
 
+		owner := cls.User_id
 		conn := connect.ConnSql()
 		sqlst := "UPDATE users SET email=$2, updated_at=$3 WHERE user_id=$1"
 
-		_, err := conn.Exec(sqlst, cls.User_id,veri_email.Email,time.Now())
+		_, err := conn.Exec(sqlst, owner,veri_email.Email,time.Now())
 
 		if err != nil {
 			fmt.Fprintf(w, "err Exec..! : %+v\n", err)
@@ -233,7 +234,8 @@ func DelUs(w http.ResponseWriter, r *http.Request) {
 		conn := connect.ConnSql()
 		sqlstr := "DELETE FROM users WHERE user_id=$1"
 
-		_, err := conn.Exec(sqlstr, cls.User_id)
+		owner := cls.User_id
+		_, err := conn.Exec(sqlstr, owner)
 
 		if err != nil {
 			fmt.Fprintf(w, "err Exec..! : %+v\n", err)

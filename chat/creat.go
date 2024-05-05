@@ -13,7 +13,7 @@ import (
 )
 
 
-func Creativity(w http.ResponseWriter, r *http.Request) {
+func Creat(w http.ResponseWriter, r *http.Request) {
 
     cls,err := authtoken.OnToken(w,r)
     if cls == nil {
@@ -26,26 +26,24 @@ func Creativity(w http.ResponseWriter, r *http.Request) {
     if r.Method == "GET" {
 
         tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/chat/creativity.html", "./tpl/base.html" ))
-
         tpl.ExecuteTemplate(w, "base", nil)
     }
 
 
     if r.Method == "POST" {
         
-        i := CreatGroup{
-            Title: r.FormValue("title"),
-            Description: r.FormValue("description"),
-        }
-        sqlstr := "INSERT INTO groups (title, description, owner, created_at) VALUES ($1,$2,$3,$4)"
+        owner := cls.User_id
+        title := r.FormValue("title")
+        description := r.FormValue("description")
 
-        _, err := db.Exec(sqlstr, i.Title,i.Description,cls.User_id,time.Now())
+        sqlstr := "INSERT INTO groups (title, description, owner, created_at) VALUES ($1,$2,$3,$4)"
+        _, err := db.Exec(sqlstr, title,description,owner,time.Now())
 
         if err != nil {
             fmt.Fprintf(w, "err db.Exec()..! : %+v\n", err)
             return
         }
-        http.Redirect(w, r, "/all-group", http.StatusFound)
+        http.Redirect(w,r, "/all-group", http.StatusFound)
     }
 }
 
@@ -87,19 +85,18 @@ func UpGr(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
 
-        i := UpdateGroup{
-            Title: r.FormValue("title"),
-            Description: r.FormValue("description"),
-        }
+        owner := cls.User_id
+        title := r.FormValue("title")
+        description := r.FormValue("description")
 
         sqlstr := "UPDATE groups SET title=$3, description=$4, completed=$5, updated_at=$6 WHERE id=$1 AND owner=$2"
         
-        _, err := db.Exec(sqlstr, id,cls.User_id,i.Title,i.Description,flag,time.Now())
+        _, err := db.Exec(sqlstr, id,owner,title,description,flag,time.Now())
         
         if err != nil {
             fmt.Fprintf(w, "err db.Exec()..! : %+v\n", err)
             return
         }
-        http.Redirect(w,r, "/owner-group", http.StatusFound)
+        http.Redirect(w,r, "/all-or-owner-group", http.StatusFound)
     }
 }

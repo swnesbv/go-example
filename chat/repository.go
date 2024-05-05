@@ -76,8 +76,20 @@ func qSscGrChUs(w http.ResponseWriter, id int) (list []int,err error) {
         }
         list = append(list, i.Owner)
     }
-    fmt.Println("group list..", list)
+    fmt.Println(" user to group list..", list)
     return list,err
+}
+
+func qAdmin(w http.ResponseWriter, id int, owner int) (i Group) {
+
+    row := db.QueryRow("SELECT id,owner,completed FROM groups WHERE id=$1 AND owner=$2 AND completed=$3", id,owner,true)
+
+    _ = row.Scan(
+        &i.Id,
+        &i.Owner,
+        &i.Completed,
+    )
+    return i
 }
 
 

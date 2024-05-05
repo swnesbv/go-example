@@ -87,6 +87,7 @@ func IdPrvDays(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
 
+        owner := cls.User_id
         title       := r.FormValue("title")
         description := r.FormValue("description")
 
@@ -111,7 +112,7 @@ func IdPrvDays(w http.ResponseWriter, r *http.Request) {
         fmt.Println(" end list..", e_list)
 
         bkg := "INSERT INTO booking (title,description,owner,to_prv,st_date,en_date,created_at) VALUES ($1,$2,$3,$4,$5,$6,$7)"
-        _, berr := conn.Exec(bkg, title,description,cls.User_id,id,start,end,time.Now())
+        _, berr := conn.Exec(bkg, title,description,owner,id,start,end,time.Now())
         if berr != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", berr)
             return
@@ -160,6 +161,7 @@ func IdPrvHours(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
 
+        owner := cls.User_id
         title       := r.FormValue("title")
         description := r.FormValue("description")
 
@@ -188,7 +190,7 @@ func IdPrvHours(w http.ResponseWriter, r *http.Request) {
         e_list = append(e_list, end)
 
         bkg := "INSERT INTO booking (title,description,owner,to_prv,st_hour,en_hour,created_at) VALUES ($1,$2,$3,$4,$5,$6,$7)"
-        _, berr := conn.Exec(bkg, title,description,cls.User_id,id,start,end,time.Now())
+        _, berr := conn.Exec(bkg, title,description,owner,id,start,end,time.Now())
         
         if berr != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", berr)

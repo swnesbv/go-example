@@ -94,7 +94,8 @@ func GrMsg(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println("msg groups message..", message.Message)
 
-    	_,err = db.Exec(sqlstr, message.Message,cls.User_id,id,true,time.Now())
+    	owner := cls.User_id
+    	_,err = db.Exec(sqlstr, message.Message,owner,id,true,time.Now())
 
 		if err != nil {
 			fmt.Println("err msg groups Exec()", err)

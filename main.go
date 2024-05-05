@@ -82,10 +82,10 @@ func main() {
 	// chat..
 	http.HandleFunc("/chat", chat.HomeChat)
 	http.HandleFunc("/all-group", chat.GrAll)
-	http.HandleFunc("/owner-group", chat.GrOwr)
+	http.HandleFunc("/all-or-owner-group", chat.GrOwr)
 	http.HandleFunc("/detail-group", chat.DetGr)
 	
-	http.HandleFunc("/creat-group", chat.Creativity)
+	http.HandleFunc("/creat-group", chat.Creat)
 	http.HandleFunc("/update-group", chat.UpGr)
 
 	http.HandleFunc("/user", chat.UsChat)
@@ -108,7 +108,7 @@ func main() {
 	http.HandleFunc("/group-ssc", subscription.ToUpGroupSsc)
 
 	http.HandleFunc("/all-touser-ssc", subscription.ToUsAllSsc)
-	http.HandleFunc("/all-toroom-ssc", subscription.ToGroupAllSsc)
+	http.HandleFunc("/all-to-room-ssc", subscription.ToGroupAllSsc)
 
 	// search..
 	http.HandleFunc("/search", search.SearchHandler)

@@ -8,7 +8,12 @@ import (
     "path/filepath"
 )
 
-
+func OkBool(a int, b int) bool {
+    if a == b {
+        return true
+    }
+    return false
+}
 func InSlice(i int, list []int) bool {
     for _, s := range list {
         if s == i {

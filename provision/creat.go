@@ -34,6 +34,7 @@ func CreatDays(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
         
+        owner := cls.User_id
         title       := r.FormValue("title")
         description := r.FormValue("description")
 
@@ -44,10 +45,11 @@ func CreatDays(w http.ResponseWriter, r *http.Request) {
             return
         }
 
+        
         conn := connect.ConnSql()
         sqlstr := "INSERT INTO provision_d (title,description,owner,st_date,en_date,created_at) VALUES ($1,$2,$3,$4,$5,$6)"
 
-        _, err := conn.Exec(sqlstr, title,description,cls.User_id,start,end,time.Now())
+        _, err := conn.Exec(sqlstr, title,description,owner,start,end,time.Now())
 
         if err != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", err)
@@ -78,6 +80,7 @@ func CreatHours(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
         
+        owner := cls.User_id
         title       := r.FormValue("title")
         description := r.FormValue("description")
 
@@ -95,7 +98,7 @@ func CreatHours(w http.ResponseWriter, r *http.Request) {
         conn := connect.ConnSql()
         sqlstr := "INSERT INTO provision_h (title,description,owner,st_hour,en_hour,created_at) VALUES ($1,$2,$3,$4,$5,$6)"
 
-        _, err := conn.Exec(sqlstr, title,description,cls.User_id,start,end,time.Now())
+        _, err := conn.Exec(sqlstr, title,description,owner,start,end,time.Now())
 
         if err != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", err)

@@ -92,13 +92,16 @@ func GrChat(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    owner := cls.User_id
     user,err := qSscGrChUs(w, id)
+    admin := qAdmin(w, id,owner)
     if err != nil {
         return
     }
 
-    i := options.InSlice(cls.User_id,user)
-    if i {
+    u := options.InSlice(owner,user)
+    a := options.OkBool(owner,admin.Owner)
+    if u || a {
 
         // msg..
         rows,err := qGrChat(w, id)
@@ -118,15 +121,11 @@ func GrChat(w http.ResponseWriter, r *http.Request) {
 
         if r.Method == "GET" {
             tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/chat/group.html", "./tpl/base.html" ))
-
             tpl.ExecuteTemplate(w, "base", data)
         }
-
     } else {
-        fmt.Fprintf(w, "User No Group..! : %+v\n", err)
+        fmt.Fprintf(w, " User No Group..! : %+v\n", err)
     }
-
-
 }
 
 

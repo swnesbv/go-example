@@ -37,15 +37,14 @@ func AddSscUs(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
         
-        user := CreatSubscription{
-            Title: r.FormValue("title"),
-            Description: r.FormValue("description"),
-        }
+        owner := cls.User_id
+        title       := r.FormValue("title")
+        description := r.FormValue("description")
 
         conn := connect.ConnSql()
         sqlstr := "INSERT INTO subscription (title, description, owner, to_user, created_at) VALUES ($1,$2,$3,$4,$5)"
 
-        _, err := conn.Exec(sqlstr, user.Title,user.Description,cls.User_id,id,time.Now())
+        _, err := conn.Exec(sqlstr, title,description,owner,id,time.Now())
 
         if err != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", err)
@@ -82,15 +81,14 @@ func AddSscGr(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
         
-        user := CreatSubscription{
-            Title: r.FormValue("title"),
-            Description: r.FormValue("description"),
-        }
+        owner := cls.User_id
+        title       := r.FormValue("title")
+        description := r.FormValue("description")
 
         conn := connect.ConnSql()
         sqlstr := "INSERT INTO subscription (title, description, owner, to_group, created_at) VALUES ($1,$2,$3,$4,$5)"
 
-        _, err := conn.Exec(sqlstr, user.Title,user.Description,cls.User_id,id,time.Now())
+        _, err := conn.Exec(sqlstr, title,description,owner,id,time.Now())
 
         if err != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", err)
@@ -135,14 +133,13 @@ func OwrUpSsc(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
 
-        art := Subscription{
-            Title: r.FormValue("title"),
-            Description: r.FormValue("description"),
-        }
+        owner := cls.User_id
+        title       := r.FormValue("title")
+        description := r.FormValue("description")
 
-        sqlstr := "UPDATE subscription SET title=$3, description=$4, updated_at=$5 WHERE id=$1 AND owner=$2;"
+        sqlstr := "UPDATE subscription SET title=$3,description=$4,updated_at=$5 WHERE id=$1 AND owner=$2;"
 
-        _, err := conn.Exec(sqlstr, id, cls.User_id, art.Title, art.Description, time.Now())
+        _, err := conn.Exec(sqlstr, id,owner,title,description,time.Now())
         
         if err != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", err)
@@ -185,10 +182,11 @@ func OwrDelSsc(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
 
+        owner := cls.User_id
         conn := connect.ConnSql()
         sqlstr := "DELETE FROM subscription WHERE id=$1 AND owner=$2"
         
-        _, err := conn.Exec(sqlstr, id,cls.User_id)
+        _, err := conn.Exec(sqlstr, id,owner)
         
         if err != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", err)

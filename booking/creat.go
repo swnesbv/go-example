@@ -35,13 +35,14 @@ func Creat(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
 
+        owner := cls.User_id
         title       := r.FormValue("title")
         description := r.FormValue("description")
 
         conn := connect.ConnSql()
         sqlstr := "INSERT INTO booking (title, description, owner, created_at) VALUES ($1,$2,$3,$4)"
 
-        _, err := conn.Exec(sqlstr, title,description,cls.User_id,time.Now())
+        _, err := conn.Exec(sqlstr, title,description,owner,time.Now())
 
         if err != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", err)
@@ -215,12 +216,13 @@ func UpBkg(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
 
+        owner := cls.User_id
         title       := r.FormValue("title")
         description := r.FormValue("description")
 
         sqlstr := "UPDATE booking SET title=$3, description=$4, completed=$5, updated_at=$6 WHERE id=$1 AND owner=$2"
         
-        _, err := conn.Exec(sqlstr, id,cls.User_id,title,description,flag,time.Now())
+        _, err := conn.Exec(sqlstr, id,owner,title,description,flag,time.Now())
         
         if err != nil {
             fmt.Fprintf(w, "err Exec..! : %+v\n", err)

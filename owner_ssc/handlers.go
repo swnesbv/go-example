@@ -23,8 +23,9 @@ func OwrAllSsc(w http.ResponseWriter, r *http.Request) {
             return
         }
 
+        owner := cls.User_id
         conn := connect.ConnSql()
-        rows,err := qsOwSsc(w, conn,cls.User_id)
+        rows,err := qsOwSsc(w, conn,owner)
         if err != nil {
             return
         }

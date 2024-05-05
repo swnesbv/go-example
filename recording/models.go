@@ -9,8 +9,8 @@ type Schedule struct {
     Title       string
     Description string
     Owner       int
-    St_hour    *time.Time
-    En_hour    *time.Time
+    St_hour     *time.Time
+    En_hour     *time.Time
     Hours       []string
     Occupied    []string
     Completed   bool

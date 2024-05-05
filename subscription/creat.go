@@ -113,6 +113,6 @@ func ToUpGroupSsc(w http.ResponseWriter, r *http.Request) {
             return
         }
         defer conn.Close()
-        http.Redirect(w,r, "/all-toroom-ssc", http.StatusFound)
+        http.Redirect(w,r, "/all-to-room-ssc", http.StatusFound)
     }
 }
