@@ -50,8 +50,8 @@ func main() {
 	// csv
 	http.HandleFunc("/csv-imp-art", sqlcsv.ImpArt)
 	http.HandleFunc("/csv-exp-art", sqlcsv.ExpArt)
-	http.HandleFunc("/csv-imp-rcg", sqlcsv.ImpSch)
-	http.HandleFunc("/csv-exp-rcg", sqlcsv.ExpSch)
+	http.HandleFunc("/csv-imp-ssc", sqlcsv.ImpSch)
+	http.HandleFunc("/csv-exp-ssc", sqlcsv.ExpSch)
 
 	// prv..
 	http.HandleFunc("/all-prv-days", provision.PrvAllD)

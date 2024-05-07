@@ -4,10 +4,12 @@ import (
     "os"
     "fmt"
     "time"
-    // "bytes"
+    "strings"
     "net/http"
     "encoding/csv"
     "html/template"
+
+    "github.com/lib/pq"
 
     "go_authentication/connect"
     "go_authentication/authtoken"
@@ -34,7 +36,7 @@ func ImpSch(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             switch {
                 case true:
-                fmt.Fprintf(w, "Error: rows..! : %+v\n", err)
+                fmt.Fprintf(w, " Error: rows..! : %+v\n", err)
                 break
             }
             return
@@ -43,52 +45,35 @@ func ImpSch(w http.ResponseWriter, r *http.Request) {
 
         mkdirerr := os.MkdirAll("./sfl/static/csv/" + cls.Email, 0750)
         if mkdirerr != nil {
-            fmt.Println("Error os.MkdirAll():", mkdirerr)
+            fmt.Println(" Error os.MkdirAll..", mkdirerr)
         }
-
         file,err := os.Create("./sfl/static/csv/" + cls.Email + "/schedule.csv")
         if err != nil {
-            fmt.Println("Error os.Create():", err)
+            fmt.Println(" Error os.Create..", err)
         }
         defer file.Close()
-        
-        columns,err := rows.Columns()
-        if err != nil {
-            fmt.Println("Error getting column names:", err)
-            return
-        }
 
-        wri := csv.NewWriter(file)
-        header := []string{"id","title","description","owner","st_hour","en_hour","hours","occupied","completed","created_at","updated_at"}
-        wri.Write(header)
-        defer wri.Flush()
-
-        key := make([]interface{}, len(columns))
-        values := make([]interface{}, len(columns))
-
-        for i := range values {
-            key[i] = &values[i]
-        }
+        wr := csv.NewWriter(file)
+        defer wr.Flush()
 
         for rows.Next() {
-            err := rows.Scan(key...)
+            i := new(Schedule)
+            err := rows.Scan(&i.Id,&i.Title,&i.Description,&i.Owner,&i.St_hour,&i.En_hour,pq.Array(&i.Hours),pq.Array(&i.Occupied),&i.Completed,&i.Created_at,&i.Updated_at)
             if err != nil {
                 fmt.Println("Error scanning row:", err)
                 return
             }
+            list := []*Schedule{}
+            list = append(list, i)
 
             var row string
-            for _, value := range values {
-                if value != nil {
-                    row += fmt.Sprintf("%v,", value)
-                } else {
-                    row += ","
-                }
+            for _, val := range list {
+                row += fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v", val.Id,val.Title,val.Description,val.Owner,val.St_hour,val.En_hour,val.Hours,val.Occupied,val.Completed,val.Created_at,val.Updated_at)
             }
-            file.WriteString(fmt.Sprintf("%s\n", row[:len(row)-1]))
+            file.WriteString(fmt.Sprintf("%s\n", row))
         }
 
-        fmt.Println("CSV successfully..!", file)
+        fmt.Println(" CSV successfully..!")
 
         defer conn.Close()
 
@@ -119,47 +104,56 @@ func ExpSch(w http.ResponseWriter, r *http.Request) {
         conn := connect.ConnSql()
         owner := cls.User_id
 
-        file, handler, err := r.FormFile("file")
+        file, _, err := r.FormFile("file")
         if err != nil{
-            fmt.Println("Error Data retrieving")
-            fmt.Println(err)
+            fmt.Println(" err data retrieving..", err)
             return
         }
-
-        fileName := handler.Filename
-        
-        fmt.Printf("Uploaded File : %+v\n", fileName)
-        fmt.Printf("File Size : %+v\n" , handler.Size)
-        fmt.Printf("MIME Header : %+v\n" , handler.Header)
 
         reader := csv.NewReader(file)
         rows,err := reader.ReadAll()
         if err != nil {
             w.WriteHeader(http.StatusBadRequest)
-            fmt.Fprintf(w, "err ReadAll()..! : %+v\n", err)
+            fmt.Fprintf(w, " Error ReadAll..! : %+v\n", err)
             return
         }
-        fmt.Printf("rows ReadAll()..! : %+v\n", rows)
 
         for _, row := range rows {
 
-        i2 := row[1]
-        i3 := row[2]
+            t  := row[1]
+            d  := row[2]
+            sh := row[4]
+            eh := row[5]
+            h  := row[6]
+            o  := row[7]
 
-        sqlst := "INSERT INTO schedule (title,description,owner,st_hour,en_hour,hours,occupied,completed,created_at,updated_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)"
+            var list []time.Time
+            th := strings.Fields(h)
+            for x := range th {
+                tht,_ := time.Parse(time.TimeOnly, th[x])
+                list = append(list, tht)
+            }
+            
+            var list2 []time.Time
+            to := strings.Fields(o)
+            for x := range to {
+                tot,_ := time.Parse(time.TimeOnly, to[x])
+                list2 = append(list2, tot)
+            }
 
-        _, err := conn.Exec(sqlst, i2,i3,nil,owner,false,time.Now(),nil)
+            sqlst := "INSERT INTO schedule (title,description,owner,st_hour,en_hour,hours,occupied,completed,created_at,updated_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)"
 
-        if err != nil {
-            w.WriteHeader(http.StatusBadRequest)
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
-            return
-        }
-        fmt.Println("OK..! Exec..", row)
+            _, err := conn.Exec(sqlst, t,d,owner,sh,eh,pq.Array(list),pq.Array(list2),false,time.Now(),nil)
+
+            if err != nil {
+                w.WriteHeader(http.StatusBadRequest)
+                fmt.Fprintf(w, " Error Exec..! : %+v\n", err)
+                return
+            }
         }
 
         defer conn.Close()
 
-        http.Redirect(w,r, "/all-recording", http.StatusFound)
+        http.Redirect(w,r, "/all-schedule", http.StatusFound)
     }
 }

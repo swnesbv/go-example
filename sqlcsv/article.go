@@ -77,7 +77,7 @@ import (
         }
         defer rows.Close()
         
-        columns,err := rows.Columns()
+        col,err := rows.Columns()
         if err != nil {
             fmt.Println("Error getting column names:", err)
             return
@@ -90,8 +90,8 @@ import (
         wri.Write(header)
         defer wri.Flush()
 
-        key := make([]interface{}, len(columns))
-        values := make([]interface{}, len(columns))
+        key := make([]interface{}, len(col))
+        values := make([]interface{}, len(col))
 
         for i := range values {
             key[i] = &values[i]
@@ -164,20 +164,21 @@ func ImpArt(w http.ResponseWriter, r *http.Request) {
             fmt.Println("Error os.Create():", err)
         }
         defer file.Close()
-        
-        columns,err := rows.Columns()
+
+        wr := csv.NewWriter(file)
+        header := []string{"id","title","description","img","owner","completed","created_at","updated_at"}
+
+        wr.Write(header)
+        defer wr.Flush()
+
+        col,err := rows.Columns()
         if err != nil {
             fmt.Println("Error getting column names:", err)
             return
         }
 
-        wri := csv.NewWriter(file)
-        header := []string{"id","title","description","img","owner","completed","created_at","updated_at"}
-        wri.Write(header)
-        defer wri.Flush()
-
-        key := make([]interface{}, len(columns))
-        values := make([]interface{}, len(columns))
+        key := make([]interface{}, len(col))
+        values := make([]interface{}, len(col))
 
         for i := range values {
             key[i] = &values[i]
