@@ -1,9 +1,9 @@
 {{ template "./tpl/base.html" }}
-{{ define "title" }} all schedule {{ end }}
+{{ define "title" }} select all schedule {{ end }}
 
 {{ block "content" . }}
 
-<h1 class="container lead my-3">all schedule</h1>
+<h1 class="container lead my-3">select all schedule</h1>
 	
 {{ range . }}
 
@@ -35,30 +35,28 @@
 
 <ul class="list-group list-group-flush">
 	<li class="list-group-item">
-	<span class="badge text-bg-light">date</span>
-	{{ index .Hours 0}}
 	<form class="card" method="POST">
-	    <div class="card-body">
+		<div class="card-body">
+			<span class="badge text-bg-light">date</span>
+			{{ index .Hours 0}}
 	        <input
 	        	required
 	            class="form-control my-2"
-	            type="number"
+	            type="hidden"
 	            name="to_schedule"
 	            value="{{ .Id }}"
 	        />
-	    	<sup class="float-start">date</sup>
 	        <input
 	        	required
 	            class="form-control my-2"
-	            type="text"
+	            type="hidden"
 	            name="date"
 	            value="{{ .St_hour }}"
 	        />
-	        <sup class="float-start">hour</sup>
 	        <input
 	        	required
 	            class="form-control my-2"
-	            type="text"
+	            type="hidden"
 	            name="hour"
 	            value="{{ index .Hours 0 }}"
 	        />
@@ -71,30 +69,28 @@
 	</li>
 
 	<li class="list-group-item">
-	<span class="badge text-bg-light">date</span>
-	{{ index .Hours 1 }}
 	<form class="card" method="POST">
 	    <div class="card-body">
+			<span class="badge text-bg-light">date</span>
+			{{ index .Hours 1 }}
 	        <input
 	        	required
 	            class="form-control my-2"
-	            type="number"
+	            type="hidden"
 	            name="to_schedule"
 	            value="{{ .Id }}"
 	        />
-	    	<sup class="float-start">date</sup>
 	        <input
 	        	required
 	            class="form-control my-2"
-	            type="text"
+	            type="hidden"
 	            name="date"
 	            value="{{ .St_hour }}"
 	        />
-	        <sup class="float-start">hour</sup>
 	        <input
 	        	required
 	            class="form-control my-2"
-	            type="text"
+	            type="hidden"
 	            name="hour"
 	            value="{{ index .Hours 1 }}"
 	        />
@@ -110,11 +106,11 @@
 <ul class="list-group list-group-flush">
 
 	<li class="list-group-item">
-		<sup>title</sup> {{ .Title }}
+		{{ .Title }}
 	</li>
 	
 	<li class="list-group-item">
-	<sup>created</sup>
+	<span class="badge text-bg-light">created</span>
 	<time>
 	{{ .Created_at.Format "2006-01-02 15:04:05" }}
 	</time>

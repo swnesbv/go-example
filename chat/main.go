@@ -51,7 +51,7 @@ func init() {
 	go groupCh()
 
     elapsed := time.Since(start)
-    fmt.Printf(" sql chat time.. :  %s \n", elapsed)
+    fmt.Println(" sql chat time..", elapsed)
     
     fmt.Println(" chat goroutine..", runtime.NumGoroutine())
 

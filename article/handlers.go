@@ -2,6 +2,7 @@ package article
 
 import (
     "fmt"
+    "log"
     "net/http"
     "html/template"
     "runtime"
@@ -9,6 +10,7 @@ import (
     "go_authentication/options"
     "go_authentication/connect"
     "go_authentication/authtoken"
+    "go_authentication/pagination"
 )
 
 
@@ -27,7 +29,34 @@ func Allarticle(w http.ResponseWriter, r *http.Request) {
     if r.Method == "GET" {
 
         conn := connect.ConnSql()
-        rows,err := qArt(w, conn)
+
+        lt,err := qArtCount(w, conn)
+        if err != nil {
+            return
+        }
+        count,err := ArtCount(w, lt)
+        if err != nil {
+            return
+        }
+
+        p,err := pagination.PageNumber(r)
+        if err != nil {
+            pagination.InvalidArgument(w)
+            return
+        }
+
+        a := pagination.Args{
+            Max:     5,
+            Pos:     1,
+            Page:    p,
+            Records: 5,
+            Total:   len(count),
+            Size:    5,
+        }
+
+        limit := 5
+        offset := limit * (a.Page - 1)
+        rows,err := qArt(w, conn, limit,offset)
         if err != nil {
             return
         }
@@ -35,11 +64,31 @@ func Allarticle(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             return
         }
+        fmt.Println(" offset..", offset)
         defer conn.Close()
 
-        tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/art/all.html", "./tpl/base.html" ))
+        pgn,err := pagination.NewPn(a)
+        if err != nil {
+            if err.Error() == pagination.ErrPageNo {
+                log.Println(" NewPn..", err.Error())
+                return
+            }
+            fmt.Println(err.Error())
+            return
+        }
 
-        tpl.ExecuteTemplate(w, "base", list)
+        type ListPage struct {
+            Articles []*Article
+            Pgn *pagination.Pagination
+        }
+        view := ListPage{
+            Articles: list,
+            Pgn: pgn,
+        }
+
+        tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/pagination/pagination.html","./tpl/art/all.html", "./tpl/base.html" ))
+
+        tpl.ExecuteTemplate(w, "base", view)
     }
 
     fmt.Println(" All article goroutine..", runtime.NumGoroutine())

@@ -255,7 +255,7 @@ func ExpArt(w http.ResponseWriter, r *http.Request) {
             fmt.Fprintf(w, "err ReadAll()..! : %+v\n", err)
             return
         }
-        fmt.Printf("rows ReadAll()..! : %+v\n", rows)
+        fmt.Printf("rows ReadAll..! : %+v\n", rows)
 
         for _, row := range rows {
 
@@ -297,14 +297,14 @@ func ExpArt(w http.ResponseWriter, r *http.Request) {
 
         file,err := os.Open("report.csv")
         if err != nil {
-            fmt.Println("os.Open()..", err)
+            fmt.Println("os.Open..", err)
         }
         defer file.Close()
 
         reader := csv.NewReader(file)
         rows,err := reader.ReadAll()
         if err != nil {
-            fmt.Println("reader.ReadAll()..", err)
+            fmt.Println("reader.ReadAll..", err)
         }
 
         for _, row := range rows {

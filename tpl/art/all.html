@@ -5,14 +5,17 @@
 
 <h1 class="container lead my-3">all article</h1>
 	
-{{ range . }}
+{{ range .Articles }}
 <ul class="list-group list-group-flush">
-
 	<li class="list-group-item">
-		<sup>id:</sup> {{ .Id }}, <sup>author:</sup> {{ .Owner }}
+		<span class="badge text-bg-primary">completed</span> {{ .Completed }}
 	</li>
 	<li class="list-group-item">
-		<sup>title:</sup> {{ .Title }}
+		<span class="badge text-bg-light">id</span>{{ .Id }}
+		<span class="badge text-bg-light">author</span>{{ .Owner }}
+	</li>
+	<li class="list-group-item">
+		<span class="badge text-bg-light">title</span>{{ .Title }}
 	</li>
 	<li class="list-group-item">
 		<sup>description:</sup> {{ .Description }}
@@ -57,5 +60,7 @@
 </div>
 
 {{ end }}
+
+{{ template "pagination" .Pgn }}
 	  
 {{ end }}

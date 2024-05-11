@@ -60,7 +60,7 @@ func ImpSch(w http.ResponseWriter, r *http.Request) {
             i := new(Schedule)
             err := rows.Scan(&i.Id,&i.Title,&i.Description,&i.Owner,&i.St_hour,&i.En_hour,pq.Array(&i.Hours),pq.Array(&i.Occupied),&i.Completed,&i.Created_at,&i.Updated_at)
             if err != nil {
-                fmt.Println("Error scanning row:", err)
+                fmt.Println(" Error Scan row..", err)
                 return
             }
             list := []*Schedule{}
