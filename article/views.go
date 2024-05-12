@@ -14,23 +14,6 @@ import (
 )
 
 
-func ArtCount(w http.ResponseWriter, rows *sql.Rows) (list []int, err error) {
-
-    defer rows.Close()
-    for rows.Next() {
-        i := new(Article)
-        err = rows.Scan(
-            &i.Id,
-        )
-        if err != nil {
-            fmt.Fprintf(w, "Error Scan count..! : %+v\n", err)
-            return
-        }
-        list = append(list, i.Id)
-    }
-    fmt.Println(" count..", list)
-    return list,err
-}
 func allArt(w http.ResponseWriter, rows *sql.Rows) (list []*Article, err error) {
 
     defer rows.Close()

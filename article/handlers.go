@@ -30,14 +30,11 @@ func Allarticle(w http.ResponseWriter, r *http.Request) {
 
         conn := connect.ConnSql()
 
-        lt,err := qArtCount(w, conn)
+        count,err := qArtCount(w, conn)
         if err != nil {
             return
         }
-        count,err := ArtCount(w, lt)
-        if err != nil {
-            return
-        }
+        fmt.Println(" count..", count)
 
         p,err := pagination.PageNumber(r)
         if err != nil {
@@ -50,7 +47,7 @@ func Allarticle(w http.ResponseWriter, r *http.Request) {
             Pos:     1,
             Page:    p,
             Records: 5,
-            Total:   len(count),
+            Total:   count,
             Size:    5,
         }
 

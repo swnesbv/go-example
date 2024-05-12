@@ -7,19 +7,15 @@ import (
     "runtime"
 )
 
-func qArtCount(w http.ResponseWriter, conn *sql.DB) (rows *sql.Rows, err error) {
+func qArtCount(w http.ResponseWriter, conn *sql.DB) (int, error) {
 
-    rows,err = conn.Query("SELECT id FROM article")
+    var count int
+    err := conn.QueryRow("SELECT COUNT(*) FROM asd").Scan(&count)
 
     if err != nil {
-        switch {
-            case true:
-            fmt.Fprintf(w, "Error: Query..! : %+v\n", err)
-            break
-        }
-        return
+        fmt.Fprintf(w, "Error: Query..! : %+v\n", err)
     }
-    return rows,err
+    return count,err
 }
 
 func qArt(w http.ResponseWriter, conn *sql.DB, limit int,offset int) (rows *sql.Rows, err error) {
