@@ -10,7 +10,7 @@ import (
 func qArtCount(w http.ResponseWriter, conn *sql.DB) (int, error) {
 
     var count int
-    err := conn.QueryRow("SELECT COUNT(*) FROM asd").Scan(&count)
+    err := conn.QueryRow("SELECT COUNT(*) FROM article").Scan(&count)
 
     if err != nil {
         fmt.Fprintf(w, "Error: Query..! : %+v\n", err)
