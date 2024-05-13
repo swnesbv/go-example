@@ -28,7 +28,7 @@ func qSchSelect(
 
 func qSch(w http.ResponseWriter, conn *sql.DB) (rows *sql.Rows, err error) {
 
-    rows,err = conn.Query("SELECT * FROM schedule")
+    rows,err = conn.Query("SELECT * FROM schedule ORDER BY id DESC")
 
     if err != nil {
         switch {

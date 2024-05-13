@@ -13,10 +13,11 @@
 <ul class="list-group list-group-flush">
 	<li class="list-group-item">
 		<span class="badge text-bg-primary">completed</span> {{ .Completed }}
+		<span class="badge text-bg-light">id</span>{{ .Id }}
+		<span class="badge text-bg-light">owner</span>{{ .Owner }}
 	</li>
 	<li class="list-group-item">
-	<span class="badge text-bg-light">id</span>{{ .Id }}
-	<span class="badge text-bg-light">owner</span>{{ .Owner }}
+
 	<span class="badge text-bg-light">start</span>{{ .St_hour.Format "2006-01-02 15:04:05" }}
 	<span class="badge text-bg-light">end</span>{{ .En_hour.Format "2006-01-02 15:04:05" }}
 	</li>
@@ -33,12 +34,13 @@
 </ul>
 {{ end }}
 
+
+{{ if ne .Hours nil }}
 <ul class="list-group list-group-flush">
+
 	<li class="list-group-item">
 	<form class="card" method="POST">
 		<div class="card-body">
-			<span class="badge text-bg-light">date</span>
-			{{ index .Hours 0}}
 	        <input
 	        	required
 	            class="form-control my-2"
@@ -53,55 +55,26 @@
 	            name="date"
 	            value="{{ .St_hour }}"
 	        />
+	        {{ range .Hours }}
+			<span class="badge text-bg-light">the beginning of the reception</span>
+			{{ . }}
 	        <input
 	        	required
 	            class="form-control my-2"
 	            type="hidden"
 	            name="hour"
-	            value="{{ index .Hours 0 }}"
+	            value="{{ . }}"
 	        />
+			<div class="card-footer action-buttons">
+			<input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
+			</div>
+	        {{ end }}
 	    </div>
-
-		<div class="card-footer action-buttons">
-		<input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
-		</div>
 	</form>
 	</li>
 
-	<li class="list-group-item">
-	<form class="card" method="POST">
-	    <div class="card-body">
-			<span class="badge text-bg-light">date</span>
-			{{ index .Hours 1 }}
-	        <input
-	        	required
-	            class="form-control my-2"
-	            type="hidden"
-	            name="to_schedule"
-	            value="{{ .Id }}"
-	        />
-	        <input
-	        	required
-	            class="form-control my-2"
-	            type="hidden"
-	            name="date"
-	            value="{{ .St_hour }}"
-	        />
-	        <input
-	        	required
-	            class="form-control my-2"
-	            type="hidden"
-	            name="hour"
-	            value="{{ index .Hours 1 }}"
-	        />
-	    </div>
-
-		<div class="card-footer action-buttons">
-		<input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
-		</div>
-	</form>
-	</li>
 </ul>
+{{ end }}
 
 <ul class="list-group list-group-flush">
 

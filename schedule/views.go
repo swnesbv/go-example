@@ -3,12 +3,42 @@ package schedule
 import (
     "database/sql"
     "fmt"
+    "time"
     "net/http"
     
     "github.com/lib/pq"
 
     // "go_authentication/authtoken"
 )
+
+
+func Converter (w http.ResponseWriter, v string) time.Time {
+
+    loc, _ := time.LoadLocation("UTC")
+    to, _ := time.ParseInLocation("2006-01-02T15:04:05",v + ":00", loc)
+
+    s := to.Format(time.TimeOnly)
+    ss, _ := time.Parse(time.TimeOnly, s)
+    return ss
+}
+func psForm (w http.ResponseWriter, r *http.Request) (list []time.Time, err error) {
+
+    pserr := r.ParseForm()
+    if pserr != nil {
+        fmt.Fprintf(w, "err ParseForm..! : %+v\n", pserr)
+        return
+    }
+
+    ps := r.Form["list"]
+
+    var v string
+    var ss time.Time
+    for _, v = range ps {
+        ss = Converter(w,v)
+        list = append(list, ss)
+    }
+    return list,err
+}
 
 
 func allSch(w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err error) {
@@ -38,4 +68,3 @@ func allSch(w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err error)
     }
     return list,err
 }
-

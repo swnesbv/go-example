@@ -36,35 +36,19 @@ func Creat(w http.ResponseWriter, r *http.Request) {
         description := r.FormValue("description")
 
         loc, _ := time.LoadLocation("UTC")
-
         start,derr := time.ParseInLocation(
             "2006-01-02T15:04:05", r.FormValue("start") + ":00", loc)
         end,derr := time.ParseInLocation(
             "2006-01-02T15:04:05", r.FormValue("end") + ":00", loc)
-
-        to1,derr := time.ParseInLocation(
-            "2006-01-02T15:04:05", r.FormValue("list_1") + ":00", loc)
-        to2,derr := time.ParseInLocation(
-            "2006-01-02T15:04:05", r.FormValue("list_2") + ":00", loc)
-
         if derr != nil {
             fmt.Fprintf(w, "err ParseInLocation..! : %+v\n", derr)
             return
         }
 
-        s1 := to1.Format(time.TimeOnly)
-        s2 := to2.Format(time.TimeOnly)
-
-        ss1,terr := time.Parse(time.TimeOnly, s1)
-        ss2,terr := time.Parse(time.TimeOnly, s2)
-
-        if terr != nil {
-            fmt.Fprintf(w, "err time Parse..! : %+v\n", terr)
+        list,pserr := psForm(w,r)
+        if pserr != nil {
             return
         }
-        
-        var list []time.Time
-        list = append(list, ss1,ss2)
 
         conn := connect.ConnSql()
         owner := cls.User_id
