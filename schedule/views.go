@@ -25,7 +25,7 @@ func psForm (w http.ResponseWriter, r *http.Request) (list []time.Time, err erro
 
     pserr := r.ParseForm()
     if pserr != nil {
-        fmt.Fprintf(w, "err ParseForm..! : %+v\n", pserr)
+        fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
         return
     }
 
@@ -36,6 +36,51 @@ func psForm (w http.ResponseWriter, r *http.Request) (list []time.Time, err erro
     for _, v = range ps {
         ss = Converter(w,v)
         list = append(list, ss)
+    }
+    return list,err
+}
+
+
+func Select(hours,occupied []string) (slt []string) {
+    m := make(map[string]bool)
+
+    for _, i := range occupied {
+        m[i] = true
+    }
+
+    for _, i := range hours {
+        if _, ok := m[i]; !ok {
+            slt = append(slt, i)
+        }
+    }
+    fmt.Println(" slt..", slt)
+    return slt
+}
+func allSelect(w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err error) {
+
+    defer rows.Close()
+    for rows.Next() {
+        i := new(Schedule)
+        err = rows.Scan(
+            &i.Id,
+            &i.Title,
+            &i.Description,
+            &i.Owner,
+            &i.St_hour,
+            &i.En_hour,
+            pq.Array(&i.Hours),
+            pq.Array(&i.Occupied),
+            &i.Completed,
+            &i.Created_at, 
+            &i.Updated_at, 
+        )
+        if err != nil {
+            fmt.Fprintf(w, " Error Scan..! : %+v\n", err)
+            return
+        }
+        free := Select(i.Hours,i.Occupied)
+        i.Hours = free
+        list = append(list, i)
     }
     return list,err
 }

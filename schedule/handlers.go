@@ -30,7 +30,7 @@ func SchSelect(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         return
     }
-    list,err := allSch(w, rows)
+    list,err := allSelect(w, rows)
     if err != nil {
         return
     }
