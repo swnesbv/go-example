@@ -2,10 +2,8 @@ package article
 
 import (
     "fmt"
-    "log"
     "net/http"
     "html/template"
-    "runtime"
 
     "go_authentication/options"
     "go_authentication/connect"
@@ -50,9 +48,9 @@ func Allarticle(w http.ResponseWriter, r *http.Request) {
             Total:   count,
             Size:    5,
         }
-
         limit := 5
         offset := limit * (a.Page - 1)
+
         rows,err := qArt(w, conn, limit,offset)
         if err != nil {
             return
@@ -64,31 +62,19 @@ func Allarticle(w http.ResponseWriter, r *http.Request) {
         fmt.Println(" offset..", offset)
         defer conn.Close()
 
-        pgn,err := pagination.NewPn(a)
-        if err != nil {
-            if err.Error() == pagination.ErrPageNo {
-                log.Println(" NewPn..", err.Error())
-                return
-            }
-            fmt.Println(err.Error())
-            return
-        }
-
-        type ListPage struct {
+        pgn,_ := pagination.NewPn(a)
+        type ListPgn struct {
             Articles []*Article
             Pgn *pagination.Pagination
         }
-        view := ListPage{
+        view := ListPgn{
             Articles: list,
             Pgn: pgn,
         }
-
-        tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/pagination/pagination.html","./tpl/art/all.html", "./tpl/base.html" ))
-
+        tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/pagination/pagination.html", "./tpl/art/all.html", "./tpl/base.html" ))
         tpl.ExecuteTemplate(w, "base", view)
-    }
 
-    fmt.Println(" All article goroutine..", runtime.NumGoroutine())
+    }
 }
 
 

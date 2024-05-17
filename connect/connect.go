@@ -29,7 +29,6 @@ func ConnSql() (*sql.DB) {
     ch := make(chan *sql.DB)
 
     go func() {
-
         conn,err := sql.Open("postgres", connstr)
         if err != nil {
             fmt.Println("coon err: sql Open..", err)
@@ -44,9 +43,9 @@ func ConnSql() (*sql.DB) {
         }
 
         ch <- conn
-
     }()
 
+    
     fmt.Println(" ConnSql goroutine..", runtime.NumGoroutine())
 
     elapsed := time.Since(start)

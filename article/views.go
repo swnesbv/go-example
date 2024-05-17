@@ -5,6 +5,7 @@ import (
     "fmt"
     "os"
     "errors"
+    "runtime"
     "net/http"
     // "path/filepath"
     
@@ -35,6 +36,7 @@ func allArt(w http.ResponseWriter, rows *sql.Rows) (list []*Article, err error) 
         }
         list = append(list, i)
     }
+    fmt.Println(" art goroutine..", runtime.NumGoroutine())
     return list,err
 }
 

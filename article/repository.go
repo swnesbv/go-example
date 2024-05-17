@@ -18,7 +18,8 @@ func qArtCount(w http.ResponseWriter, conn *sql.DB) (int, error) {
     return count,err
 }
 
-func qArt(w http.ResponseWriter, conn *sql.DB, limit int,offset int) (rows *sql.Rows, err error) {
+func qArt(
+    w http.ResponseWriter, conn *sql.DB, limit int,offset int) (rows *sql.Rows, err error) {
 
     rows,err = conn.Query("SELECT id, title, description, img, owner, completed, created_at, updated_at FROM article ORDER BY id LIMIT $1 OFFSET $2", limit,offset)
 

@@ -22,6 +22,7 @@ func qSchSelect(
         }
         return
     }
+    defer conn.Close()
     return rows,err
 }
 
@@ -38,5 +39,6 @@ func qSch(w http.ResponseWriter, conn *sql.DB) (rows *sql.Rows, err error) {
         }
         return
     }
+    defer conn.Close()
     return rows,err
 }

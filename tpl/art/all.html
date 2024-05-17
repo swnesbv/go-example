@@ -1,10 +1,11 @@
 {{ template "./tpl/base.html" }}
 {{ define "title" }} all article {{ end }}
 
-{{block "content" .}}
+{{ block "content" . }}
 
 <h1 class="container lead my-3">all article</h1>
 	
+{{ if ne .Articles nil }}
 {{ range .Articles }}
 <ul class="list-group list-group-flush">
 	<li class="list-group-item">
@@ -58,9 +59,11 @@
 </a>
 </div>
 </div>
-
+{{ end }}
 {{ end }}
 
-{{ template "pagination" .Pgn }}
+{{ if eq (len .Articles) 5 }}
+	{{ template "pagination" .Pgn }}
+{{ end }}
 	  
 {{ end }}
