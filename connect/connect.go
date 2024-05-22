@@ -31,15 +31,15 @@ func ConnSql() (*sql.DB) {
     go func() {
         conn,err := sql.Open("postgres", connstr)
         if err != nil {
-            fmt.Println("coon err: sql Open..", err)
+            fmt.Println(" coon err: sql Open..", err)
         }
 
         ping_err := conn.Ping()
         if ping_err != nil {
-            fmt.Println("coon err: Ping..", ping_err)
+            fmt.Println(" coon err: Ping..", ping_err)
         }
         if ping_err == nil {
-            fmt.Println("ConnSql OK..!")
+            fmt.Println(" ConnSql OK..!")
         }
 
         ch <- conn

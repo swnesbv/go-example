@@ -45,7 +45,7 @@ func Creat(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, title,description,owner,time.Now())
 
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
@@ -69,7 +69,7 @@ func Period(w http.ResponseWriter, r *http.Request) {
         start,err := time.Parse(time.DateOnly, r.FormValue("start"))
         end,err   := time.Parse(time.DateOnly, r.FormValue("end"))
         if err != nil {
-            fmt.Fprintf(w, "err time Parse..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: time Parse..! : %+v\n", err)
             return
         }
 
@@ -87,7 +87,7 @@ func Period(w http.ResponseWriter, r *http.Request) {
         }
         list,err := json.Marshal(data)
         if err != nil {
-            fmt.Fprintf(w, "err json Marshal..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: json Marshal..! : %+v\n", err)
             return
         }
 
@@ -139,7 +139,7 @@ func PeriodHours(w http.ResponseWriter, r *http.Request) {
         //     layout, r.FormValue("end") + ":00.000Z")
 
         if err != nil {
-            fmt.Fprintf(w, "err time Parse..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: time Parse..! : %+v\n", err)
             return
         }
 
@@ -156,7 +156,7 @@ func PeriodHours(w http.ResponseWriter, r *http.Request) {
         }
         list,err := json.Marshal(data)
         if err != nil {
-            fmt.Fprintf(w, "err json Marshal..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: json Marshal..! : %+v\n", err)
             return
         }
 
@@ -202,7 +202,7 @@ func UpBkg(w http.ResponseWriter, r *http.Request) {
     flag,err := options.ParseBool(r.FormValue("completed"))
     if err != nil {
         w.WriteHeader(http.StatusBadRequest)
-        fmt.Fprintf(w, "err ParseBool()..  : %+v\n", err)
+        fmt.Fprintf(w, " Error: ParseBool()..  : %+v\n", err)
         return
     }
 
@@ -225,7 +225,7 @@ func UpBkg(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, id,owner,title,description,flag,time.Now())
         
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 

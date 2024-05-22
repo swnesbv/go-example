@@ -27,19 +27,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "POST" {
 
-        conn := connect.ConnSql()
-
-        start := time.Now()
-
         email    := r.FormValue("email")
         password := r.FormValue("password")
 
+        start := time.Now()
         start_1 := time.Now()
+
+        conn := connect.ConnSql()
         saved_password,err := qPass(w, conn,email)
         if err != nil {
-            fmt.Fprintf(w, "No password : %+v\n", err)
+            fmt.Fprintf(w, " No user password : %+v\n", err)
             return
         }
+        defer conn.Close()
+
         elapsed1 := time.Since(start_1)
         fmt.Printf(" 1 time.. :  %s \n", elapsed1)
 
@@ -49,70 +50,59 @@ func Login(w http.ResponseWriter, r *http.Request) {
         fmt.Printf(" 2 time.. :  %s \n", elapsed2)
 
         if match == false {
-            fmt.Fprintf(w, "Match matching passwords..! : %+v\n", match)
+            fmt.Fprintf(w, " Match matching passwords..! : %+v\n", match)
             return 
         }
 
+        start_3 := time.Now()
 
-        if match {
-            start_3 := time.Now()
-
-            if err := godotenv.Load(); err != nil {
-                fmt.Fprintf(w, "No .env file found : %+v\n", err)
-                return
-            }
-
-            user_id,err := userId(w, conn,email)
-            if err != nil {
-                fmt.Fprintf(w, "No user_id : %+v\n", err)
-                return
-            }
-
-            token := jwt.New(jwt.SigningMethodHS256)
-            cls := token.Claims.(jwt.MapClaims)
-
-            cls["authorized"] = true
-            cls["user_id"] = user_id
-            cls["email"] = email
-            cls["exp"] = time.Now().Add(time.Minute * 60).Unix()
-
-            tokenstr, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
-
-            if err != nil {
-                w.WriteHeader(http.StatusBadRequest)
-                fmt.Fprintf(w, "err SignedString..! : %+v\n", err)
-                return
-            }
-
-            cookie := http.Cookie{
-                Name:     "Visitor",
-                Value:    tokenstr,
-                Path:     "/",
-                MaxAge:   3600,
-                HttpOnly: true,
-                Secure:   false,
-                SameSite: http.SameSiteLaxMode,
-            }
-            http.SetCookie(w, &cookie)
-
-            fmt.Fprintf(w, "OK : token..!")
-            fmt.Fprintf(w, " OK : login successful..!")
-
-
-            elapsed3 := time.Since(start_3)
-            fmt.Printf(" 3 time.. :  %s \n", elapsed3)
-
-            elapsed := time.Since(start)
-            fmt.Printf(" all time.. :  %s \n", elapsed)
-
-            defer conn.Close()
+        if err := godotenv.Load(); err != nil {
+            fmt.Fprintf(w, " No .env file found : %+v\n", err)
             return
         }
 
-        defer conn.Close()
-        fmt.Println("Error: conn.Close..!")
-        fmt.Fprintf(w, "Error: login failed..!")
+        user_id,err := userId(w, conn,email)
+        if err != nil {
+            fmt.Fprintf(w, " No user email : %+v\n", err)
+            return
+        }
 
+        token := jwt.New(jwt.SigningMethodHS256)
+        cls := token.Claims.(jwt.MapClaims)
+
+        cls["authorized"] = true
+        cls["user_id"] = user_id
+        cls["email"] = email
+        cls["exp"] = time.Now().Add(time.Minute * 60).Unix()
+
+        tokenstr, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+
+        if err != nil {
+            w.WriteHeader(http.StatusBadRequest)
+            fmt.Fprintf(w, " err SignedString..! : %+v\n", err)
+            return
+        }
+
+        cookie := http.Cookie{
+            Name:     "Visitor",
+            Value:    tokenstr,
+            Path:     "/",
+            MaxAge:   3600,
+            HttpOnly: true,
+            Secure:   false,
+            SameSite: http.SameSiteLaxMode,
+        }
+        http.SetCookie(w, &cookie)
+
+        fmt.Fprintf(w, " OK : token..!")
+        fmt.Fprintf(w, " OK : login successful..!")
+
+
+        elapsed3 := time.Since(start_3)
+        fmt.Printf(" 3 time.. :  %s \n", elapsed3)
+
+        elapsed := time.Since(start)
+        fmt.Printf(" all time.. :  %s \n", elapsed)
         return
     }
 }
@@ -201,7 +191,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
             if err != nil {
                 w.WriteHeader(http.StatusBadRequest)
-                fmt.Fprintf(w, "err SignedString..! : %+v\n", err)
+                fmt.Fprintf(w, " Error: SignedString..! : %+v\n", err)
                 return
             }
 
@@ -243,11 +233,11 @@ func AuthToken(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         if err == http.ErrNoCookie {
             w.WriteHeader(http.StatusUnauthorized)
-            fmt.Fprintf(w, "err http.ErrNoCookie..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: http.ErrNoCookie..! : %+v\n", err)
             return
         }
         w.WriteHeader(http.StatusBadRequest)
-        fmt.Fprintf(w, "err Cookie..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: Cookie..! : %+v\n", err)
         return
     }
 
@@ -261,11 +251,11 @@ func AuthToken(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         if err == jwt.ErrSignatureInvalid {
             w.WriteHeader(http.StatusUnauthorized)
-            fmt.Fprintf(w, "err ErrSignatureInvalid..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: ErrSignatureInvalid..! : %+v\n", err)
             return
         }
         w.WriteHeader(http.StatusBadRequest)
-        fmt.Fprintf(w, "err ParseWithClaims()..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: ParseWithClaims()..! : %+v\n", err)
         return
     }
     if !token.Valid {

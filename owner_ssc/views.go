@@ -50,10 +50,10 @@ func ownerIdSsc(w http.ResponseWriter, conn *sql.DB, id int, owner int) (i Subsc
     )
 
     if err == sql.ErrNoRows {
-        fmt.Fprintf(w, "err sql.ErrNoRows..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql.ErrNoRows..! : %+v\n", err)
         return
     } else if err != nil {
-        fmt.Fprintf(w, "err sql..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
         return
     }
 

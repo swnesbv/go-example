@@ -20,6 +20,7 @@ import (
 	"go_authentication/recording"
 	"go_authentication/owner_ssc"
 	"go_authentication/subscription"
+	"go_authentication/slider"
 )
 
 
@@ -109,6 +110,11 @@ func main() {
 
 	http.HandleFunc("/all-touser-ssc", subscription.ToUsAllSsc)
 	http.HandleFunc("/all-to-room-ssc", subscription.ToGroupAllSsc)
+
+	// slider..
+	http.HandleFunc("/add-collection", slider.CreatCollection)
+	http.HandleFunc("/all-collection", slider.CollectionAll)
+	http.HandleFunc("/add-slider", slider.CreatSlider)
 
 	// search..
 	http.HandleFunc("/search", search.SearchHandler)

@@ -1,0 +1,113 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} create slider {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">create slider</h1>
+
+<form class="card" method="POST" enctype="multipart/form-data">
+	
+	<div class="card-body">
+	<sup>title</sup>
+	<input required type="text" name="title" class="form-control">
+	<sup>description</sup>
+	<input required type="text" name="description" class="form-control">
+	</div>
+
+    {{ if ne .Art nil }}
+    <div class="card-footer">
+        <select
+            name="to_art"
+            class="form-control shadow-sm">
+            <option value="">art select</option>
+
+            {{ range .Art }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne .Sch nil }}
+    <div class="card-footer">
+        <select
+            name="to_sch"
+            class="form-control shadow-sm">
+            <option value="">sch select</option>
+
+            {{ range .Sch }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne .PrvD nil }}
+    <div class="card-footer">
+        <select
+            name="to_prv_d"
+            class="form-control shadow-sm">
+            <option value="">prv d select</option>
+
+            {{ range .PrvD }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne .PrvH nil }}
+    <div class="card-footer">
+        <select
+            name="to_prv_h"
+            class="form-control shadow-sm">
+            <option value="">prv h select</option>
+
+            {{ range .PrvH }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+
+        </select>
+    </div>
+    {{ end }}
+
+    <div id="addinput" class="card-body">
+    </div>
+
+    <div class="card-footer action-buttons">
+    <button class="btn btn-sm btn-outline-primary" onclick="addFn(); return false;">
+        image - add Input
+    </button>
+    </div>
+
+	<div class="card-footer action-buttons">
+	<input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
+	</div>
+
+</form>
+
+<script>
+    function addFn() {
+        const divEle = document.getElementById("addinput");
+        const wrapper = document.createElement("div");
+        const iFeild = document.createElement("input");
+        iFeild.setAttribute("type", "file");
+        iFeild.setAttribute("name", "file");
+        // iFeild.setAttribute("multiple", "multiple");
+        iFeild.setAttribute("placeholder", "Enter value");
+        iFeild.classList.add("form-control");
+        iFeild.classList.add("mt-2");
+        wrapper.appendChild(iFeild);
+        divEle.appendChild(wrapper);
+    }
+</script>
+	  
+{{ end }}

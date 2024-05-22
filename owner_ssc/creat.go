@@ -47,7 +47,7 @@ func AddSscUs(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, title,description,owner,id,time.Now())
 
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
@@ -91,7 +91,7 @@ func AddSscGr(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, title,description,owner,id,time.Now())
 
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
@@ -142,7 +142,7 @@ func OwrUpSsc(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, id,owner,title,description,time.Now())
         
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
@@ -189,7 +189,7 @@ func OwrDelSsc(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, id,owner)
         
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
         

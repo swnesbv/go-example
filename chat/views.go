@@ -132,10 +132,10 @@ func idGroup(w http.ResponseWriter, id int) (i Group, err error) {
     )
 
     if err == sql.ErrNoRows {
-        fmt.Fprintf(w, "err sql.ErrNoRows..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql.ErrNoRows..! : %+v\n", err)
         return
     } else if err != nil {
-        fmt.Fprintf(w, "err sql..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
         return
     }
     return i,err

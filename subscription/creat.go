@@ -29,7 +29,7 @@ func ToUpUsSsc(w http.ResponseWriter, r *http.Request) {
 
     flag,err := options.ParseBool(r.FormValue("completed"))
     if err != nil {
-        fmt.Fprintf(w, "err ParseBool()..  : %+v\n", err)
+        fmt.Fprintf(w, " Error: ParseBool()..  : %+v\n", err)
         return
     }
 
@@ -55,7 +55,7 @@ func ToUpUsSsc(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, id,flag,time.Now())
         
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
         defer conn.Close()
@@ -82,7 +82,7 @@ func ToUpGroupSsc(w http.ResponseWriter, r *http.Request) {
     flag,err := options.ParseBool(r.FormValue("completed"))
 
     if err != nil {
-        fmt.Fprintf(w, "err ParseBool()..  : %+v\n", err)
+        fmt.Fprintf(w, " Error: ParseBool()..  : %+v\n", err)
         return
     }
 
@@ -109,7 +109,7 @@ func ToUpGroupSsc(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, id,flag,time.Now())
         
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
         defer conn.Close()

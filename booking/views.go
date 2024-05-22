@@ -9,11 +9,11 @@ import (
 )
 
 
-func allSearchD(w http.ResponseWriter, rows *sql.Rows) (list []*ProvisionD, err error) {
+func allSearchD(w http.ResponseWriter, rows *sql.Rows) (list []*Provision_d, err error) {
 
     defer rows.Close()
     for rows.Next() {
-        i := new(ProvisionD)
+        i := new(Provision_d)
         err = rows.Scan(
             &i.Id,
             &i.Title,
@@ -36,11 +36,11 @@ func allSearchD(w http.ResponseWriter, rows *sql.Rows) (list []*ProvisionD, err 
     }
     return list,err
 }
-func allSearcH(w http.ResponseWriter, rows *sql.Rows) (list []*ProvisionH, err error) {
+func allSearcH(w http.ResponseWriter, rows *sql.Rows) (list []*Provision_h, err error) {
 
     defer rows.Close()
     for rows.Next() {
-        i := new(ProvisionH)
+        i := new(Provision_h)
         err = rows.Scan(
             &i.Id,
             &i.Title,
@@ -75,7 +75,8 @@ func allBkg(w http.ResponseWriter, rows *sql.Rows) (list []*Booking, err error) 
             &i.Title,
             &i.Description,
             &i.Owner,
-            &i.To_prv,
+            &i.To_prv_d,
+            &i.To_prv_h,
             &i.St_date,
             &i.En_date,
             &i.St_hour,
@@ -114,10 +115,10 @@ func idBkg(w http.ResponseWriter, conn *sql.DB, id int,cls *authtoken.Claims) (i
     )
 
     if err == sql.ErrNoRows {
-        fmt.Fprintf(w, "err sql.ErrNoRows..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql.ErrNoRows..! : %+v\n", err)
         return
     } else if err != nil {
-        fmt.Fprintf(w, "err sql..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
         return
     }
 

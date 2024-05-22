@@ -41,7 +41,7 @@ func Creat(w http.ResponseWriter, r *http.Request) {
         end,derr := time.ParseInLocation(
             "2006-01-02T15:04:05", r.FormValue("end") + ":00", loc)
         if derr != nil {
-            fmt.Fprintf(w, "err ParseInLocation..! : %+v\n", derr)
+            fmt.Fprintf(w, " Error: ParseInLocation..! : %+v\n", derr)
             return
         }
 
@@ -58,7 +58,7 @@ func Creat(w http.ResponseWriter, r *http.Request) {
             str, title,description,owner,start,end,pq.Array(list),time.Now())
 
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 

@@ -83,7 +83,7 @@ func GrMsg(w http.ResponseWriter, r *http.Request) {
 
 	register <- conn
 
-	sqlstr := "INSERT INTO msggroups (coming,owner,to_group, completed,created_at) VALUES ($1,$2,$3,$4,$5)"
+	sqlstr := "INSERT INTO msggroups (coming, owner, to_group, completed, created_at) VALUES ($1,$2,$3,$4,$5)"
 
 	for {
 		var message Message

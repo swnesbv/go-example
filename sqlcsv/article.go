@@ -34,7 +34,7 @@ import (
         if err != nil {
             switch {
                 case true:
-                fmt.Fprintf(w, "Error: rows..! : %+v\n", err)
+                fmt.Fprintf(w, " Error: rows..! : %+v\n", err)
                 break
             }
             return
@@ -70,7 +70,7 @@ import (
         if err != nil {
             switch {
                 case true:
-                fmt.Fprintf(w, "Error: rows..! : %+v\n", err)
+                fmt.Fprintf(w, " Error: rows..! : %+v\n", err)
                 break
             }
             return
@@ -79,7 +79,7 @@ import (
         
         col,err := rows.Columns()
         if err != nil {
-            fmt.Println("Error getting column names:", err)
+            fmt.Println(" err getting column names:", err)
             return
         }
 
@@ -100,7 +100,7 @@ import (
         for rows.Next() {
             err := rows.Scan(key...)
             if err != nil {
-                fmt.Println("Error scanning row:", err)
+                fmt.Println(" err scanning row:", err)
                 return
             }
 
@@ -237,8 +237,7 @@ func ExpArt(w http.ResponseWriter, r *http.Request) {
 
         file, handler, err := r.FormFile("file")
         if err != nil{
-            fmt.Println("Error Data retrieving")
-            fmt.Println(err)
+            fmt.Println(" err Data retrieving", err)
             return
         }
 
@@ -251,11 +250,10 @@ func ExpArt(w http.ResponseWriter, r *http.Request) {
         reader := csv.NewReader(file)
         rows,err := reader.ReadAll()
         if err != nil {
-            w.WriteHeader(http.StatusBadRequest)
-            fmt.Fprintf(w, "err ReadAll()..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: ReadAll..! : %+v\n", err)
             return
         }
-        fmt.Printf("rows ReadAll..! : %+v\n", rows)
+        fmt.Printf(" rows ReadAll..! : %+v\n", rows)
 
         for _, row := range rows {
 
@@ -268,7 +266,7 @@ func ExpArt(w http.ResponseWriter, r *http.Request) {
 
         if err != nil {
             w.WriteHeader(http.StatusBadRequest)
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
         fmt.Println("OK..! Exec..", row)

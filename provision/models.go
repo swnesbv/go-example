@@ -4,7 +4,7 @@ import (
     "time"
 )
 
-type ProvisionD struct {
+type Provision_d struct {
     Id          int
     Title       string
     Description string
@@ -18,7 +18,7 @@ type ProvisionD struct {
     Created_at  time.Time 
     Updated_at  *time.Time 
 }
-type ProvisionH struct {
+type Provision_h struct {
     Id          int
     Title       string
     Description string

@@ -33,7 +33,7 @@ func Period(w http.ResponseWriter, r *http.Request) {
         end,err := time.ParseInLocation(
             "2006-01-02T15:04:05", r.FormValue("end") + ":00", loc)
         if err != nil {
-            fmt.Fprintf(w, "err time Parse..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: time Parse..! : %+v\n", err)
             return
         }
 
@@ -51,7 +51,7 @@ func Period(w http.ResponseWriter, r *http.Request) {
         }
         list,err := json.Marshal(data)
         if err != nil {
-            fmt.Fprintf(w, "err json Marshal..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: json Marshal..! : %+v\n", err)
             return
         }
 

@@ -122,7 +122,7 @@ func SqlToken(w http.ResponseWriter, r *http.Request) (cls *Claims, err error) {
 
     if err != nil {
         if err == jwt.ErrSignatureInvalid {
-            fmt.Fprintf(w, "err ErrSignatureInvalid..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: ErrSignatureInvalid..! : %+v\n", err)
             return
         }
         fmt.Fprintf(w, "SqlToken err: ParseWithClaims..! : %+v\n", err)
@@ -186,7 +186,7 @@ func BuildSend(w http.ResponseWriter, email string) (string, error) {
 
     if err != nil {
         w.WriteHeader(http.StatusBadRequest)
-        fmt.Fprintf(w, "err SignedString()..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: SignedString()..! : %+v\n", err)
     }
     return tokenstr,err
 }

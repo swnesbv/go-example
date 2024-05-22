@@ -4,6 +4,7 @@ import (
     "os"
     "fmt"
     "time"
+    "runtime"
     "strings"
     "net/http"
     "encoding/csv"
@@ -113,7 +114,6 @@ func ExpSch(w http.ResponseWriter, r *http.Request) {
         reader := csv.NewReader(file)
         rows,err := reader.ReadAll()
         if err != nil {
-            w.WriteHeader(http.StatusBadRequest)
             fmt.Fprintf(w, " Error ReadAll..! : %+v\n", err)
             return
         }
@@ -127,33 +127,46 @@ func ExpSch(w http.ResponseWriter, r *http.Request) {
             h  := row[6]
             o  := row[7]
 
-            var list []time.Time
+            var lt []time.Time
+            ch := make(chan []time.Time)
             th := strings.Fields(h)
+
             for x := range th {
-                tht,_ := time.Parse(time.TimeOnly, th[x])
-                list = append(list, tht)
+                go func() {
+                    tht,_ := time.Parse(time.TimeOnly, th[x])
+                    lt = append(lt, tht)
+                    ch <- lt
+                    fmt.Println(" go func 1..", runtime.NumGoroutine())
+                }()
+                <-ch
             }
-            
-            var list2 []time.Time
+
+            var lt2 []time.Time
+            ch2 := make(chan []time.Time)
             to := strings.Fields(o)
+
             for x := range to {
-                tot,_ := time.Parse(time.TimeOnly, to[x])
-                list2 = append(list2, tot)
+                go func() {
+                    tot,_ := time.Parse(time.TimeOnly, to[x])
+                    lt2 = append(lt2, tot)
+                    ch2 <- lt2
+                    fmt.Println(" go func 2..", runtime.NumGoroutine())
+                }()
+                <-ch2
             }
 
-            sqlst := "INSERT INTO schedule (title,description,owner,st_hour,en_hour,hours,occupied,completed,created_at,updated_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)"
+            sqlst := "INSERT INTO schedule (title,description,owner,st_hour,en_hour,hours,occupied,created_at,updated_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)"
 
-            _, err := conn.Exec(sqlst, t,d,owner,sh,eh,pq.Array(list),pq.Array(list2),false,time.Now(),nil)
+            _, err := conn.Exec(sqlst, t,d,owner,sh,eh,pq.Array(lt),pq.Array(lt2),time.Now(),nil)
 
             if err != nil {
-                w.WriteHeader(http.StatusBadRequest)
                 fmt.Fprintf(w, " Error Exec..! : %+v\n", err)
                 return
             }
         }
 
         defer conn.Close()
-
+        fmt.Println(" ExpSch goroutine..", runtime.NumGoroutine())
         http.Redirect(w,r, "/all-schedule", http.StatusFound)
     }
 }

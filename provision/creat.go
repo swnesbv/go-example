@@ -41,7 +41,7 @@ func CreatDays(w http.ResponseWriter, r *http.Request) {
         start,terr := time.Parse(time.DateOnly, r.FormValue("start"))
         end,terr := time.Parse(time.DateOnly, r.FormValue("end"))
         if terr != nil {
-            fmt.Fprintf(w, "err time Parse..! : %+v\n", terr)
+            fmt.Fprintf(w, " Error: time Parse..! : %+v\n", terr)
             return
         }
 
@@ -52,7 +52,7 @@ func CreatDays(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, title,description,owner,start,end,time.Now())
 
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
@@ -91,7 +91,7 @@ func CreatHours(w http.ResponseWriter, r *http.Request) {
             "2006-01-02T15:04:05", r.FormValue("end") + ":00", loc)
 
         if terr != nil {
-            fmt.Fprintf(w, "err time Parse..! : %+v\n", terr)
+            fmt.Fprintf(w, " Error: time Parse..! : %+v\n", terr)
             return
         }
 
@@ -101,7 +101,7 @@ func CreatHours(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, title,description,owner,start,end,time.Now())
 
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 

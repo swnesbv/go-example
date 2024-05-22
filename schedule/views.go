@@ -36,7 +36,7 @@ func psForm (w http.ResponseWriter, r *http.Request) (list []time.Time, err erro
     var v string
     var ss time.Time
     for _, v = range ps {
-        ss = Converter(w,v)
+        ss = Converter(w, v)
         list = append(list, ss)
     }
     return list,err
@@ -59,7 +59,7 @@ func selection (hours,occupied []string) (slt []string) {
     return slt
 }
 
-func allSelect (
+/*func allSelect (
     w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err error) {
         
     start := time.Now()
@@ -93,9 +93,9 @@ func allSelect (
     fmt.Println(" sel time..", elapsed)
 
     return list,err
-}
+}*/
 
-/*func scanning(w http.ResponseWriter, rows *sql.Rows, ch chan *Schedule) {
+func scanning(w http.ResponseWriter, rows *sql.Rows, ch chan *Schedule) {
     i := new(Schedule)
     err := rows.Scan(
         &i.Id,
@@ -136,7 +136,7 @@ func allSelect(w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err err
     fmt.Println(" sel time..", elapsed)
 
     return list,err
-}*/
+}
 
 
 func allSch(w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err error) {

@@ -52,11 +52,11 @@ func SchSelect(w http.ResponseWriter, r *http.Request) {
             time.TimeOnly, r.FormValue("hour"))
 
         if derr != nil {
-            fmt.Fprintf(w, "err D ParseInLocation..! : %+v\n", derr)
+            fmt.Fprintf(w, " Error: D ParseInLocation..! : %+v\n", derr)
             return
         }
         if herr != nil {
-            fmt.Fprintf(w, "err H ParseInLocation..! : %+v\n", herr)
+            fmt.Fprintf(w, " Error: H ParseInLocation..! : %+v\n", herr)
             return
         }
         
@@ -68,14 +68,14 @@ func SchSelect(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(
             str, owner,id,date,hour,time.Now())
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
         prv := "UPDATE schedule SET occupied=array_cat(occupied, $2),completed=$3,updated_at=$4 WHERE id=$1"
         _, perr := conn.Exec(prv, id,pq.Array(list),false,time.Now())
         if perr != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", perr)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", perr)
             return
         }
 

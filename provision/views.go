@@ -11,11 +11,11 @@ import (
 )
 
 
-func allPrvD(w http.ResponseWriter, rows *sql.Rows) (list []*ProvisionD, err error) {
+func allPrvD(w http.ResponseWriter, rows *sql.Rows) (list []*Provision_d, err error) {
 
     defer rows.Close()
     for rows.Next() {
-        i := new(ProvisionD)
+        i := new(Provision_d)
         err = rows.Scan(
             &i.Id,
             &i.Title,
@@ -38,11 +38,11 @@ func allPrvD(w http.ResponseWriter, rows *sql.Rows) (list []*ProvisionD, err err
     }
     return list,err
 }
-func allPrvH(w http.ResponseWriter, rows *sql.Rows) (list []*ProvisionH, err error) {
+func allPrvH(w http.ResponseWriter, rows *sql.Rows) (list []*Provision_h, err error) {
 
     defer rows.Close()
     for rows.Next() {
-        i := new(ProvisionH)
+        i := new(Provision_h)
         err = rows.Scan(
             &i.Id,
             &i.Title,
@@ -67,7 +67,7 @@ func allPrvH(w http.ResponseWriter, rows *sql.Rows) (list []*ProvisionH, err err
 }
 
 
-func idPrvD(w http.ResponseWriter, conn *sql.DB, id int) (i ProvisionD, err error) {
+func idPrvD(w http.ResponseWriter, conn *sql.DB, id int) (i Provision_d, err error) {
 
     row := conn.QueryRow("SELECT * FROM provision_d WHERE id=$1", id)
 
@@ -87,16 +87,16 @@ func idPrvD(w http.ResponseWriter, conn *sql.DB, id int) (i ProvisionD, err erro
     )
 
     if err == sql.ErrNoRows {
-        fmt.Fprintf(w, "err sql.ErrNoRows..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql.ErrNoRows..! : %+v\n", err)
         return
     } else if err != nil {
-        fmt.Fprintf(w, "err sql..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
         return
     }
 
     return i,err
 }
-func idPrvH(w http.ResponseWriter, conn *sql.DB, id int) (i ProvisionH, err error) {
+func idPrvH(w http.ResponseWriter, conn *sql.DB, id int) (i Provision_h, err error) {
 
     row := conn.QueryRow("SELECT * FROM provision_h WHERE id=$1", id)
 
@@ -116,10 +116,10 @@ func idPrvH(w http.ResponseWriter, conn *sql.DB, id int) (i ProvisionH, err erro
     )
 
     if err == sql.ErrNoRows {
-        fmt.Fprintf(w, "err sql.ErrNoRows..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql.ErrNoRows..! : %+v\n", err)
         return
     } else if err != nil {
-        fmt.Fprintf(w, "err sql..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
         return
     }
 

@@ -31,7 +31,7 @@ func allArt(w http.ResponseWriter, rows *sql.Rows) (list []*Article, err error) 
             &i.Updated_at,
         )
         if err != nil {
-            fmt.Fprintf(w, "Error Scan..! : %+v\n", err)
+            fmt.Fprintf(w, " Error Scan..! : %+v\n", err)
             return
         }
         list = append(list, i)
@@ -57,7 +57,7 @@ func userArt(w http.ResponseWriter, rows *sql.Rows) (list []*Article, err error)
             &i.Updated_at,
         )
         if err != nil {
-            fmt.Fprintf(w, "Error Scan..! : %+v\n", err)
+            fmt.Fprintf(w, " Error Scan..! : %+v\n", err)
             return
         }
         list = append(list, i)
@@ -104,10 +104,10 @@ func authorArt(w http.ResponseWriter, conn *sql.DB, id int,cls *authtoken.Claims
     )
 
     if err == sql.ErrNoRows {
-        fmt.Fprintf(w, "err sql.ErrNoRows..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql.ErrNoRows..! : %+v\n", err)
         return
     } else if err != nil {
-        fmt.Fprintf(w, "err sql..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
         return
     }
 
@@ -131,10 +131,10 @@ func idArt(w http.ResponseWriter, conn *sql.DB, id int) (i Article, err error) {
     )
 
     if err == sql.ErrNoRows {
-        fmt.Fprintf(w, "err sql.ErrNoRows..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql.ErrNoRows..! : %+v\n", err)
         return
     } else if err != nil {
-        fmt.Fprintf(w, "err sql..! : %+v\n", err)
+        fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
         return
     }
 
@@ -166,11 +166,11 @@ func OnAuth(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             if err == jwt.ErrSignatureInvalid {
                 w.WriteHeader(http.StatusUnauthorized)
-                fmt.Fprintf(w, "err jwt.ErrSignatureInvalid..! : %+v\n", err)
+                fmt.Fprintf(w, " Error: jwt.ErrSignatureInvalid..! : %+v\n", err)
                 return
             }
             w.WriteHeader(http.StatusBadRequest)
-            fmt.Fprintf(w, "err jwt.ParseWithClaims()..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: jwt.ParseWithClaims()..! : %+v\n", err)
             return
         }
         if !token.Valid {

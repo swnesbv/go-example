@@ -40,7 +40,7 @@ func Creat(w http.ResponseWriter, r *http.Request) {
         _, err := db.Exec(sqlstr, title,description,owner,time.Now())
 
         if err != nil {
-            fmt.Fprintf(w, "err db.Exec()..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: db.Exec()..! : %+v\n", err)
             return
         }
         http.Redirect(w,r, "/all-group", http.StatusFound)
@@ -71,7 +71,7 @@ func UpGr(w http.ResponseWriter, r *http.Request) {
     flag,err := options.ParseBool(r.FormValue("completed"))
     if err != nil {
         w.WriteHeader(http.StatusBadRequest)
-        fmt.Fprintf(w, "err ParseBool()..  : %+v\n", err)
+        fmt.Fprintf(w, " Error: ParseBool()..  : %+v\n", err)
         return
     }
 
@@ -94,7 +94,7 @@ func UpGr(w http.ResponseWriter, r *http.Request) {
         _, err := db.Exec(sqlstr, id,owner,title,description,flag,time.Now())
         
         if err != nil {
-            fmt.Fprintf(w, "err db.Exec()..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: db.Exec()..! : %+v\n", err)
             return
         }
         http.Redirect(w,r, "/all-or-owner-group", http.StatusFound)

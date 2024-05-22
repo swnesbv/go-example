@@ -44,7 +44,7 @@ func Creativity(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, title,description,owner,time.Now())
 
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
@@ -77,7 +77,7 @@ func UpArt(w http.ResponseWriter, r *http.Request) {
     flag,err := options.ParseBool(r.FormValue("completed"))
     if err != nil {
         w.WriteHeader(http.StatusBadRequest)
-        fmt.Fprintf(w, "err ParseBool()..  : %+v\n", err)
+        fmt.Fprintf(w, " Error: ParseBool()..  : %+v\n", err)
         return
     }
 
@@ -99,7 +99,7 @@ func UpArt(w http.ResponseWriter, r *http.Request) {
         
         _, err := conn.Exec(sqlstr, id,owner,title,description,flag,time.Now())
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
@@ -156,7 +156,7 @@ func DelArt(w http.ResponseWriter, r *http.Request) {
         _, err := conn.Exec(sqlstr, id,owner)
         
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
         
@@ -201,7 +201,7 @@ func ImgArt(w http.ResponseWriter, r *http.Request) {
         if i.Img != nil {
             err := os.Remove("." + *i.Img) 
             if err != nil { 
-                fmt.Fprintf(w, "err Remove..! : %+v\n", err)
+                fmt.Fprintf(w, " Error: Remove..! : %+v\n", err)
             }
         }
 
@@ -215,8 +215,8 @@ func ImgArt(w http.ResponseWriter, r *http.Request) {
         flname := handler.Filename
         sid := r.URL.Query().Get("id")
 
-        fpath := "./static/img/art/" + cls.Email + "/" + sid + "/"
-        fname := "./static/img/art/" + cls.Email + "/" + sid + "/"  + flname
+        fpath := "./sfl/static/img/art/" + cls.Email + "/" + sid + "/"
+        fname := "./sfl/static/img/art/" + cls.Email + "/" + sid + "/"  + flname
         fle := "/static/img/art/" + cls.Email + "/" + sid + "/" + flname
 
         fmt.Printf("fle %+v\n: ", fle)
@@ -241,12 +241,11 @@ func ImgArt(w http.ResponseWriter, r *http.Request) {
         }
 
         sqlstr := "UPDATE article SET img=$3, updated_at=$4 WHERE id=$1 AND owner=$2"
-        
         owner := cls.User_id
         _, err = conn.Exec(sqlstr, id,owner,fle,time.Now())
         
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 
@@ -299,7 +298,7 @@ func DelImgArt(w http.ResponseWriter, r *http.Request) {
         _, err = conn.Exec(sqlstr, id,owner,nil,time.Now())
         
         if err != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
             return
         }
 

@@ -103,7 +103,8 @@ CREATE TABLE booking (
     title       VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
     owner       INTEGER,
-    to_prv      INTEGER,
+    to_prv_d    INTEGER,
+    to_prv_h    INTEGER,
     st_date     Date,
     en_date     Date,
     st_hour     TIMESTAMP,
@@ -112,8 +113,8 @@ CREATE TABLE booking (
     created_at  TIMESTAMPTZ,
     updated_at  TIMESTAMPTZ,
     FOREIGN KEY (owner) REFERENCES users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (to_prv) REFERENCES provision_d(id) ON DELETE CASCADE,
-    FOREIGN KEY (to_prv) REFERENCES provision_h(id) ON DELETE CASCADE
+    FOREIGN KEY (to_prv_d) REFERENCES provision_d(id) ON DELETE CASCADE,
+    FOREIGN KEY (to_prv_h) REFERENCES provision_h(id) ON DELETE CASCADE
 );
 CREATE TABLE schedule (
     id          SERIAL PRIMARY KEY,
@@ -140,4 +141,34 @@ CREATE TABLE recording (
     updated_at  TIMESTAMPTZ,
     FOREIGN KEY (owner) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (to_schedule) REFERENCES schedule(id) ON DELETE CASCADE
+);
+CREATE TABLE collection (
+    id            SERIAL PRIMARY KEY,
+    collection_id VARCHAR(8),
+    owner         INTEGER,
+    pfile         TEXT[],
+    completed     BOOLEAN DEFAULT false,
+    created_at    TIMESTAMPTZ,
+    updated_at    TIMESTAMPTZ,
+    FOREIGN KEY (owner) REFERENCES users(user_id) ON DELETE CASCADE
+);
+CREATE TABLE slider (
+    id          SERIAL PRIMARY KEY,
+    collection_id VARCHAR(8),
+    title       VARCHAR(255),
+    description TEXT,
+    owner       INTEGER,
+    to_art      INTEGER,
+    to_sch      INTEGER,
+    to_prv_d    INTEGER,
+    to_prv_h    INTEGER,
+    pfile       TEXT[],
+    completed   BOOLEAN DEFAULT false,
+    created_at  TIMESTAMPTZ,
+    updated_at  TIMESTAMPTZ,
+    FOREIGN KEY (owner) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (to_art) REFERENCES article(id) ON DELETE CASCADE,
+    FOREIGN KEY (to_sch) REFERENCES schedule(id) ON DELETE CASCADE,
+    FOREIGN KEY (to_prv_d) REFERENCES provision_d(id) ON DELETE CASCADE,
+    FOREIGN KEY (to_prv_h) REFERENCES provision_h(id) ON DELETE CASCADE
 );

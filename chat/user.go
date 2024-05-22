@@ -83,7 +83,7 @@ func UsMsg(w http.ResponseWriter, r *http.Request) {
 
 	us_register <- conn
 
-	sqlstr := "INSERT INTO msguser (coming,owner,to_user,completed, created_at) VALUES ($1,$2,$3,$4,$5)"
+	sqlstr := "INSERT INTO msguser (coming, owner, to_user, completed, created_at) VALUES ($1,$2,$3,$4,$5)"
 
 	for {
 		var message Message

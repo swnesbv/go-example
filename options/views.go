@@ -8,7 +8,7 @@ import (
     "path/filepath"
 )
 
-func OkBool(a int, b int) bool {
+func OkBool(a, b int) bool {
     if a == b {
         return true
     }

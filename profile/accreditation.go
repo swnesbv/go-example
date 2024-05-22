@@ -32,7 +32,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		_, err := conn.Exec(sqlstr, username,email,hash,time.Now())
 
 		if err != nil {
-			fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
 		}
 
@@ -75,7 +75,7 @@ func UpName(w http.ResponseWriter, r *http.Request) {
 		_, err := conn.Exec(sqlstr, owner,username,time.Now())
 
 		if err != nil {
-			fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
 		}
 
@@ -118,7 +118,7 @@ func UpPass(w http.ResponseWriter, r *http.Request) {
 		_, err := conn.Exec(sqlstr, owner,hash,time.Now())
 
 		if err != nil {
-			fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
 		}
 
@@ -197,7 +197,7 @@ func VerifyEmail(w http.ResponseWriter, r *http.Request) {
 		_, err := conn.Exec(sqlst, owner,veri_email.Email,time.Now())
 
 		if err != nil {
-			fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
 		}
 
@@ -238,7 +238,7 @@ func DelUs(w http.ResponseWriter, r *http.Request) {
 		_, err := conn.Exec(sqlstr, owner)
 
 		if err != nil {
-			fmt.Fprintf(w, "err Exec..! : %+v\n", err)
+			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
 		}
 

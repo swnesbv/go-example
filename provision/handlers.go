@@ -94,7 +94,7 @@ func IdPrvDays(w http.ResponseWriter, r *http.Request) {
         start,err := time.Parse(time.DateOnly, r.FormValue("start"))
         end,err := time.Parse(time.DateOnly, r.FormValue("end"))
         if err != nil {
-            fmt.Fprintf(w, "err time Parse..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: time Parse..! : %+v\n", err)
             return
         }
 
@@ -111,17 +111,17 @@ func IdPrvDays(w http.ResponseWriter, r *http.Request) {
         e_list = append(e_list, end)
         fmt.Println(" end list..", e_list)
 
-        bkg := "INSERT INTO booking (title,description,owner,to_prv,st_date,en_date,created_at) VALUES ($1,$2,$3,$4,$5,$6,$7)"
+        bkg := "INSERT INTO booking (title,description,owner,to_prv_d,st_date,en_date,created_at) VALUES ($1,$2,$3,$4,$5,$6,$7)"
         _, berr := conn.Exec(bkg, title,description,owner,id,start,end,time.Now())
         if berr != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", berr)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", berr)
             return
         }
 
         prv := "UPDATE provision_d SET s_dates=array_cat(s_dates, $2),e_dates=array_cat(e_dates, $3),dates=array_cat(dates, $4),updated_at=$5 WHERE id=$1"
         _, perr := conn.Exec(prv, id,pq.Array(s_list),pq.Array(e_list),pq.Array(list),time.Now())
         if perr != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", perr)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", perr)
             return
         }
 
@@ -172,7 +172,7 @@ func IdPrvHours(w http.ResponseWriter, r *http.Request) {
             "2006-01-02T15:04:05", r.FormValue("end") + ":00", loc)
             
         if err != nil {
-            fmt.Fprintf(w, "err time Parse..! : %+v\n", err)
+            fmt.Fprintf(w, " Error: time Parse..! : %+v\n", err)
             return
         }
 
@@ -189,11 +189,11 @@ func IdPrvHours(w http.ResponseWriter, r *http.Request) {
         s_list = append(s_list, start)
         e_list = append(e_list, end)
 
-        bkg := "INSERT INTO booking (title,description,owner,to_prv,st_hour,en_hour,created_at) VALUES ($1,$2,$3,$4,$5,$6,$7)"
+        bkg := "INSERT INTO booking (title,description,owner,to_prv_h,st_hour,en_hour,created_at) VALUES ($1,$2,$3,$4,$5,$6,$7)"
         _, berr := conn.Exec(bkg, title,description,owner,id,start,end,time.Now())
         
         if berr != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", berr)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", berr)
             return
         }
 
@@ -201,7 +201,7 @@ func IdPrvHours(w http.ResponseWriter, r *http.Request) {
         _, perr := conn.Exec(prv, id,pq.Array(s_list),pq.Array(e_list),pq.Array(list),time.Now())
 
         if perr != nil {
-            fmt.Fprintf(w, "err Exec..! : %+v\n", perr)
+            fmt.Fprintf(w, " Error: Exec..! : %+v\n", perr)
             return
         }
 

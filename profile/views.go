@@ -13,18 +13,13 @@ import (
     "go_authentication/authtoken"
 )
 
-
 func hashPassword(password string) (string, error) {
-
-    bytes,err := bcrypt.GenerateFromPassword([]byte(password), 14)
-
-    return string(bytes),err
+    b,err := bcrypt.GenerateFromPassword([]byte(password), 14)
+    return string(b),err
 }
 
 func checkPass(password, hash string) bool {
-
     err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-    
     return err == nil
 }
 
@@ -35,14 +30,14 @@ func qPass(w http.ResponseWriter, conn *sql.DB, email string) (saved_password st
 
     switch {
     case row == sql.ErrNoRows:
-        fmt.Fprintf(w, "Error: login email..! : %+v\n", email)
-        fmt.Fprintf(w, "err: login email..! : %+v\n", row)
+        fmt.Fprintf(w, " Error: login email..! : %+v\n", email)
+        fmt.Fprintf(w, " err: login email..! : %+v\n", row)
         return
     case row != nil:
-        fmt.Fprintf(w, "Error: QueryRow..! : %+v\n", row)
+        fmt.Fprintf(w, " Error: QueryRow..! : %+v\n", row)
         break
     default:
-        fmt.Println("email : ", email)
+        fmt.Println(" email..", email)
     }
     return saved_password,err
 }

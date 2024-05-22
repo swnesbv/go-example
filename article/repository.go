@@ -36,7 +36,7 @@ func qArt(
 
 func qArtBool(w http.ResponseWriter, conn *sql.DB) (rows *sql.Rows, err error) {
 
-    rows,err = conn.Query("SELECT id, title, description, img, owner, completed, created_at, updated_at FROM article WHERE Completed=$1", true)
+    rows,err = conn.Query("SELECT id, title, description, img, owner, completed, created_at, updated_at FROM article WHERE completed=$1", true)
 
     if err != nil {
         switch {
