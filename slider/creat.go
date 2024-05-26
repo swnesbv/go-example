@@ -29,7 +29,7 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
 
-		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/collection.html", "./tpl/base.html"))
+		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/add_collection.html", "./tpl/base.html"))
 
 		tpl.ExecuteTemplate(w, "base", nil)
 	}
@@ -60,7 +60,7 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 			filePath := filepath.Join(fpath, f.Name)
 
 			if f.FileInfo().IsDir() {
-				fmt.Println("creating directory...")
+				fmt.Println("creating directory..")
 				if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
 					fmt.Fprintf(w, " Error: FileInfo..! : %+v\n", err)
 				}
@@ -91,7 +91,7 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 
 		conn := connect.ConnSql()
 		owner := cls.User_id
-		str := "INSERT INTO collection (collection_id, owner, pfile, created_at) VALUES ($1,$2,$3,$4,$5)"
+		str := "INSERT INTO collection (collection_id, owner, pfile, created_at) VALUES ($1,$2,$3,$4)"
 
 		_, adderr := conn.Exec(str, sid,owner,pq.Array(list),time.Now())
 
@@ -184,18 +184,26 @@ func CreatSlider(w http.ResponseWriter, r *http.Request) {
 		rand.Seed(time.Now().UTC().UnixNano())
 		sid := randomString(8)
 
-        list,pserr := psForm(w,r, cls,sid)
+        lt_t,pserr := psFormT(w,r)
         if pserr != nil {
             return
         }
-        fmt.Printf("list %+v\n: ", list)
+        lt_d,pserr := psFormD(w,r)
+        if pserr != nil {
+            return
+        }
+        pfile,pserr := psFormI(w,r, cls,sid)
+        if pserr != nil {
+            return
+        }
+        fmt.Printf("pfile %+v\n: ", pfile)
 
         conn := connect.ConnSql()
         
-        str := "INSERT INTO slider (collection_id, title, description, owner, to_art, to_sch, to_prv_d, to_prv_h, pfile, created_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)"
+        str := "INSERT INTO slider (collection_id, title, description, owner, to_art, to_sch, to_prv_d, to_prv_h, lt_t, lt_d, pfile, created_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)"
 
         _, err := conn.Exec(
-            str, sid,title,description,owner,to_art,to_sch,to_prv_d,to_prv_h,pq.Array(list),time.Now())
+            str, sid,title,description,owner,to_art,to_sch,to_prv_d,to_prv_h,pq.Array(lt_t),pq.Array(lt_d),pq.Array(pfile),time.Now())
 
         if err != nil {
             fmt.Fprintf(w, " Error: CreatSlider Exec..! : %+v\n", err)

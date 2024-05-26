@@ -79,12 +79,27 @@
     </div>
     {{ end }}
 
-    <div id="addinput" class="card-body">
+    <div id="addt" class="card-body">
+    </div>
+    <div class="card-footer action-buttons">
+    <button class="btn btn-sm btn-outline-primary" onclick="addFnT(); return false;">
+        title - add input
+    </button>
+    </div>
+    <div id="addd" class="card-body">
+    </div>
+    <div class="card-footer action-buttons">
+    <button class="btn btn-sm btn-outline-primary" onclick="addFnD(); return false;">
+        description - add input
+    </button>
     </div>
 
+
+    <div id="addi" class="card-body">
+    </div>
     <div class="card-footer action-buttons">
-    <button class="btn btn-sm btn-outline-primary" onclick="addFn(); return false;">
-        image - add Input
+    <button class="btn btn-sm btn-outline-primary" onclick="addFnI(); return false;">
+        image - add input
     </button>
     </div>
 
@@ -95,13 +110,36 @@
 </form>
 
 <script>
-    function addFn() {
-        const divEle = document.getElementById("addinput");
+    function addFnT() {
+        const divEle = document.getElementById("addt");
+        const wrapper = document.createElement("div");
+        const iFeild = document.createElement("input");
+        iFeild.setAttribute("type", "text");
+        iFeild.setAttribute("name", "lt_t");
+        iFeild.setAttribute("placeholder", "Enter value");
+        iFeild.classList.add("form-control");
+        iFeild.classList.add("mt-2");
+        wrapper.appendChild(iFeild);
+        divEle.appendChild(wrapper);
+    }
+    function addFnD() {
+        const divEle = document.getElementById("addd");
+        const wrapper = document.createElement("div");
+        const iFeild = document.createElement("input");
+        iFeild.setAttribute("type", "text");
+        iFeild.setAttribute("name", "lt_d");
+        iFeild.setAttribute("placeholder", "Enter value");
+        iFeild.classList.add("form-control");
+        iFeild.classList.add("mt-2");
+        wrapper.appendChild(iFeild);
+        divEle.appendChild(wrapper);
+    }
+    function addFnI() {
+        const divEle = document.getElementById("addi");
         const wrapper = document.createElement("div");
         const iFeild = document.createElement("input");
         iFeild.setAttribute("type", "file");
         iFeild.setAttribute("name", "file");
-        // iFeild.setAttribute("multiple", "multiple");
         iFeild.setAttribute("placeholder", "Enter value");
         iFeild.classList.add("form-control");
         iFeild.classList.add("mt-2");

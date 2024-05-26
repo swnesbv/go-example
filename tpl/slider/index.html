@@ -1,0 +1,51 @@
+{{ define "index" }}
+
+
+<section class="promo_slider">
+    <div class="sl_content">
+        {{ range .Sl }}
+        <div id="item-{{ .Id }}" class="card_i">
+            {{ if ne .F nil }}
+                <style>
+                    #item-{{ .Id }}.card_i .content::before,
+                    #item-{{ .Id }}.card_i .content .inner::after{
+                        background-image: url("{{ .F }}")
+                    }
+                </style>
+
+            {{ else }}
+            <style>
+                #item-{{ .Id }}.card_i .content::before,
+                #item-{{ .Id }}.card_i .content .inner::after{
+                    background-image: url("/static/photo.png")
+                }
+            </style>
+            {{ end }}
+
+            <div class="content">
+                <span class="item_name">
+                    <span>{{ .T }}</span>
+                </span>
+                <span class="number" data-text="{{ .Id }}"> {{ .Id }} </span>
+
+                <div class="content_text">
+                    {{ .D}}
+                    <hr />
+                    <a class="btn btn-outline-primary btn-sm" href="">
+                        {{ .T }}
+                    </a>
+                </div>
+
+                <div class="inner"></div>
+                <div class="inner_shadow"></div>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+    <div class="sld_trigger"></div>
+</section>
+
+
+{{ end }}
+
+

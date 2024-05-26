@@ -19,10 +19,12 @@ type Slider struct {
 	Title         string
 	Description   string
 	Owner         int
-	To_art     	  int
-	To_sch    	  int
-	To_prv_d 	  int
-	To_prv_h 	  int
+	To_art     	  *int
+	To_sch    	  *int
+	To_prv_d 	  *int
+	To_prv_h 	  *int
+	Lt_t   	  	  []string
+	Lt_d   	  	  []string
 	Pfile   	  []string
 	Completed     bool
 	Created_at    time.Time

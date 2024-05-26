@@ -1,29 +1,22 @@
 
-.num{
-    width: 20%;
-    overflow: hidden;
-    float: right;
-}
-.chat{
-    width: 80%;
-}
-.ch_img{
-    width: 100%;
-}
-.js_chat{
-    font-size: 75%;
-}
-.js_chat{
-    word-wrap: break-word;;
+
+.collection{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    height: 100%;
+    padding: 1em;
 }
 
-@media (max-width:1024px){
-    .num{
-        min-width: 100%;
-    }
-    .chat{
-        width: 100%;
-    }
+.collection figure{
+    height: 12em;
+}
+figure img{
+    width: auto;
+    height: 100%;
 }
 
 .flex_cont{
@@ -54,9 +47,6 @@
     align-content: space-between;
 }
 
-.num hr{
-    margin: 0;
-}
 html,
 body{
     overflow-x: hidden;

@@ -15,7 +15,7 @@ import (
 )
 
 
-func psForm (
+func psFormI (
     w http.ResponseWriter, r *http.Request, cls *authtoken.Claims, sid string) (list []string, err error) {
 
     pserr := r.ParseMultipartForm(10 * 1024 * 1024)
@@ -24,7 +24,6 @@ func psForm (
         return
     }
     files := r.MultipartForm.File["file"]
-
     for _, i := range files {
 
         flname := i.Filename
@@ -48,6 +47,38 @@ func psForm (
         }
 
         list = append(list, fle)
+    }
+    return list,err
+}
+func psFormT (
+    w http.ResponseWriter, r *http.Request) (list []string, err error) {
+
+    pserr := r.ParseForm()
+    if pserr != nil {
+        fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
+        return
+    }
+    ps := r.Form["lt_t"]
+
+    var s string
+    for _, s = range ps {
+        list = append(list, s)
+    }
+    return list,err
+}
+func psFormD (
+    w http.ResponseWriter, r *http.Request) (list []string, err error) {
+
+    pserr := r.ParseForm()
+    if pserr != nil {
+        fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
+        return
+    }
+    ps := r.Form["lt_d"]
+
+    var s string
+    for _, s = range ps {
+        list = append(list, s)
     }
     return list,err
 }

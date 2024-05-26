@@ -5,8 +5,7 @@
 
 <h1 class="container lead my-3">all collection</h1>
 	
-{{ range . }}
-
+{{ range .List }}
 <div class="card">
 
 <div class="card-body">
@@ -20,19 +19,6 @@
 	<span class="badge text-bg-light">owner</span>{{ .Owner }}
 	</li>
 </ul>
-
-<ul class="list-group list-group-flush">
-	<li class="list-group-item">
-		<span class="badge text-bg-light">list img</span>
-		{{ range .Pfile }}
-		<figure>
-			<img height="360" src="{{ . }}">
-		</figure>
-		{{ end }}
-	</li>
-</ul>
-
-
 <ul class="list-group list-group-flush">
 	<li class="list-group-item">
 	<span class="badge text-bg-light">created</span>
@@ -52,23 +38,147 @@
 	</li>
 </ul>
 
-</div>
+<h2 class="lead my-2"><small>list img</small></h2>
 
-<div class="card-footer">
-<a class="btn btn-outline-primary btn-sm" href="/id-prv-days?id={{ .Id }}" role="button">
-	details
-</a>
-</div>
+<form class="card" method="POST">
+	<div class="collection">
+		{{ range .Pfile }}
+		<figure class="collection">
+			<img class="" src="{{ . }}">
+			<figcaption>img</figcaption>
+		</figure>
+		  <div>
+		    <input type="checkbox" name="img" />
+		    <input type="hidden" name="path" value="{{ . }}" />
+		    <label for="horns">append</label>
+		  </div>
+		{{ end }}
+	</div>
+
+	<div class="card-body">
+	<sup>title</sup>
+	<input required type="text" name="title" class="form-control">
+	<sup>description</sup>
+	<input required type="text" name="description" class="form-control">
+	<input type="hidden" name="collection_id" value="{{ .Collection_id }}" />
+	</div>
+
+    {{ if ne $.Art nil }}
+    <div class="card-footer">
+        <select
+            name="to_art"
+            class="form-control shadow-sm">
+            <option value="">art select</option>
+
+            {{ range $.Art }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne $.Sch nil }}
+    <div class="card-footer">
+        <select
+            name="to_sch"
+            class="form-control shadow-sm">
+            <option value="">sch select</option>
+
+            {{ range $.Sch }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne $.PrvD nil }}
+    <div class="card-footer">
+        <select
+            name="to_prv_d"
+            class="form-control shadow-sm">
+            <option value="">prv d select</option>
+
+            {{ range $.PrvD }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne $.PrvH nil }}
+    <div class="card-footer">
+        <select
+            name="to_prv_h"
+            class="form-control shadow-sm">
+            <option value="">prv h select</option>
+
+            {{ range $.PrvH }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+
+        </select>
+    </div>
+    {{ end }}
+
+    <div id="addt" class="card-body">
+    </div>
+    <div class="card-footer action-buttons">
+    <button class="btn btn-sm btn-outline-primary" onclick="addFnT(); return false;">
+        title - add input
+    </button>
+    </div>
+    <div id="addd" class="card-body">
+    </div>
+    <div class="card-footer action-buttons">
+    <button class="btn btn-sm btn-outline-primary" onclick="addFnD(); return false;">
+        description - add input
+    </button>
+    </div>
+
+	<div class="card-footer action-buttons">
+		<p>select a photo from the collection and create a slider</p>
+	<input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
+	</div>
+</form>
 
 </div>
-
+</div>
 <hr>
-
 {{ end }}
-
+	  
 <script>
-document.body.innerHTML = document.body.innerHTML.replaceAll("0001-01-01", "");
-document.body.innerHTML = document.body.innerHTML.replaceAll(" BC", "");
+    function addFnT() {
+        const divEle = document.getElementById("addt");
+        const wrapper = document.createElement("div");
+        const iFeild = document.createElement("input");
+        iFeild.setAttribute("type", "text");
+        iFeild.setAttribute("name", "lt_t");
+        iFeild.setAttribute("placeholder", "Enter value");
+        iFeild.classList.add("form-control");
+        iFeild.classList.add("mt-2");
+        wrapper.appendChild(iFeild);
+        divEle.appendChild(wrapper);
+    }
+    function addFnD() {
+        const divEle = document.getElementById("addd");
+        const wrapper = document.createElement("div");
+        const iFeild = document.createElement("input");
+        iFeild.setAttribute("type", "text");
+        iFeild.setAttribute("name", "lt_d");
+        iFeild.setAttribute("placeholder", "Enter value");
+        iFeild.classList.add("form-control");
+        iFeild.classList.add("mt-2");
+        wrapper.appendChild(iFeild);
+        divEle.appendChild(wrapper);
+    }
 </script>
 	  
 {{ end }}

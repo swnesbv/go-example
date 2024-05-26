@@ -199,16 +199,16 @@
         text-transform: capitalize;
     }
     .card_i .content .item_name{
+        width: 55%;
         top: 0;
-        padding: 1em 1em 1em 0;
-        margin: 1vh 0 0 0;
+        padding: .5em .5em .5em 0;
         color: #7C8999;
-        font-size: 2rem;
+        font-size: 1.6rem;
         font-weight: lighter;
     }
     .card_i .content .content_text{
         width: calc(36% - 1.8em);
-        top: 27.5%;
+        top: 20%;
     }
     .card_i .content .publish_date{
         top: 75%;

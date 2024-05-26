@@ -147,7 +147,7 @@ func ImpArt(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             switch {
                 case true:
-                fmt.Fprintf(w, "Error: rows..! : %+v\n", err)
+                fmt.Fprintf(w, " Error: rows..! : %+v\n", err)
                 break
             }
             return
@@ -156,12 +156,12 @@ func ImpArt(w http.ResponseWriter, r *http.Request) {
 
         mkdirerr := os.MkdirAll("./sfl/static/csv/" + cls.Email, 0750)
         if mkdirerr != nil {
-            fmt.Println("Error os.MkdirAll():", mkdirerr)
+            fmt.Println(" err os.MkdirAll..", mkdirerr)
         }
 
         file,err := os.Create("./sfl/static/csv/" + cls.Email + "/article.csv")
         if err != nil {
-            fmt.Println("Error os.Create():", err)
+            fmt.Println(" err os.Create..", err)
         }
         defer file.Close()
 
@@ -173,7 +173,7 @@ func ImpArt(w http.ResponseWriter, r *http.Request) {
 
         col,err := rows.Columns()
         if err != nil {
-            fmt.Println("Error getting column names:", err)
+            fmt.Println(" err getting column names..", err)
             return
         }
 
@@ -187,7 +187,7 @@ func ImpArt(w http.ResponseWriter, r *http.Request) {
         for rows.Next() {
             err := rows.Scan(key...)
             if err != nil {
-                fmt.Println("Error scanning row:", err)
+                fmt.Println(" err scanning row..", err)
                 return
             }
 

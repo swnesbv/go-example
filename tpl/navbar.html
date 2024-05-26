@@ -1,7 +1,7 @@
 {{template "./tpl/base.html"}}
 
 
-{{block "navbar" .}}
+{{ block "navbar" . }}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-5">
     <div class="container-fluid">
@@ -345,6 +345,32 @@
             </ul>
         </li>
 
+        <li class="nav-item dropdown">
+            <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                slider
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/add-collection">creat collection</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/all-collection">all collection</a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-item" href="/add-slider">creat slider</a>
+                </li>
+
+            </ul>
+        </li>
+
         </ul>
 
         <form class="d-flex" action="/search">
@@ -366,4 +392,4 @@
     </div>
 </nav>
 
-{{end}}
+{{ end }}
