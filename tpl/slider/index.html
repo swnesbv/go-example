@@ -5,7 +5,7 @@
     <div class="sl_content">
         {{ range .Sl }}
         <div id="item-{{ .Id }}" class="card_i">
-            {{ if ne .F nil }}
+            {{ if ne .F "" }}
                 <style>
                     #item-{{ .Id }}.card_i .content::before,
                     #item-{{ .Id }}.card_i .content .inner::after{

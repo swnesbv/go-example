@@ -59,7 +59,7 @@ func Allarticle(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return
 		}
-		fmt.Printf("%s\n", list)
+		// fmt.Printf("%s\n", list)
 		fmt.Println(" offset..", offset)
 
 		defer conn.Close()
@@ -133,18 +133,21 @@ func DetArt(w http.ResponseWriter, r *http.Request) {
 		}
 		s := idSlider(w, conn, id)
 
-		list := []string{}
 		var s1 []string = s.Lt_t
 		var s2 []string = s.Lt_d
 		var s3 []string = s.Pfile
 
-		for k := range s1 {
-			// fmt.Println("id..", k)
-			// fmt.Println("s1..", s1[k])
-			// fmt.Println("s2..", s2[k])
-			// fmt.Println("s3..", s3[k])
-			list = append(list, strconv.Itoa(k), s1[k], s2[k], s3[k])
+		list  := make([]string, 0, 40)
+		if s.Pfile == nil {
+			for k := range s1 {
+				list = append(list, strconv.Itoa(k), s1[k], s2[k], "")
+			}
+		} else {
+			for k := range s1 {
+				list = append(list, strconv.Itoa(k), s1[k], s2[k], s3[k])
+			}
 		}
+
 		// fmt.Println(" list..", list)
 
 		section := Section(list, 4)
@@ -158,7 +161,7 @@ func DetArt(w http.ResponseWriter, r *http.Request) {
 		if err := json.Unmarshal([]byte(encjson), &u); err != nil {
 			fmt.Fprintf(w, " Error Unmarshal..! : %+v\n", err)
 		}
-		// fmt.Printf(" u.. %+v\n", u)
+		fmt.Printf(" u.. %+v\n", u)
 
 		type ListSelect struct {
 			Art Article
