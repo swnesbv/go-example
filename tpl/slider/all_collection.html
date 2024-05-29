@@ -48,11 +48,14 @@
 			<figcaption>img</figcaption>
 		</figure>
 		  <div>
-		    <input type="checkbox" name="img" />
+            <input type="hidden" name="img" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
 		    <input type="hidden" name="path" value="{{ . }}" />
-		    <label for="horns">append</label>
+		    <sup>append</sup>
 		  </div>
 		{{ end }}
+
+
+
 	</div>
 
 	<div class="card-body">
@@ -155,30 +158,31 @@
 {{ end }}
 	  
 <script>
-    function addFnT() {
-        const divEle = document.getElementById("addt");
-        const wrapper = document.createElement("div");
-        const iFeild = document.createElement("input");
-        iFeild.setAttribute("type", "text");
-        iFeild.setAttribute("name", "lt_t");
-        iFeild.setAttribute("placeholder", "Enter value");
-        iFeild.classList.add("form-control");
-        iFeild.classList.add("mt-2");
-        wrapper.appendChild(iFeild);
-        divEle.appendChild(wrapper);
-    }
-    function addFnD() {
-        const divEle = document.getElementById("addd");
-        const wrapper = document.createElement("div");
-        const iFeild = document.createElement("input");
-        iFeild.setAttribute("type", "text");
-        iFeild.setAttribute("name", "lt_d");
-        iFeild.setAttribute("placeholder", "Enter value");
-        iFeild.classList.add("form-control");
-        iFeild.classList.add("mt-2");
-        wrapper.appendChild(iFeild);
-        divEle.appendChild(wrapper);
-    }
+
+function addFnT() {
+    const divEle = document.getElementById("addt");
+    const wrapper = document.createElement("div");
+    const iFeild = document.createElement("input");
+    iFeild.setAttribute("type", "text");
+    iFeild.setAttribute("name", "lt_t");
+    iFeild.setAttribute("placeholder", "Enter value");
+    iFeild.classList.add("form-control");
+    iFeild.classList.add("mt-2");
+    wrapper.appendChild(iFeild);
+    divEle.appendChild(wrapper);
+}
+function addFnD() {
+    const divEle = document.getElementById("addd");
+    const wrapper = document.createElement("div");
+    const iFeild = document.createElement("input");
+    iFeild.setAttribute("type", "text");
+    iFeild.setAttribute("name", "lt_d");
+    iFeild.setAttribute("placeholder", "Enter value");
+    iFeild.classList.add("form-control");
+    iFeild.classList.add("mt-2");
+    wrapper.appendChild(iFeild);
+    divEle.appendChild(wrapper);
+}
 </script>
 	  
 {{ end }}

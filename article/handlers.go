@@ -137,7 +137,7 @@ func DetArt(w http.ResponseWriter, r *http.Request) {
 		var s2 []string = s.Lt_d
 		var s3 []string = s.Pfile
 
-		list  := make([]string, 0, 40)
+		list := make([]string, 0, len(s1))
 		if s.Pfile == nil {
 			for k := range s1 {
 				list = append(list, strconv.Itoa(k), s1[k], s2[k], "")
@@ -147,7 +147,6 @@ func DetArt(w http.ResponseWriter, r *http.Request) {
 				list = append(list, strconv.Itoa(k), s1[k], s2[k], s3[k])
 			}
 		}
-
 		// fmt.Println(" list..", list)
 
 		section := Section(list, 4)

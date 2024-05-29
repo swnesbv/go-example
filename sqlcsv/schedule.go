@@ -127,10 +127,9 @@ func ExpSch(w http.ResponseWriter, r *http.Request) {
             h  := row[6]
             o  := row[7]
 
-            var lt []time.Time
-            ch := make(chan []time.Time)
             th := strings.Fields(h)
-
+            lt := make([]time.Time, 0, len(th))
+            ch := make(chan []time.Time)
             for x := range th {
                 go func() {
                     tht,_ := time.Parse(time.TimeOnly, th[x])
@@ -141,10 +140,9 @@ func ExpSch(w http.ResponseWriter, r *http.Request) {
                 <-ch
             }
 
-            var lt2 []time.Time
-            ch2 := make(chan []time.Time)
             to := strings.Fields(o)
-
+            lt2 := make([]time.Time, 0, len(to))
+            ch2 := make(chan []time.Time)
             for x := range to {
                 go func() {
                     tot,_ := time.Parse(time.TimeOnly, to[x])

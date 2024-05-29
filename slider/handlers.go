@@ -85,23 +85,36 @@ func CollectionAll(w http.ResponseWriter, r *http.Request) {
     }
 
     if r.Method == "GET" {
-
         tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/all_collection.html", "./tpl/base.html" ))
         tpl.ExecuteTemplate(w, "base", view)
     }
 
-
     if r.Method == "POST" {
 
-        flag, _ := options.ParseBool(r.FormValue("img"))
-        path := r.FormValue("path")
-        if flag == true {
-            path = r.FormValue("path")
+        pserr := r.ParseForm()
+        if pserr != nil {
+            fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
+            return
         }
 
-        var pfile []string
-        pfile = append(pfile, path)
-        fmt.Printf("list img.. %+v\n: ", pfile)
+        on_off := make([]bool, len(r.Form["img"]))
+        fmt.Println(" len on_off..", len(r.Form["img"]))
+        pfile := []string{}
+
+        for k,v := range r.Form["img"] {
+            flag, _ := options.ParseBool(v)
+            fmt.Println(" flag..", flag)
+            on_off[k] = flag
+        }
+        fmt.Println(" on_off..", on_off)
+
+        file := r.Form["path"]
+        for k := range on_off {
+            if on_off[k] == true {
+                pfile = append(pfile, file[k])
+            }
+        }
+        fmt.Printf(" pfile.. %+v\n: ", pfile)
         
         title         := r.FormValue("title")
         description   := r.FormValue("description")
@@ -112,11 +125,11 @@ func CollectionAll(w http.ResponseWriter, r *http.Request) {
         to_prv_d := ToNullInt64(r.FormValue("to_prv_d"))
         to_prv_h := ToNullInt64(r.FormValue("to_prv_h"))
 
-        lt_t,pserr := psFormT(w,r)
+        lt_t,pserr := options.PsFormString(w,r, "lt_t")
         if pserr != nil {
             return
         }
-        lt_d,pserr := psFormD(w,r)
+        lt_d,pserr := options.PsFormString(w,r, "lt_d")
         if pserr != nil {
             return
         }

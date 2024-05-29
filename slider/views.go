@@ -50,38 +50,6 @@ func psFormI (
     }
     return list,err
 }
-func psFormT (
-    w http.ResponseWriter, r *http.Request) (list []string, err error) {
-
-    pserr := r.ParseForm()
-    if pserr != nil {
-        fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
-        return
-    }
-    ps := r.Form["lt_t"]
-
-    var s string
-    for _, s = range ps {
-        list = append(list, s)
-    }
-    return list,err
-}
-func psFormD (
-    w http.ResponseWriter, r *http.Request) (list []string, err error) {
-
-    pserr := r.ParseForm()
-    if pserr != nil {
-        fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
-        return
-    }
-    ps := r.Form["lt_d"]
-
-    var s string
-    for _, s = range ps {
-        list = append(list, s)
-    }
-    return list,err
-}
 
 
  func ToNullInt64(s string) sql.NullInt64 {

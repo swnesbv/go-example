@@ -63,3 +63,21 @@ func IdUrl(w http.ResponseWriter, r *http.Request) (id int, err error) {
     }
     return id,err
 }
+
+
+func PsFormString (
+    w http.ResponseWriter, r *http.Request, str string) (list []string, err error) {
+
+    pserr := r.ParseForm()
+    if pserr != nil {
+        fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
+        return
+    }
+    ps := r.Form[str]
+
+    var s string
+    for _, s = range ps {
+        list = append(list, s)
+    }
+    return list,err
+}

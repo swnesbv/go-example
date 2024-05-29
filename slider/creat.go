@@ -13,7 +13,7 @@ import (
 	"github.com/lib/pq"
 
 	"go_authentication/connect"
-	// "go_authentication/options"
+	"go_authentication/options"
 	"go_authentication/authtoken"
 )
 
@@ -53,7 +53,7 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		var list []string
+		list := make([]string, 0, len(archive.File))
 
 		for _, f := range archive.File {
 			fle := "/static/collection/" + cls.Email + "/" + sid + "/" + f.Name
@@ -184,11 +184,11 @@ func CreatSlider(w http.ResponseWriter, r *http.Request) {
 		rand.Seed(time.Now().UTC().UnixNano())
 		sid := randomString(8)
 
-        lt_t,pserr := psFormT(w,r)
+        lt_t,pserr := options.PsFormString(w,r, "lt_t")
         if pserr != nil {
             return
         }
-        lt_d,pserr := psFormD(w,r)
+        lt_d,pserr := options.PsFormString(w,r, "lt_d")
         if pserr != nil {
             return
         }
