@@ -150,3 +150,59 @@ func CollectionAll(w http.ResponseWriter, r *http.Request) {
         http.Redirect(w,r, "/", http.StatusFound)
     }
 }
+
+
+func AllSlider(w http.ResponseWriter, r *http.Request) {
+
+    if r.Method == "GET" {
+
+        cls, err := authtoken.OnToken(w, r)
+        if cls == nil {
+            return
+        }
+        if err != nil {
+            return
+        }
+        owner := cls.User_id
+
+        conn := connect.ConnSql()
+
+        rows,err := qSlider(w, conn,owner)
+        if err != nil {
+            return
+        }
+        list,err := allSl(w, rows)
+        if err != nil {
+            return
+        }
+
+        defer conn.Close()
+
+        tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/all.html", "./tpl/base.html"))
+
+        tpl.ExecuteTemplate(w, "base", list)
+    }
+}
+
+func DetSlider(w http.ResponseWriter, r *http.Request) {
+
+    if r.Method == "GET" {
+
+        id, err := options.IdUrl(w, r)
+        if err != nil {
+            return
+        }
+
+        conn := connect.ConnSql()
+        i, err := idSl(w, conn,id)
+        if err != nil {
+            return
+        }
+
+        defer conn.Close()
+
+        tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/detail.html", "./tpl/base.html"))
+
+        tpl.ExecuteTemplate(w, "base", i)
+    }
+}

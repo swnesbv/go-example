@@ -1,0 +1,138 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} update slider img {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="lead my-3">update slider img</h1>
+
+<div class="card">
+
+<div class="card-body">
+<ul class="list-group list-group-flush">
+	<li class="list-group-item">
+		<span class="badge text-bg-primary">completed</span> {{ .I.Completed }}
+	</li>
+	<li class="list-group-item">
+	<span class="badge text-bg-light">id</span>{{ .I.Id }}
+    <span class="badge text-bg-light">owner</span>{{ .I.Owner }}
+	<span class="badge text-bg-light">collection</span>{{ .I.Collection_id }}
+	</li>
+</ul>
+<ul class="list-group list-group-flush">
+    {{ if ne .I.Lt_t nil }}
+    {{ range .I.Lt_t }}
+    <li class="list-group-item">
+        <span class="badge text-bg-light">+ title +</span>
+        {{ . }}
+    </li>
+    {{ end }}
+    {{ end }}
+    {{ if ne .I.Lt_d nil }}
+    {{ range .I.Lt_d }}
+    <li class="list-group-item">
+        <span class="badge text-bg-light">+ description +</span>
+        {{ . }}
+    </li>
+    {{ end }}
+    {{ end }}
+</ul>
+
+<ul class="list-group list-group-flush">
+    {{ if ne .I.To_art nil }}
+    <li class="list-group-item">
+        <sup class="badge text-bg-light">to art</sup>
+        id {{ .I.To_art }}
+    </li>
+    {{ end }}
+    {{ if ne .I.To_sch nil }}
+    <li class="list-group-item">
+        <sup class="badge text-bg-light">to sch</sup>
+        id {{ .I.To_sch }}
+    </li>
+    {{ end }}
+    {{ if ne .I.To_prv_d nil }}
+    <li class="list-group-item">
+        <sup class="badge text-bg-light">to prv_d</sup>
+        id {{ .I.To_prv_d }}
+    </li>
+    {{ end }}
+    {{ if ne .I.To_prv_h nil }}
+    <li class="list-group-item">
+        <sup class="badge text-bg-light">to prv_h</sup>
+        id {{ .I.To_prv_h }}
+    </li>
+    {{ end }}
+</ul>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+    <span class="badge text-bg-light">created</span>
+    <time>
+    {{ .I.Created_at.Format "2006-01-02 15:04:05" }}
+    </time>
+    </li>
+    <li class="list-group-item">
+    {{ if ne .I.Updated_at nil }}
+    <sup>updated</sup> 
+    <time>
+    {{ .I.Updated_at.Format "2006-01-02 15:04:05" }}
+    </time>
+    {{ else }}
+        there are no updates
+    {{ end }}
+    </li>
+</ul>
+
+
+<form class="card" method="POST" enctype="multipart/form-data">
+
+    <div class="mt-5">
+        <sup class="float-start mb-2">completed</sup>
+        <input
+            type="checkbox"
+            name="completed"
+        />
+    </div>
+
+    <h5 class="m-2"><sup>update img collection</sup></h5>
+    <div class="collection">
+        {{ range .I.Pfile }}
+        <figure class="collection">
+            <img class="" src="{{ . }}">
+            <figcaption>img</figcaption>
+        </figure>
+        {{ end }}
+    </div>
+
+    <div id="addi" class="card-body">
+    </div>
+    <div class="card-footer">
+    <button class="btn btn-sm btn-outline-primary" onclick="addFnI(); return false;">
+        image - add input
+    </button>
+    </div>
+
+    <div class="card-footer">
+    <input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
+    </div>
+</form>
+
+</div>
+</div>
+
+
+<script>
+function addFnI() {
+    const divEle = document.getElementById("addi");
+    const wrapper = document.createElement("div");
+    const iFeild = document.createElement("input");
+    iFeild.setAttribute("type", "file");
+    iFeild.setAttribute("name", "file");
+    iFeild.setAttribute("placeholder", "Enter value");
+    iFeild.classList.add("form-control");
+    iFeild.classList.add("mt-2");
+    wrapper.appendChild(iFeild);
+    divEle.appendChild(wrapper);
+}
+</script>
+	  
+{{ end }}

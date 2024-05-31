@@ -1,0 +1,130 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} detail slider {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">detail slider</h1>
+
+<div class="card">
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+        	<li class="list-group-item">
+        		<span class="badge text-bg-primary">completed</span> {{ .Completed }}
+        	</li>
+        	<li class="list-group-item">
+        	<span class="badge text-bg-light">id</span>{{ .Id }}
+        	<span class="badge text-bg-light">collection</span>{{ .Collection_id }}
+        	<span class="badge text-bg-light">owner</span>{{ .Owner }}
+        	</li>
+        </ul>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <span class="badge text-bg-light">title</span>{{ .Title }}
+            </li>
+            <li class="list-group-item">
+                <span class="badge text-bg-light">description</span>{{ .Description }}
+            </li>
+            </li>
+        </ul>
+        <ul class="list-group list-group-flush">
+            {{ if ne .To_art nil }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">to art</sup>
+                : {{ .To_art }}
+            </li>
+            {{ end }}
+            {{ if ne .To_sch nil }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">to sch</sup>
+                : {{ .To_sch }}
+            </li>
+            {{ end }}
+            {{ if ne .To_prv_d nil }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">to prv_d</sup>
+                : {{ .To_prv_d }}
+            </li>
+            {{ end }}
+            {{ if ne .To_prv_h nil }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">to prv_h</sup>
+                : {{ .To_prv_h }}
+            </li>
+            {{ end }}
+        </ul>
+        <ul class="list-group list-group-flush">
+        	<li class="list-group-item">
+        	<span class="badge text-bg-light">created</span>
+        	<time>
+        	{{ .Created_at.Format "2006-01-02 15:04:05" }}
+        	</time>
+        	</li>
+        	<li class="list-group-item">
+        	{{ if ne .Updated_at nil }}
+        	<sup>updated</sup> 
+        	<time>
+        	{{ .Updated_at.Format "2006-01-02 15:04:05" }}
+        	</time>
+        	{{ else }}
+        		there are no updates
+        	{{ end }}
+        	</li>
+        </ul>
+
+        <h5 class="mt-2"><sup>list slider title &  description</sup></h5>
+
+        <ul class="list-group list-group-flush">
+            {{ if ne .Lt_t nil }}
+            {{ range .Lt_t }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">+ title +</sup>
+                {{ . }}
+            </li>
+            {{ end }}
+            {{ end }}
+
+            {{ if ne .Lt_d nil }}
+            {{ range .Lt_d }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">+ description +</sup>
+                {{ . }}
+            </li>
+            {{ end }}
+            {{ end }}
+        </ul>
+
+        <h5 class="mt-2"><sup>list img</sup></h5>
+
+    	<div class="collection">
+    		{{ range .Pfile }}
+    		<figure class="collection">
+    			<img class="" src="{{ . }}">
+    			<figcaption>img</figcaption>
+    		</figure>
+    		{{ end }}
+    	</div>
+
+    </div>
+</div>
+
+<div class="card my-2">
+    <div class="card-footer">
+
+    <a class="btn btn-outline-primary btn-sm me-2" href="/update-slider-key?id={{ .Id }}" role="button">
+        <i class="bi bi-pencil"></i> &raquo; key
+    </a>
+    <a class="btn btn-outline-primary btn-sm me-2" href="/update-slider-text?id={{ .Id }}" role="button">
+        <i class="bi bi-pencil"></i> &raquo; text
+    </a>
+    <a class="btn btn-outline-primary btn-sm me-2" href="/update-slider-img?id={{ .Id }}" role="button">
+        <i class="bi bi-pencil"></i> &raquo; img
+    </a>
+
+    <a class="btn btn-outline-danger btn-sm" href="/delete-slider?id={{ .Id }}" role="button">
+        <i class="bi bi-trash3"></i> &raquo;
+    </a>
+
+    </div>
+</div>
+	  
+{{ end }}

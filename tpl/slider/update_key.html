@@ -1,0 +1,167 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} update slider key {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="lead my-3">update slider key</h1>
+
+<div class="card">
+
+<div class="card-body">
+<ul class="list-group list-group-flush">
+	<li class="list-group-item">
+		<span class="badge text-bg-primary">completed</span> {{ .I.Completed }}
+	</li>
+	<li class="list-group-item">
+	<span class="badge text-bg-light">id</span>{{ .I.Id }}
+    <span class="badge text-bg-light">owner</span>{{ .I.Owner }}
+	<span class="badge text-bg-light">collection</span>{{ .I.Collection_id }}
+	</li>
+</ul>
+<ul class="list-group list-group-flush">
+    {{ if ne .I.Lt_t nil }}
+    {{ range .I.Lt_t }}
+    <li class="list-group-item">
+        <span class="badge text-bg-light">+ title +</span>
+        {{ . }}
+    </li>
+    {{ end }}
+    {{ end }}
+    {{ if ne .I.Lt_d nil }}
+    {{ range .I.Lt_d }}
+    <li class="list-group-item">
+        <span class="badge text-bg-light">+ description +</span>
+        {{ . }}
+    </li>
+    {{ end }}
+    {{ end }}
+</ul>
+
+<ul class="list-group list-group-flush">
+    {{ if ne .I.To_art nil }}
+    <li class="list-group-item">
+        <sup class="badge text-bg-light">to art</sup>
+        : {{ .I.To_art }}
+    </li>
+    {{ end }}
+    {{ if ne .I.To_sch nil }}
+    <li class="list-group-item">
+        <sup class="badge text-bg-light">to sch</sup>
+        : {{ .I.To_sch }}
+    </li>
+    {{ end }}
+    {{ if ne .I.To_prv_d nil }}
+    <li class="list-group-item">
+        <sup class="badge text-bg-light">to prv_d</sup>
+        : {{ .I.To_prv_d }}
+    </li>
+    {{ end }}
+    {{ if ne .I.To_prv_h nil }}
+    <li class="list-group-item">
+        <sup class="badge text-bg-light">to prv_h</sup>
+        : {{ .I.To_prv_h }}
+    </li>
+    {{ end }}
+</ul>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+    <span class="badge text-bg-light">created</span>
+    <time>
+    {{ .I.Created_at.Format "2006-01-02 15:04:05" }}
+    </time>
+    </li>
+    <li class="list-group-item">
+    {{ if ne .I.Updated_at nil }}
+    <sup>updated</sup> 
+    <time>
+    {{ .I.Updated_at.Format "2006-01-02 15:04:05" }}
+    </time>
+    {{ else }}
+        there are no updates
+    {{ end }}
+    </li>
+</ul>
+
+
+<form class="card" method="POST">
+
+    <div class="m-3">
+        <sup class="float-start mb-2">completed</sup>
+        <input
+            type="checkbox"
+            name="completed"
+        />
+    </div>
+
+    <h5 class="m-2"><sup>list slider select</sup></h5>
+
+    {{ if ne .Art nil }}
+    <div class="card-footer">
+        <select
+            name="to_art"
+            class="form-control shadow-sm">
+            <option value="">art select</option>
+            <option value="nil">reset</option>
+            {{ range .Art }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne .Sch nil }}
+    <div class="card-footer">
+        <select
+            name="to_sch"
+            class="form-control shadow-sm">
+            <option value="">sch select</option>
+            <option value="nil">reset</option>
+            {{ range .Sch }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne .PrvD nil }}
+    <div class="card-footer">
+        <select
+            name="to_prv_d"
+            class="form-control shadow-sm">
+            <option value="">prv d select</option>
+            <option value="nil">reset</option>
+            {{ range .PrvD }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+        </select>
+    </div>
+    {{ end }}
+    {{ if ne .PrvH nil }}
+    <div class="card-footer">
+        <select
+            name="to_prv_h"
+            class="form-control shadow-sm">
+            <option value="">prv h select</option>
+            <option value="nil">reset</option>
+            {{ range .PrvH }}
+                <option value="{{ .Id }}">
+                    id {{ .Id }}
+                </option>
+            {{ end }}
+        </select>
+    </div>
+    {{ end }}
+
+    <div class="card-footer">
+    <input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
+    </div>
+</form>
+
+</div>
+</div>
+	  
+{{ end }}

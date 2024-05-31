@@ -23,6 +23,23 @@ func qCollection(
 }
 
 
+func qSlider(
+    w http.ResponseWriter, conn *sql.DB, owner int) (rows *sql.Rows, err error) {
+
+    rows,err = conn.Query("SELECT * FROM slider WHERE owner=$1 ORDER BY id", owner)
+
+    if err != nil {
+        switch {
+            case true:
+            fmt.Fprintf(w, "Error: Query..! : %+v\n", err)
+            break
+        }
+        return
+    }
+    return rows,err
+}
+
+
 func qArt(
     w http.ResponseWriter, conn *sql.DB, owner int) (rows *sql.Rows, err error) {
 

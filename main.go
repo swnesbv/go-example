@@ -115,6 +115,12 @@ func main() {
 	http.HandleFunc("/add-collection", slider.CreatCollection)
 	http.HandleFunc("/all-collection", slider.CollectionAll)
 	http.HandleFunc("/add-slider", slider.CreatSlider)
+	http.HandleFunc("/all-slider", slider.AllSlider)
+	http.HandleFunc("/detail-slider", slider.DetSlider)
+
+	http.HandleFunc("/update-slider-key", slider.UpSlKey)
+	http.HandleFunc("/update-slider-text", slider.UpSlText)
+	http.HandleFunc("/update-slider-img", slider.UpSlImg)
 
 	// search..
 	http.HandleFunc("/search", search.SearchHandler)
