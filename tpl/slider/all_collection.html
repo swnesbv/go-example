@@ -44,7 +44,7 @@
 	<div class="collection">
 		{{ range .Pfile }}
 		<figure class="collection">
-			<img class="" src="{{ . }}">
+			<img class="pfile" src="{{ . }}">
 			<figcaption>img</figcaption>
 		</figure>
 		  <div>
@@ -53,9 +53,6 @@
 		    <sup>append</sup>
 		  </div>
 		{{ end }}
-
-
-
 	</div>
 
 	<div class="card-body">
@@ -158,7 +155,6 @@
 {{ end }}
 	  
 <script>
-
 function addFnT() {
     const divEle = document.getElementById("addt");
     const wrapper = document.createElement("div");

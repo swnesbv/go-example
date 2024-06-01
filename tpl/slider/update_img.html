@@ -6,7 +6,7 @@
 <h1 class="lead my-3">update slider img</h1>
 
 <div class="card">
-
+<div class="flex_start">
 <div class="card-body">
 <ul class="list-group list-group-flush">
 	<li class="list-group-item">
@@ -18,6 +18,8 @@
 	<span class="badge text-bg-light">collection</span>{{ .I.Collection_id }}
 	</li>
 </ul>
+</div>
+<div class="card-body">
 <ul class="list-group list-group-flush">
     {{ if ne .I.Lt_t nil }}
     {{ range .I.Lt_t }}
@@ -36,7 +38,8 @@
     {{ end }}
     {{ end }}
 </ul>
-
+</div>
+<div class="card-body">
 <ul class="list-group list-group-flush">
     {{ if ne .I.To_art nil }}
     <li class="list-group-item">
@@ -63,6 +66,8 @@
     </li>
     {{ end }}
 </ul>
+</div>
+<div class="card-body">
 <ul class="list-group list-group-flush">
     <li class="list-group-item">
     <span class="badge text-bg-light">created</span>
@@ -81,9 +86,12 @@
     {{ end }}
     </li>
 </ul>
+</div>
+</div>
+</div>
 
 
-<form class="card" method="POST" enctype="multipart/form-data">
+<form  name="form1" class="card" method="POST" enctype="multipart/form-data">
 
     <div class="mt-5">
         <sup class="float-start mb-2">completed</sup>
@@ -97,27 +105,29 @@
     <div class="collection">
         {{ range .I.Pfile }}
         <figure class="collection">
-            <img class="" src="{{ . }}">
+            <img class="pfile" src="{{ . }}">
             <figcaption>img</figcaption>
         </figure>
+          <div>
+            <input type="hidden" name="img" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+            <input type="hidden" name="path" value="{{ . }}" />
+            <sup>del</sup>
+          </div>
         {{ end }}
     </div>
 
     <div id="addi" class="card-body">
     </div>
     <div class="card-footer">
-    <button class="btn btn-sm btn-outline-primary" onclick="addFnI(); return false;">
-        image - add input
-    </button>
+        <button class="btn btn-sm btn-outline-primary" onclick="addFnI(); return false;">
+            image - add input
+        </button>
     </div>
 
     <div class="card-footer">
     <input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
     </div>
 </form>
-
-</div>
-</div>
 
 
 <script>
