@@ -8,90 +8,90 @@
 <div class="card">
 
 <div class="card-body">
-<ul class="list-group list-group-flush">
-	<li class="list-group-item">
-		<span class="badge text-bg-primary">completed</span> {{ .I.Completed }}
-	</li>
-	<li class="list-group-item">
-	<span class="badge text-bg-light">id</span>{{ .I.Id }}
-    <span class="badge text-bg-light">owner</span>{{ .I.Owner }}
-	<span class="badge text-bg-light">collection</span>{{ .I.Collection_id }}
-	</li>
-</ul>
-<ul class="list-group list-group-flush">
-    <li class="list-group-item">
-        <span class="badge text-bg-light">title</span>{{ .I.Title }}
-    </li>
-    <li class="list-group-item">
-        <span class="badge text-bg-light">description</span>{{ .I.Description }}
-    </li>
-    </li>
-</ul>
-
-<ul class="list-group list-group-flush">
-    {{ if ne .I.Lt_t nil }}
-    {{ range .I.Lt_t }}
-    <li class="list-group-item">
-        <span class="badge text-bg-light">+ title +</span>
-        {{ . }}
-    </li>
-    {{ end }}
-    {{ end }}
-    {{ if ne .I.Lt_d nil }}
-    {{ range .I.Lt_d }}
-    <li class="list-group-item">
-        <span class="badge text-bg-light">+ description +</span>
-        {{ . }}
-    </li>
-    {{ end }}
-    {{ end }}
-</ul>
-
-<ul class="list-group list-group-flush">
-    {{ if ne .I.To_art nil }}
-    <li class="list-group-item">
-        <sup class="badge text-bg-light">to art</sup>
-        id {{ .I.To_art }}
-    </li>
-    {{ end }}
-    {{ if ne .I.To_sch nil }}
-    <li class="list-group-item">
-        <sup class="badge text-bg-light">to sch</sup>
-        id {{ .I.To_sch }}
-    </li>
-    {{ end }}
-    {{ if ne .I.To_prv_d nil }}
-    <li class="list-group-item">
-        <sup class="badge text-bg-light">to prv_d</sup>
-        id {{ .I.To_prv_d }}
-    </li>
-    {{ end }}
-    {{ if ne .I.To_prv_h nil }}
-    <li class="list-group-item">
-        <sup class="badge text-bg-light">to prv_h</sup>
-        id {{ .I.To_prv_h }}
-    </li>
-    {{ end }}
-</ul>
-<ul class="list-group list-group-flush">
-    <li class="list-group-item">
-    <span class="badge text-bg-light">created</span>
-    <time>
-    {{ .I.Created_at.Format "2006-01-02 15:04:05" }}
-    </time>
-    </li>
-    <li class="list-group-item">
-    {{ if ne .I.Updated_at nil }}
-    <sup>updated</sup> 
-    <time>
-    {{ .I.Updated_at.Format "2006-01-02 15:04:05" }}
-    </time>
-    {{ else }}
-        there are no updates
-    {{ end }}
-    </li>
-</ul>
-
+<div class="flex_start">
+    <ul class="list-group list-group-flush">
+    	<li class="list-group-item">
+    		<span class="badge text-bg-primary">completed</span> {{ .I.Completed }}
+    	</li>
+    	<li class="list-group-item">
+    	<span class="badge text-bg-light">id</span>{{ .I.Id }}
+        <span class="badge text-bg-light">owner</span>{{ .I.Owner }}
+    	<span class="badge text-bg-light">collection</span>{{ .I.Collection_id }}
+    	</li>
+    </ul>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <span class="badge text-bg-light">title</span>{{ .I.Title }}
+        </li>
+        <li class="list-group-item">
+            <span class="badge text-bg-light">description</span>{{ .I.Description }}
+        </li>
+        </li>
+    </ul>
+    <ul class="list-group list-group-flush">
+        {{ if ne .I.Lt_t nil }}
+        {{ range .I.Lt_t }}
+        <li class="list-group-item">
+            <span class="badge text-bg-light">+ title +</span>
+            {{ . }}
+        </li>
+        {{ end }}
+        {{ end }}
+        {{ if ne .I.Lt_d nil }}
+        {{ range .I.Lt_d }}
+        <li class="list-group-item">
+            <span class="badge text-bg-light">+ description +</span>
+            {{ . }}
+        </li>
+        {{ end }}
+        {{ end }}
+    </ul>
+    <ul class="list-group list-group-flush">
+        {{ if ne .I.To_art nil }}
+        <li class="list-group-item">
+            <sup class="badge text-bg-light">to art</sup>
+            id {{ .I.To_art }}
+        </li>
+        {{ end }}
+        {{ if ne .I.To_sch nil }}
+        <li class="list-group-item">
+            <sup class="badge text-bg-light">to sch</sup>
+            id {{ .I.To_sch }}
+        </li>
+        {{ end }}
+        {{ if ne .I.To_prv_d nil }}
+        <li class="list-group-item">
+            <sup class="badge text-bg-light">to prv_d</sup>
+            id {{ .I.To_prv_d }}
+        </li>
+        {{ end }}
+        {{ if ne .I.To_prv_h nil }}
+        <li class="list-group-item">
+            <sup class="badge text-bg-light">to prv_h</sup>
+            id {{ .I.To_prv_h }}
+        </li>
+        {{ end }}
+    </ul>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+        <span class="badge text-bg-light">created</span>
+        <time>
+        {{ .I.Created_at.Format "2006-01-02 15:04:05" }}
+        </time>
+        </li>
+        <li class="list-group-item">
+        {{ if ne .I.Updated_at nil }}
+        <sup>updated</sup> 
+        <time>
+        {{ .I.Updated_at.Format "2006-01-02 15:04:05" }}
+        </time>
+        {{ else }}
+            there are no updates
+        {{ end }}
+        </li>
+    </ul>
+</div>
+</div>
 
 <form class="card" method="POST">
 
@@ -109,6 +109,28 @@
     <sup>description</sup>
     <input type="text" name="description" class="form-control" value="{{ .I.Description }}">
     </div>
+
+    <div class="card-body">
+    <ul class="list-group list-group-flush">
+        {{ if ne .I.Lt_t nil }}
+        {{ range .I.Lt_t }}
+        <li class="list-group-item">
+            <span class="badge text-bg-light">+ title +</span>
+            <input type="text" name="lt_t" class="form-control" value="{{ . }}">
+        </li>
+        {{ end }}
+        {{ end }}
+        {{ if ne .I.Lt_d nil }}
+        {{ range .I.Lt_d }}
+        <li class="list-group-item">
+            <span class="badge text-bg-light">+ description +</span>
+            <input type="text" name="lt_d" class="form-control" value="{{ . }}">
+        </li>
+        {{ end }}
+        {{ end }}
+    </ul>
+    </div>
+
 
     <div id="addt" class="card-body">
         <sup>+ title</sup>
@@ -132,9 +154,6 @@
     <input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
     </div>
 </form>
-
-</div>
-</div>
 
 
 <script>

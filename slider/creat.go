@@ -436,11 +436,10 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, " Error: ParseBool()..  : %+v\n", err)
 			return
 		}
-		dbstr := "UPDATE slider SET title=$3, description=$4, lt_t=$5, lt_d=$6, completed=$7, updated_at=$8 WHERE id=$1 AND owner=$2"
-		str := "UPDATE slider SET title=$3, description=$4, lt_t=array_cat(lt_t, $5), lt_d=array_cat(lt_d, $6), completed=$7, updated_at=$8 WHERE id=$1 AND owner=$2"
+		str := "UPDATE slider SET title=$3, description=$4, lt_t=$5, lt_d=$6, completed=$7, updated_at=$8 WHERE id=$1 AND owner=$2"
 
 		if r.FormValue("lt_t") == "" && r.FormValue("lt_d") == "" {
-			_, err := conn.Exec(dbstr, id, owner, title, description, pq.Array(i.Lt_t), pq.Array(i.Lt_d), flag, time.Now())
+			_, err := conn.Exec(str, id, owner, title, description, pq.Array(i.Lt_t), pq.Array(i.Lt_d), flag, time.Now())
 			fmt.Println("  FormValue..!")
 
 			if err != nil {
