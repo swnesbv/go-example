@@ -73,11 +73,11 @@ func PsFormString (
         fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
         return
     }
-    ps := r.Form[str]
+    list = r.Form[str]
+    ps := make([]string, len(list))
 
-    var s string
-    for _, s = range ps {
-        list = append(list, s)
+    for k, v := range list {
+        ps[k] = v
     }
     return list,err
 }
