@@ -48,7 +48,6 @@ func ParseBool(str string) (bool, error) {
     case "", "0", "f", "F", "false", "FALSE", "False", "off", "no":
         return false, nil
     }
-
     return false, &strconv.NumError{Func: "ParseBool", Num: str, Err: strconv.ErrSyntax}
 }
 

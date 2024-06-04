@@ -6,88 +6,88 @@
 <h1 class="lead my-3">update slider img</h1>
 
 <div class="card">
-<div class="flex_start">
-<div class="card-body">
-<ul class="list-group list-group-flush">
-	<li class="list-group-item">
-		<span class="badge text-bg-primary">completed</span> {{ .I.Completed }}
-	</li>
-	<li class="list-group-item">
-	<span class="badge text-bg-light">id</span>{{ .I.Id }}
-    <span class="badge text-bg-light">owner</span>{{ .I.Owner }}
-	<span class="badge text-bg-light">collection</span>{{ .I.Collection_id }}
-	</li>
-</ul>
-</div>
-<div class="card-body">
-<ul class="list-group list-group-flush">
-    {{ if ne .I.Lt_t nil }}
-    {{ range .I.Lt_t }}
-    <li class="list-group-item">
-        <span class="badge text-bg-light">+ title +</span>
-        {{ . }}
-    </li>
-    {{ end }}
-    {{ end }}
-    {{ if ne .I.Lt_d nil }}
-    {{ range .I.Lt_d }}
-    <li class="list-group-item">
-        <span class="badge text-bg-light">+ description +</span>
-        {{ . }}
-    </li>
-    {{ end }}
-    {{ end }}
-</ul>
-</div>
-<div class="card-body">
-<ul class="list-group list-group-flush">
-    {{ if ne .I.To_art nil }}
-    <li class="list-group-item">
-        <sup class="badge text-bg-light">to art</sup>
-        id {{ .I.To_art }}
-    </li>
-    {{ end }}
-    {{ if ne .I.To_sch nil }}
-    <li class="list-group-item">
-        <sup class="badge text-bg-light">to sch</sup>
-        id {{ .I.To_sch }}
-    </li>
-    {{ end }}
-    {{ if ne .I.To_prv_d nil }}
-    <li class="list-group-item">
-        <sup class="badge text-bg-light">to prv_d</sup>
-        id {{ .I.To_prv_d }}
-    </li>
-    {{ end }}
-    {{ if ne .I.To_prv_h nil }}
-    <li class="list-group-item">
-        <sup class="badge text-bg-light">to prv_h</sup>
-        id {{ .I.To_prv_h }}
-    </li>
-    {{ end }}
-</ul>
-</div>
-<div class="card-body">
-<ul class="list-group list-group-flush">
-    <li class="list-group-item">
-    <span class="badge text-bg-light">created</span>
-    <time>
-    {{ .I.Created_at.Format "2006-01-02 15:04:05" }}
-    </time>
-    </li>
-    <li class="list-group-item">
-    {{ if ne .I.Updated_at nil }}
-    <sup>updated</sup> 
-    <time>
-    {{ .I.Updated_at.Format "2006-01-02 15:04:05" }}
-    </time>
-    {{ else }}
-        there are no updates
-    {{ end }}
-    </li>
-</ul>
-</div>
-</div>
+    <div class="flex_start">
+    <div class="card-body">
+    <ul class="list-group list-group-flush">
+    	<li class="list-group-item">
+    		<span class="badge text-bg-primary">completed</span> {{ .I.Completed }}
+    	</li>
+    	<li class="list-group-item">
+    	<span class="badge text-bg-light">id</span>{{ .I.Id }}
+        <span class="badge text-bg-light">owner</span>{{ .I.Owner }}
+    	<span class="badge text-bg-light">collection</span>{{ .I.Collection_id }}
+    	</li>
+    </ul>
+    </div>
+    <div class="card-body">
+    <ul class="list-group list-group-flush">
+        {{ if ne .I.Lt_t nil }}
+        {{ range .I.Lt_t }}
+        <li class="list-group-item">
+            <span class="badge text-bg-light">+ title +</span>
+            {{ . }}
+        </li>
+        {{ end }}
+        {{ end }}
+        {{ if ne .I.Lt_d nil }}
+        {{ range .I.Lt_d }}
+        <li class="list-group-item">
+            <span class="badge text-bg-light">+ description +</span>
+            {{ . }}
+        </li>
+        {{ end }}
+        {{ end }}
+    </ul>
+    </div>
+    <div class="card-body">
+    <ul class="list-group list-group-flush">
+        {{ if ne .I.To_art nil }}
+        <li class="list-group-item">
+            <sup class="badge text-bg-light">to art</sup>
+            id {{ .I.To_art }}
+        </li>
+        {{ end }}
+        {{ if ne .I.To_sch nil }}
+        <li class="list-group-item">
+            <sup class="badge text-bg-light">to sch</sup>
+            id {{ .I.To_sch }}
+        </li>
+        {{ end }}
+        {{ if ne .I.To_prv_d nil }}
+        <li class="list-group-item">
+            <sup class="badge text-bg-light">to prv_d</sup>
+            id {{ .I.To_prv_d }}
+        </li>
+        {{ end }}
+        {{ if ne .I.To_prv_h nil }}
+        <li class="list-group-item">
+            <sup class="badge text-bg-light">to prv_h</sup>
+            id {{ .I.To_prv_h }}
+        </li>
+        {{ end }}
+    </ul>
+    </div>
+    <div class="card-body">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+        <span class="badge text-bg-light">created</span>
+        <time>
+        {{ .I.Created_at.Format "2006-01-02 15:04:05" }}
+        </time>
+        </li>
+        <li class="list-group-item">
+        {{ if ne .I.Updated_at nil }}
+        <sup>updated</sup> 
+        <time>
+        {{ .I.Updated_at.Format "2006-01-02 15:04:05" }}
+        </time>
+        {{ else }}
+            there are no updates
+        {{ end }}
+        </li>
+    </ul>
+    </div>
+    </div>
 </div>
 
 
@@ -108,11 +108,11 @@
             <img class="pfile" src="{{ . }}">
             <figcaption>img</figcaption>
         </figure>
-          <div>
-            <input type="hidden" name="img" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+        <div>
+            <input type="hidden" name="del" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
             <input type="hidden" name="path" value="{{ . }}" />
             <sup>del</sup>
-          </div>
+        </div>
         {{ end }}
     </div>
 

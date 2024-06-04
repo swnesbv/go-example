@@ -401,61 +401,104 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	type ListSelect struct {
-		I    *Slider
-		Art  []*Article
-		Sch  []*Schedule
-		PrvD []*Provision_d
-		PrvH []*Provision_h
-	}
-	view := ListSelect{
-		I:    i,
-		Art:  listArt,
-		Sch:  listSch,
-		PrvD: listPd,
-		PrvH: listPh,
-	}
 
 	if r.Method == "GET" {
+		type ListSelect struct {
+			I    *Slider
+			Art  []*Article
+			Sch  []*Schedule
+			PrvD []*Provision_d
+			PrvH []*Provision_h
+		}
+		view := ListSelect{
+			I:    i,
+			Art:  listArt,
+			Sch:  listSch,
+			PrvD: listPd,
+			PrvH: listPh,
+		}
 		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/update_text.html", "./tpl/base.html"))
 		tpl.ExecuteTemplate(w, "base", view)
 	}
 
 	if r.Method == "POST" {
-
 		title := r.FormValue("title")
 		description := r.FormValue("description")
 
 		lt_t, err := options.PsFormString(w, r, "lt_t")
 		lt_d, err := options.PsFormString(w, r, "lt_d")
+		if err != nil {
+			return
+		}
 
-		fmt.Println(" lt_t..", lt_t)
+		pserr := r.ParseForm()
+		if pserr != nil {
+			fmt.Println(" err ParseForm..", pserr)
+		}
+		on_off_t := make([]bool, len(r.Form["del_t"]))
+		for k, v := range r.Form["del_t"] {
+			p, _ := options.ParseBool(v)
+			on_off_t[k] = p
+		}
+		on_off_d := make([]bool, len(r.Form["del_d"]))
+		for k, v := range r.Form["del_d"] {
+			p, _ := options.ParseBool(v)
+			on_off_d[k] = p
+		}
+		ps_t := delOk(on_off_t)
+		ps_d := delOk(on_off_d)
 
 		flag, err := options.ParseBool(r.FormValue("completed"))
 		if err != nil {
 			fmt.Fprintf(w, " Error: ParseBool()..  : %+v\n", err)
 			return
 		}
+
 		str := "UPDATE slider SET title=$3, description=$4, lt_t=$5, lt_d=$6, completed=$7, updated_at=$8 WHERE id=$1 AND owner=$2"
 
-		if r.FormValue("lt_t") == "" && r.FormValue("lt_d") == "" {
+		switch {
+		case r.FormValue("lt_t") == "" && r.FormValue("lt_d") == "":
 			_, err := conn.Exec(str, id, owner, title, description, pq.Array(i.Lt_t), pq.Array(i.Lt_d), flag, time.Now())
-			fmt.Println("  FormValue..!")
-
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
-		} else {
-			_, err := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(lt_d), flag, time.Now())
-			fmt.Println("  input..!")
 
+		case ps_t == true && ps_d == true:
+			del_t := psDelStr(r, lt_t,"del_t")
+			t := delList(lt_t, del_t)
+			del_d := psDelStr(r, lt_d,"del_d")
+			d := delList(lt_d, del_d)
+			_, err := conn.Exec(str, id, owner, title, description, pq.Array(t), pq.Array(d), flag, time.Now())
+			if err != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+				return
+			}
+
+		case ps_t == true:
+			del_t := psDelStr(r, lt_t,"del_t")
+			t := delList(lt_t, del_t)
+			_, err := conn.Exec(str, id, owner, title, description, pq.Array(t), pq.Array(lt_d), flag, time.Now())
+			if err != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+				return
+			}
+		case ps_d == true:
+			del_d := psDelStr(r, lt_d,"del_d")
+			d := delList(lt_d, del_d)
+			_, err := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(d), flag, time.Now())
+			if err != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+				return
+			}
+
+		default:
+			_, err := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(lt_d), flag, time.Now())
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
 		}
-
 		defer conn.Close()
 		http.Redirect(w, r, "/detail-slider?id="+strconv.Itoa(i.Id), http.StatusFound)
 	}
@@ -515,22 +558,22 @@ func UpSlImg(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	type ListSelect struct {
-		I    *Slider
-		Art  []*Article
-		Sch  []*Schedule
-		PrvD []*Provision_d
-		PrvH []*Provision_h
-	}
-	view := ListSelect{
-		I:    i,
-		Art:  listArt,
-		Sch:  listSch,
-		PrvD: listPd,
-		PrvH: listPh,
-	}
 
 	if r.Method == "GET" {
+		type ListSelect struct {
+			I    *Slider
+			Art  []*Article
+			Sch  []*Schedule
+			PrvD []*Provision_d
+			PrvH []*Provision_h
+		}
+		view := ListSelect{
+			I:    i,
+			Art:  listArt,
+			Sch:  listSch,
+			PrvD: listPd,
+			PrvH: listPh,
+		}
 		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/update_img.html", "./tpl/base.html"))
 		tpl.ExecuteTemplate(w, "base", view)
 	}
@@ -541,51 +584,50 @@ func UpSlImg(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return
 		}
-		fmt.Println(" delfl..", delfl)
-
 		for _, v := range delfl {
 			err := os.Remove("./sfl" + v)
 			if err != nil {
 				fmt.Println(" err when deleting file..", err)
 			}
 		}
-
-		obj := DelList(i.Pfile, delfl)
+		obj := delList(i.Pfile, delfl)
+		fmt.Println(" delfl..", delfl)
 		fmt.Println(" obj..", obj)
 
 		pfile, err := psFormI(w, r, cls, i.Collection_id)
 		if err != nil {
 			return
 		}
+
 		flag, err := options.ParseBool(r.FormValue("completed"))
 		if err != nil {
 			fmt.Fprintf(w, " Error: ParseBool..  : %+v\n", err)
 			return
 		}
+
 		dbstr := "UPDATE slider SET pfile=$3, completed=$4, updated_at=$5 WHERE id=$1 AND owner=$2"
 		str := "UPDATE slider SET pfile=array_cat(pfile, $3), completed=$4, updated_at=$5 WHERE id=$1 AND owner=$2"
 
-		file, _, _ := r.FormFile("file")
-
 		switch {
-		case file == nil && delfl == nil:
+		case pfile == nil && delfl == nil:
 			_, err := conn.Exec(dbstr, id, owner, pq.Array(i.Pfile), flag, time.Now())
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
-		case file == nil && delfl != nil:
+		case pfile != nil && delfl != nil:
+			_, err := conn.Exec(dbstr, id, owner, pq.Array(pfile), flag, time.Now())
+			if err != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+				return
+			}
+		case pfile == nil && delfl != nil:
 			_, err := conn.Exec(dbstr, id, owner, pq.Array(obj), flag, time.Now())
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
-		case file != nil && delfl != nil:
-			_, err := conn.Exec(dbstr, id, owner, pq.Array(obj), flag, time.Now())
-			if err != nil {
-				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
-				return
-			}
+
 		default:
 			_, err := conn.Exec(str, id, owner, pq.Array(pfile), flag, time.Now())
 			fmt.Println("  default..!")

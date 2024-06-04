@@ -211,7 +211,16 @@ func allPrvH(
 	return list, err
 }
 
-func DelList(src []string, del []string) []string {
+
+func delOk(src []bool) bool {
+	for i := range src {
+	    if src[i] == true {
+	        return true
+	    }
+	}
+    return false
+}
+func delList(src []string, del []string) []string {
 	list := make([]string, 0, len(src))
 	for _, v := range src {
 		exist := true
@@ -227,6 +236,29 @@ func DelList(src []string, del []string) []string {
 	}
 	return list
 }
+func psDelStr(r *http.Request, del []string, str string) (list []string) {
+
+	err := r.ParseForm()
+	if err != nil {
+		fmt.Println("Error ParseForm..", err)
+	}
+	on_off := make([]bool, len(r.Form[str]))
+	fmt.Println(" len on_off..", len(r.Form[str]))
+
+	for k, v := range r.Form[str] {
+		flag, _ := options.ParseBool(v)
+		on_off[k] = flag
+	}
+	fmt.Println(" on_off..", on_off)
+
+	for k := range on_off {
+		if on_off[k] == true {
+			list = append(list, del[k])
+		}
+	}
+	return list
+}
+
 func psDelImg(
 	w http.ResponseWriter, r *http.Request) (list []string, err error) {
 
@@ -235,12 +267,11 @@ func psDelImg(
 		fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
 		return
 	}
-	on_off := make([]bool, len(r.Form["img"]))
-	fmt.Println(" len on_off..", len(r.Form["img"]))
+	on_off := make([]bool, len(r.Form["del"]))
+	fmt.Println(" len on_off..", len(r.Form["del"]))
 
-	for k, v := range r.Form["img"] {
+	for k, v := range r.Form["del"] {
 		flag, _ := options.ParseBool(v)
-		fmt.Println(" flag..", flag)
 		on_off[k] = flag
 	}
 
@@ -252,6 +283,7 @@ func psDelImg(
 	}
 	return list, err
 }
+
 
 func psFormI(
 	w http.ResponseWriter, r *http.Request, cls *authtoken.Claims, sid string) (list []string, err error) {

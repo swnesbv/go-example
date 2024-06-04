@@ -117,6 +117,10 @@
         <li class="list-group-item">
             <span class="badge text-bg-light">+ title +</span>
             <input type="text" name="lt_t" class="form-control" value="{{ . }}">
+            <p>
+            <input type="hidden" name="del_t" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+            <sup>del</sup>
+            </p>
         </li>
         {{ end }}
         {{ end }}
@@ -125,6 +129,10 @@
         <li class="list-group-item">
             <span class="badge text-bg-light">+ description +</span>
             <input type="text" name="lt_d" class="form-control" value="{{ . }}">
+            <p>
+            <input type="hidden" name="del_d" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+            <sup>del</sup>
+            </p>
         </li>
         {{ end }}
         {{ end }}
