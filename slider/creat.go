@@ -591,13 +591,14 @@ func UpSlImg(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		obj := delList(i.Pfile, delfl)
-		fmt.Println(" delfl..", delfl)
-		fmt.Println(" obj..", obj)
 
 		pfile, err := psFormI(w, r, cls, i.Collection_id)
 		if err != nil {
 			return
 		}
+		fmt.Println(" delfl..", delfl)
+		fmt.Println(" pfile..", pfile)
+		fmt.Println(" obj..", obj)
 
 		flag, err := options.ParseBool(r.FormValue("completed"))
 		if err != nil {
@@ -616,7 +617,8 @@ func UpSlImg(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		case pfile != nil && delfl != nil:
-			_, err := conn.Exec(dbstr, id, owner, pq.Array(pfile), flag, time.Now())
+			_, err := conn.Exec(dbstr, id, owner, pq.Array(obj), flag, time.Now())
+			_, err = conn.Exec(str, id, owner, pq.Array(pfile), flag, time.Now())
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
