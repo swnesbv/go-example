@@ -21,12 +21,8 @@ import (
 func CreatCollection(w http.ResponseWriter, r *http.Request) {
 
 	cls, err := authtoken.OnToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
 
 	if r.Method == "GET" {
 
@@ -44,7 +40,7 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 		}
 
 		rand.Seed(time.Now().UTC().UnixNano())
-		sid := randomString(8)
+		sid := randomString(4)
 		fpath := "./sfl/static/collection/" + cls.Email + "/" + sid + "/"
 
 		archive, err := zip.NewReader(file, handler.Size)
@@ -54,9 +50,9 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		list := make([]string, 0, len(archive.File))
+		list := make([]string, len(archive.File))
 
-		for _, f := range archive.File {
+		for k, f := range archive.File {
 			fle := "/static/collection/" + cls.Email + "/" + sid + "/" + f.Name
 			filePath := filepath.Join(fpath, f.Name)
 
@@ -85,7 +81,7 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprintf(w, " Error: Copy..! : %+v\n", err)
 			}
 
-			list = append(list, fle)
+			list[k] = fle
 			dstFile.Close()
 			srcFile.Close()
 		}
@@ -109,48 +105,29 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 func CreatSlider(w http.ResponseWriter, r *http.Request) {
 
 	cls, err := authtoken.OnToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
+
 	owner := cls.User_id
 
 	conn := connect.ConnSql()
 
 	rowsArt, err := qArt(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listArt, err := allArt(w, rowsArt)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsSch, err := qSch(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listSch, err := allSch(w, rowsSch)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsPd, err := qPrvD(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listPd, err := allPrvD(w, rowsPd)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsPh, err := qPrvH(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listPh, err := allPrvH(w, rowsPh)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	if r.Method == "GET" {
 
@@ -186,20 +163,9 @@ func CreatSlider(w http.ResponseWriter, r *http.Request) {
 		sid := randomString(8)
 
 		lt_t, pserr := options.PsFormString(w, r, "lt_t")
-		if pserr != nil {
-			return
-		}
 		lt_d, pserr := options.PsFormString(w, r, "lt_d")
-		if pserr != nil {
-			return
-		}
 		pfile, pserr := psFormI(w, r, cls, sid)
-		if pserr != nil {
-			return
-		}
-		fmt.Printf("pfile %+v\n: ", pfile)
-
-		conn := connect.ConnSql()
+		if pserr != nil { return }
 
 		str := "INSERT INTO slider (collection_id, title, description, owner, to_art, to_sch, to_prv_d, to_prv_h, lt_t, lt_d, pfile, created_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)"
 
@@ -219,57 +185,34 @@ func CreatSlider(w http.ResponseWriter, r *http.Request) {
 func UpSlKey(w http.ResponseWriter, r *http.Request) {
 
 	id, err := options.IdUrl(w, r)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	cls, err := authtoken.SqlToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
+
 	owner := cls.User_id
 
 	conn := connect.ConnSql()
 
 	rowsArt, err := qArt(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listArt, err := allArt(w, rowsArt)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsSch, err := qSch(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listSch, err := allSch(w, rowsSch)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsPd, err := qPrvD(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listPd, err := allPrvD(w, rowsPd)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsPh, err := qPrvH(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listPh, err := allPrvH(w, rowsPh)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	i, err := authorSl(w, conn, id, cls)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	type ListSelect struct {
 		I    *Slider
 		Art  []*Article
@@ -350,57 +293,33 @@ func UpSlKey(w http.ResponseWriter, r *http.Request) {
 func UpSlText(w http.ResponseWriter, r *http.Request) {
 
 	id, err := options.IdUrl(w, r)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	cls, err := authtoken.SqlToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
 	owner := cls.User_id
 
 	conn := connect.ConnSql()
 
 	rowsArt, err := qArt(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listArt, err := allArt(w, rowsArt)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsSch, err := qSch(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listSch, err := allSch(w, rowsSch)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsPd, err := qPrvD(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listPd, err := allPrvD(w, rowsPd)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsPh, err := qPrvH(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listPh, err := allPrvH(w, rowsPh)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	i, err := authorSl(w, conn, id, cls)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	if r.Method == "GET" {
 		type ListSelect struct {
@@ -427,9 +346,7 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 
 		lt_t, err := options.PsFormString(w, r, "lt_t")
 		lt_d, err := options.PsFormString(w, r, "lt_d")
-		if err != nil {
-			return
-		}
+		if err != nil { return }
 
 		pserr := r.ParseForm()
 		if pserr != nil {
@@ -465,37 +382,41 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 			}
 
 		case ps_t == true && ps_d == true:
-			del_t := psDelStr(r, lt_t,"del_t")
+			del_t,err := psDelStr(w,r, lt_t,"del_t")
+			if err != nil { return }
 			t := delList(lt_t, del_t)
-			del_d := psDelStr(r, lt_d,"del_d")
+			del_d,err := psDelStr(w,r, lt_d,"del_d")
+			if err != nil { return }
 			d := delList(lt_d, del_d)
-			_, err := conn.Exec(str, id, owner, title, description, pq.Array(t), pq.Array(d), flag, time.Now())
-			if err != nil {
-				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+			_, crash := conn.Exec(str, id, owner, title, description, pq.Array(t), pq.Array(d), flag, time.Now())
+			if crash != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", crash)
 				return
 			}
 
 		case ps_t == true:
-			del_t := psDelStr(r, lt_t,"del_t")
+			del_t,err := psDelStr(w,r, lt_t,"del_t")
+			if err != nil { return}
 			t := delList(lt_t, del_t)
-			_, err := conn.Exec(str, id, owner, title, description, pq.Array(t), pq.Array(lt_d), flag, time.Now())
-			if err != nil {
-				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+			_, crash := conn.Exec(str, id, owner, title, description, pq.Array(t), pq.Array(lt_d), flag, time.Now())
+			if crash != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", crash)
 				return
 			}
 		case ps_d == true:
-			del_d := psDelStr(r, lt_d,"del_d")
+			del_d,err := psDelStr(w,r, lt_d,"del_d")
+			if err != nil { return }
 			d := delList(lt_d, del_d)
-			_, err := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(d), flag, time.Now())
-			if err != nil {
-				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+			_, crash := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(d), flag, time.Now())
+			if crash != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", crash)
 				return
 			}
 
 		default:
-			_, err := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(lt_d), flag, time.Now())
-			if err != nil {
-				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+			_, crash := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(lt_d), flag, time.Now())
+			if crash != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", crash)
 				return
 			}
 		}
@@ -507,57 +428,34 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 func UpSlImg(w http.ResponseWriter, r *http.Request) {
 
 	id, err := options.IdUrl(w, r)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	cls, err := authtoken.SqlToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
+
 	owner := cls.User_id
 
 	conn := connect.ConnSql()
 
 	rowsArt, err := qArt(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listArt, err := allArt(w, rowsArt)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsSch, err := qSch(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listSch, err := allSch(w, rowsSch)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsPd, err := qPrvD(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listPd, err := allPrvD(w, rowsPd)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	rowsPh, err := qPrvH(w, conn, owner)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	listPh, err := allPrvH(w, rowsPh)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	i, err := authorSl(w, conn, id, cls)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	if r.Method == "GET" {
 		type ListSelect struct {
@@ -581,9 +479,8 @@ func UpSlImg(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
 		delfl, err := psDelImg(w, r)
-		if err != nil {
-			return
-		}
+		if err != nil { return }
+
 		for _, v := range delfl {
 			err := os.Remove("./sfl" + v)
 			if err != nil {
@@ -593,12 +490,7 @@ func UpSlImg(w http.ResponseWriter, r *http.Request) {
 		obj := delList(i.Pfile, delfl)
 
 		pfile, err := psFormI(w, r, cls, i.Collection_id)
-		if err != nil {
-			return
-		}
-		fmt.Println(" delfl..", delfl)
-		fmt.Println(" pfile..", pfile)
-		fmt.Println(" obj..", obj)
+		if err != nil { return }
 
 		flag, err := options.ParseBool(r.FormValue("completed"))
 		if err != nil {

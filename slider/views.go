@@ -236,46 +236,43 @@ func delList(src []string, del []string) []string {
 	}
 	return list
 }
-func psDelStr(r *http.Request, del []string, str string) (list []string) {
+func psDelStr(w http.ResponseWriter, r *http.Request, del []string, str string) ([]string, error) {
 
 	err := r.ParseForm()
 	if err != nil {
-		fmt.Println("Error ParseForm..", err)
+		fmt.Fprintf(w, "Error ParseForm..! : %+v\n", err)
 	}
 	on_off := make([]bool, len(r.Form[str]))
-	fmt.Println(" len on_off..", len(r.Form[str]))
-
 	for k, v := range r.Form[str] {
 		flag, _ := options.ParseBool(v)
 		on_off[k] = flag
 	}
 	fmt.Println(" on_off..", on_off)
-
+	list := make([]string, 0, len(del))
 	for k := range on_off {
 		if on_off[k] == true {
 			list = append(list, del[k])
 		}
 	}
-	return list
+	return list,err
 }
 
-func psDelImg(
-	w http.ResponseWriter, r *http.Request) (list []string, err error) {
+func psDelImg(w http.ResponseWriter, r *http.Request) ([]string, error) {
 
-	pserr := r.ParseMultipartForm(10 * 1024 * 1024)
-	if pserr != nil {
-		fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
-		return
+	err := r.ParseMultipartForm(10 * 1024 * 1024)
+	if err != nil {
+		fmt.Fprintf(w, "Error MultipartForm..! : %+v\n", err)
 	}
+
 	on_off := make([]bool, len(r.Form["del"]))
 	fmt.Println(" len on_off..", len(r.Form["del"]))
-
 	for k, v := range r.Form["del"] {
 		flag, _ := options.ParseBool(v)
 		on_off[k] = flag
 	}
 
 	file := r.Form["path"]
+	list := make([]string, 0, len(file))
 	for k := range on_off {
 		if on_off[k] == true {
 			list = append(list, file[k])
@@ -286,15 +283,15 @@ func psDelImg(
 
 
 func psFormI(
-	w http.ResponseWriter, r *http.Request, cls *authtoken.Claims, sid string) (list []string, err error) {
+	w http.ResponseWriter, r *http.Request, cls *authtoken.Claims, sid string) ([]string, error) {
 
-	pserr := r.ParseMultipartForm(10 * 1024 * 1024)
-	if pserr != nil {
-		fmt.Fprintf(w, " Error ParseMultipartForm..! : %+v\n", pserr)
-		return
+	err := r.ParseMultipartForm(10 * 1024 * 1024)
+	if err != nil {
+		fmt.Fprintf(w, " Error ParseMultipartForm..! : %+v\n", err)
 	}
 	files := r.MultipartForm.File["file"]
-	for _, i := range files {
+	list := make([]string, len(files))
+	for k, i := range files {
 
 		flname := i.Filename
 		fpath := "./sfl/static/slider/" + cls.Email + "/" + sid + "/"
@@ -315,8 +312,8 @@ func psFormI(
 		if _, err := io.Copy(img, readerFile); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-
-		list = append(list, fle)
+		
+		list[k] = fle
 	}
 	return list, err
 }
