@@ -86,6 +86,7 @@
         title - add input
     </button>
     </div>
+
     <div id="addd" class="card-body">
     </div>
     <div class="card-footer action-buttons">
@@ -94,6 +95,14 @@
     </button>
     </div>
 
+
+    <div id="addno" class="card-body">
+    </div>
+    <div class="card-footer action-buttons">
+    <button class="btn btn-sm btn-outline-primary" onclick="addFnNo(); return false;">
+        no image - add input
+    </button>
+    </div>
 
     <div id="addi" class="card-body">
     </div>
@@ -116,7 +125,7 @@
         const iFeild = document.createElement("input");
         iFeild.setAttribute("type", "text");
         iFeild.setAttribute("name", "lt_t");
-        iFeild.setAttribute("placeholder", "Enter value");
+        iFeild.setAttribute("placeholder", "No title");
         iFeild.classList.add("form-control");
         iFeild.classList.add("mt-2");
         wrapper.appendChild(iFeild);
@@ -128,7 +137,19 @@
         const iFeild = document.createElement("input");
         iFeild.setAttribute("type", "text");
         iFeild.setAttribute("name", "lt_d");
-        iFeild.setAttribute("placeholder", "Enter value");
+        iFeild.setAttribute("placeholder", "No description");
+        iFeild.classList.add("form-control");
+        iFeild.classList.add("mt-2");
+        wrapper.appendChild(iFeild);
+        divEle.appendChild(wrapper);
+    }
+    function addFnNo() {
+        const divEle = document.getElementById("addno");
+        const wrapper = document.createElement("div");
+        const iFeild = document.createElement("input");
+        iFeild.setAttribute("type", "text");
+        iFeild.setAttribute("name", "no_img");
+        iFeild.setAttribute("placeholder", "No image");
         iFeild.classList.add("form-control");
         iFeild.classList.add("mt-2");
         wrapper.appendChild(iFeild);

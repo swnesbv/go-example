@@ -1,9 +1,10 @@
 {{template "./tpl/base.html"}}
 
 {{ block "slider_css" . }}
+{{ if .Sl }}
 <link rel="stylesheet" href="/static/src_slider/slider.css" />
 {{ end }}
-
+{{ end }}
 
 
 

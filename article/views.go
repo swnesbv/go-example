@@ -156,6 +156,7 @@ func idSlider(w http.ResponseWriter, conn *sql.DB, id int) (i Slider) {
 		&i.Title,
 		&i.Description,
 		&i.Owner,
+		&i.To_collection,
 		&i.To_art,
 		&i.To_sch,
 		&i.To_prv_d,

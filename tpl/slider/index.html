@@ -1,6 +1,5 @@
 {{ define "index" }}
 
-
 <section class="promo_slider">
     <div class="sl_content">
         {{ range .Sl }}
@@ -12,7 +11,6 @@
                         background-image: url("{{ .F }}")
                     }
                 </style>
-
             {{ else }}
             <style>
                 #item-{{ .Id }}.card_i .content::before,
@@ -23,28 +21,29 @@
             {{ end }}
 
             <div class="content">
+                <span class="number" data-text="{{ .Id }}"> {{ .Id }} </span>
+                {{ if ne .T "" }}
                 <span class="item_name">
                     <span>{{ .T }}</span>
                 </span>
-                <span class="number" data-text="{{ .Id }}"> {{ .Id }} </span>
-
                 <div class="content_text">
-                    {{ .D}}
+                    {{ .D }}
                     <hr />
                     <a class="btn btn-outline-primary btn-sm" href="">
                         {{ .T }}
                     </a>
                 </div>
+                {{ end }}
 
                 <div class="inner"></div>
                 <div class="inner_shadow"></div>
             </div>
+
         </div>
         {{ end }}
     </div>
     <div class="sld_trigger"></div>
 </section>
-
 
 {{ end }}
 

@@ -8,12 +8,47 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/lib/pq"
 
 	"go_authentication/authtoken"
 	"go_authentication/options"
 )
+
+func selectImg(
+	w http.ResponseWriter,
+	r *http.Request,
+	conn *sql.DB,
+	i *Slider,
+	str string,
+	pfile []string,
+	id int,
+	owner int,
+	flag bool,
+) error {
+
+	switch {
+	case pfile == nil:
+		_, err := conn.Exec(str, id, owner, pq.Array(i.Pfile), flag, time.Now())
+		if err != nil {
+			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+		}
+	case pfile != nil:
+		_, err := conn.Exec(str, id, owner, pq.Array(pfile), flag, time.Now())
+		if err != nil {
+			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+		}
+
+	default:
+		_, err := conn.Exec(str, id, owner, pq.Array(pfile), flag, time.Now())
+		fmt.Println("  default..!")
+		if err != nil {
+			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
+		}
+	}
+	return nil
+}
 
 func allCollection(
 	w http.ResponseWriter, rows *sql.Rows) (list []*Collection, err error) {
@@ -50,6 +85,7 @@ func allSl(w http.ResponseWriter, rows *sql.Rows) (list []*Slider, err error) {
 			&i.Title,
 			&i.Description,
 			&i.Owner,
+			&i.To_collection,
 			&i.To_art,
 			&i.To_sch,
 			&i.To_prv_d,
@@ -70,11 +106,47 @@ func allSl(w http.ResponseWriter, rows *sql.Rows) (list []*Slider, err error) {
 	return list, err
 }
 
-func authorSl(w http.ResponseWriter, conn *sql.DB, id int, cls *authtoken.Claims) (i *Slider, err error) {
+
+func authorColl(
+	w http.ResponseWriter,
+	conn *sql.DB,
+	id int,
+	owner int,
+) (i *Collection, err error) {
+
+	i = &Collection{}
+	i = new(Collection)
+
+	row := conn.QueryRow("SELECT * FROM collection WHERE id=$1 AND owner=$2", id, owner)
+
+	err = row.Scan(
+		&i.Id,
+		&i.Collection_id,
+		&i.Owner,
+		pq.Array(&i.Pfile),
+		&i.Completed,
+		&i.Created_at,
+		&i.Updated_at,
+	)
+
+	if err == sql.ErrNoRows {
+		fmt.Fprintf(w, " Error: coll sql.ErrNoRows..! : %+v\n", err)
+		return
+	} else if err != nil {
+		fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
+		return
+	}
+	return i, err
+}
+func authorSl(
+	w http.ResponseWriter,
+	conn *sql.DB,
+	id int,
+	owner int,
+) (i *Slider, err error) {
 
 	i = &Slider{}
 	i = new(Slider)
-	owner := cls.User_id
 
 	row := conn.QueryRow("SELECT * FROM slider WHERE id=$1 AND owner=$2", id, owner)
 
@@ -84,6 +156,7 @@ func authorSl(w http.ResponseWriter, conn *sql.DB, id int, cls *authtoken.Claims
 		&i.Title,
 		&i.Description,
 		&i.Owner,
+		&i.To_collection,
 		&i.To_art,
 		&i.To_sch,
 		&i.To_prv_d,
@@ -97,7 +170,7 @@ func authorSl(w http.ResponseWriter, conn *sql.DB, id int, cls *authtoken.Claims
 	)
 
 	if err == sql.ErrNoRows {
-		fmt.Fprintf(w, " Error: sql.ErrNoRows..! : %+v\n", err)
+		fmt.Fprintf(w, " Error: slider sql.ErrNoRows..! : %+v\n", err)
 		return
 	} else if err != nil {
 		fmt.Fprintf(w, " Error: sql..! : %+v\n", err)
@@ -119,6 +192,7 @@ func idSl(w http.ResponseWriter, conn *sql.DB, id int) (i *Slider, err error) {
 		&i.Title,
 		&i.Description,
 		&i.Owner,
+		&i.To_collection,
 		&i.To_art,
 		&i.To_sch,
 		&i.To_prv_d,
@@ -211,14 +285,13 @@ func allPrvH(
 	return list, err
 }
 
-
 func delOk(src []bool) bool {
 	for i := range src {
-	    if src[i] == true {
-	        return true
-	    }
+		if src[i] == true {
+			return true
+		}
 	}
-    return false
+	return false
 }
 func delList(src []string, del []string) []string {
 	list := make([]string, 0, len(src))
@@ -254,7 +327,7 @@ func psDelStr(w http.ResponseWriter, r *http.Request, del []string, str string) 
 			list = append(list, del[k])
 		}
 	}
-	return list,err
+	return list, err
 }
 
 func psDelImg(w http.ResponseWriter, r *http.Request) ([]string, error) {
@@ -280,7 +353,6 @@ func psDelImg(w http.ResponseWriter, r *http.Request) ([]string, error) {
 	}
 	return list, err
 }
-
 
 func psFormI(
 	w http.ResponseWriter, r *http.Request, cls *authtoken.Claims, sid string) ([]string, error) {
@@ -312,7 +384,7 @@ func psFormI(
 		if _, err := io.Copy(img, readerFile); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-		
+
 		list[k] = fle
 	}
 	return list, err
@@ -323,11 +395,10 @@ func ToNullInt64(s string) sql.NullInt64 {
 	return sql.NullInt64{Int64: int64(i), Valid: err == nil}
 }
 
-func randomString(len int) string {
-
-	bytes := make([]byte, len)
-	for i := 0; i < len; i++ {
-		bytes[i] = byte(randInt(97, 122))
+func randomString(quantity int) string {
+	bytes := make([]byte, quantity)
+	for k := range quantity {
+		bytes[k] = byte(randInt(97, 122))
 	}
 	return string(bytes)
 }

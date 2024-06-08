@@ -64,9 +64,7 @@ func GrMsg(w http.ResponseWriter, r *http.Request) {
     cls := authtoken.WhoisWho(w,r)
     
     id,err := options.IdUrl(w,r)
-    if err != nil {
-        return
-    }
+    if err != nil { return }
 
 	conn,err := upgrade.Upgrade(w,r, nil)
 	fmt.Println("Group upgrade..", cls.Email)
@@ -83,7 +81,7 @@ func GrMsg(w http.ResponseWriter, r *http.Request) {
 
 	register <- conn
 
-	sqlstr := "INSERT INTO msggroups (coming, owner, to_group, completed, created_at) VALUES ($1,$2,$3,$4,$5)"
+	str := "INSERT INTO msggroups (coming, owner, to_group, completed, created_at) VALUES ($1,$2,$3,$4,$5)"
 
 	for {
 		var message Message
@@ -95,10 +93,10 @@ func GrMsg(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("msg groups message..", message.Message)
 
     	owner := cls.User_id
-    	_,err = db.Exec(sqlstr, message.Message,owner,id,true,time.Now())
 
+    	_,err = db.Exec(str, message.Message,owner,id,true,time.Now())
 		if err != nil {
-			fmt.Println("err msg groups Exec()", err)
+			fmt.Println("err msg groups Exec..", err)
 			break
 		}
 

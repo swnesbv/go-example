@@ -25,17 +25,15 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 	if err != nil { return }
 
 	if r.Method == "GET" {
-
 		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/add_collection.html", "./tpl/base.html"))
-
 		tpl.ExecuteTemplate(w, "base", nil)
 	}
 
 	if r.Method == "POST" {
 
-		file, handler, err := r.FormFile("file")
-		if err != nil {
-			fmt.Println(" err Data retrieving", err)
+		file, handler, crash := r.FormFile("file")
+		if crash != nil {
+			fmt.Println(" err Data retrieving", crash)
 			return
 		}
 
@@ -43,10 +41,9 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 		sid := randomString(4)
 		fpath := "./sfl/static/collection/" + cls.Email + "/" + sid + "/"
 
-		archive, err := zip.NewReader(file, handler.Size)
-
-		if err != nil {
-			fmt.Fprintf(w, " Error: OpenReader..! : %+v\n", err)
+		archive, crash := zip.NewReader(file, handler.Size)
+		if crash != nil {
+			fmt.Fprintf(w, " Error: OpenReader..! : %+v\n", crash)
 			return
 		}
 
@@ -90,10 +87,9 @@ func CreatCollection(w http.ResponseWriter, r *http.Request) {
 		owner := cls.User_id
 		str := "INSERT INTO collection (collection_id, owner, pfile, created_at) VALUES ($1,$2,$3,$4)"
 
-		_, adderr := conn.Exec(str, sid, owner, pq.Array(list), time.Now())
-
-		if adderr != nil {
-			fmt.Fprintf(w, " Error: adderr Exec..! : %+v\n", adderr)
+		_, err := conn.Exec(str, sid, owner, pq.Array(list), time.Now())
+		if err != nil {
+			fmt.Fprintf(w, " Error: crash Exec..! : %+v\n", err)
 			return
 		}
 
@@ -109,7 +105,6 @@ func CreatSlider(w http.ResponseWriter, r *http.Request) {
 	if err != nil { return }
 
 	owner := cls.User_id
-
 	conn := connect.ConnSql()
 
 	rowsArt, err := qArt(w, conn, owner)
@@ -145,7 +140,6 @@ func CreatSlider(w http.ResponseWriter, r *http.Request) {
 		}
 
 		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/slider/slider.html", "./tpl/base.html"))
-
 		tpl.ExecuteTemplate(w, "base", view)
 	}
 
@@ -162,23 +156,35 @@ func CreatSlider(w http.ResponseWriter, r *http.Request) {
 		rand.Seed(time.Now().UTC().UnixNano())
 		sid := randomString(8)
 
-		lt_t, pserr := options.PsFormString(w, r, "lt_t")
-		lt_d, pserr := options.PsFormString(w, r, "lt_d")
-		pfile, pserr := psFormI(w, r, cls, sid)
-		if pserr != nil { return }
+		lt_t, crash := options.PsFormString(w, r, "lt_t")
+		if crash != nil { return }
+		lt_d, crash := options.PsFormString(w, r, "lt_d")
+		if crash != nil { return }
+		no_img, crash := options.PsFormString(w, r, "no_img")
+		if crash != nil { return }
+		pfile, crash := psFormI(w, r, cls, sid)
+		if crash != nil { return }
 
 		str := "INSERT INTO slider (collection_id, title, description, owner, to_art, to_sch, to_prv_d, to_prv_h, lt_t, lt_d, pfile, created_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)"
 
-		_, err := conn.Exec(
-			str, sid, title, description, owner, to_art, to_sch, to_prv_d, to_prv_h, pq.Array(lt_t), pq.Array(lt_d), pq.Array(pfile), time.Now())
-
-		if err != nil {
-			fmt.Fprintf(w, " Error: CreatSlider Exec..! : %+v\n", err)
-			return
+		if no_img != nil {
+			_, err := conn.Exec(
+				str, sid, title, description, owner, to_art, to_sch, to_prv_d, to_prv_h, pq.Array(lt_t), pq.Array(lt_d), pq.Array(no_img), time.Now())
+			if err != nil {
+				fmt.Fprintf(w, " Error: CreatSlider Exec..! : %+v\n", err)
+				return
+			}
+		} else {
+			_, err := conn.Exec(
+				str, sid, title, description, owner, to_art, to_sch, to_prv_d, to_prv_h, pq.Array(lt_t), pq.Array(lt_d), pq.Array(pfile), time.Now())
+			if err != nil {
+				fmt.Fprintf(w, " Error: CreatSlider Exec..! : %+v\n", err)
+				return
+			}
 		}
 
 		defer conn.Close()
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/all-slider", http.StatusFound)
 	}
 }
 
@@ -191,7 +197,6 @@ func UpSlKey(w http.ResponseWriter, r *http.Request) {
 	if err != nil { return }
 
 	owner := cls.User_id
-
 	conn := connect.ConnSql()
 
 	rowsArt, err := qArt(w, conn, owner)
@@ -211,7 +216,7 @@ func UpSlKey(w http.ResponseWriter, r *http.Request) {
 	listPh, err := allPrvH(w, rowsPh)
 	if err != nil { return }
 
-	i, err := authorSl(w, conn, id, cls)
+	i, err := authorSl(w, conn, id, owner)
 	if err != nil { return }
 	type ListSelect struct {
 		I    *Slider
@@ -250,35 +255,30 @@ func UpSlKey(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case r.FormValue("to_art") == "":
 			_, err := conn.Exec(str, id, owner, i.To_art, to_sch, to_prv_d, to_prv_h, flag, time.Now())
-			fmt.Println("  to_art..!")
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
 		case r.FormValue("to_sch") == "":
 			_, err := conn.Exec(str, id, owner, to_art, i.To_sch, to_prv_d, to_prv_h, flag, time.Now())
-			fmt.Println("  to_sch..!")
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
 		case r.FormValue("to_prv_d") == "":
 			_, err := conn.Exec(str, id, owner, to_art, to_sch, i.To_prv_d, to_prv_h, flag, time.Now())
-			fmt.Println("  to_prv_d..!")
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
 		case r.FormValue("to_prv_h") == "":
 			_, err := conn.Exec(str, id, owner, to_art, to_sch, to_prv_d, i.To_prv_d, flag, time.Now())
-			fmt.Println("  to_prv_h..!")
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
 		default:
 			_, err := conn.Exec(str, id, owner, to_art, to_sch, to_prv_d, to_prv_h, flag, time.Now())
-			fmt.Println("  default..!")
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
@@ -318,7 +318,7 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 	listPh, err := allPrvH(w, rowsPh)
 	if err != nil { return }
 
-	i, err := authorSl(w, conn, id, cls)
+	i, err := authorSl(w, conn, id, owner)
 	if err != nil { return }
 
 	if r.Method == "GET" {
@@ -345,12 +345,13 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 		description := r.FormValue("description")
 
 		lt_t, err := options.PsFormString(w, r, "lt_t")
+		if err != nil { return }
 		lt_d, err := options.PsFormString(w, r, "lt_d")
 		if err != nil { return }
 
-		pserr := r.ParseForm()
-		if pserr != nil {
-			fmt.Println(" err ParseForm..", pserr)
+		crash := r.ParseForm()
+		if crash != nil {
+			fmt.Println(" err ParseForm..", crash)
 		}
 		on_off_t := make([]bool, len(r.Form["del_t"]))
 		for k, v := range r.Form["del_t"] {
@@ -375,7 +376,7 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 
 		switch {
 		case r.FormValue("lt_t") == "" && r.FormValue("lt_d") == "":
-			_, err := conn.Exec(str, id, owner, title, description, pq.Array(i.Lt_t), pq.Array(i.Lt_d), flag, time.Now())
+			_, err := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(lt_d), flag, time.Now())
 			if err != nil {
 				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
@@ -404,12 +405,12 @@ func UpSlText(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		case ps_d == true:
-			del_d,err := psDelStr(w,r, lt_d,"del_d")
-			if err != nil { return }
+			del_d,crash := psDelStr(w,r, lt_d,"del_d")
+			if crash != nil { return }
 			d := delList(lt_d, del_d)
-			_, crash := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(d), flag, time.Now())
-			if crash != nil {
-				fmt.Fprintf(w, " Error: Exec..! : %+v\n", crash)
+			_, err := conn.Exec(str, id, owner, title, description, pq.Array(lt_t), pq.Array(d), flag, time.Now())
+			if err != nil {
+				fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 				return
 			}
 
@@ -434,7 +435,6 @@ func UpSlImg(w http.ResponseWriter, r *http.Request) {
 	if err != nil { return }
 
 	owner := cls.User_id
-
 	conn := connect.ConnSql()
 
 	rowsArt, err := qArt(w, conn, owner)
@@ -454,7 +454,7 @@ func UpSlImg(w http.ResponseWriter, r *http.Request) {
 	listPh, err := allPrvH(w, rowsPh)
 	if err != nil { return }
 
-	i, err := authorSl(w, conn, id, cls)
+	i, err := authorSl(w, conn, id, owner)
 	if err != nil { return }
 
 	if r.Method == "GET" {

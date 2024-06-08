@@ -1,0 +1,170 @@
+{{ template "./tpl/base.html" }}
+{{ define "title" }} update collection {{ end }}
+
+{{ block "content" . }}
+
+<h1 class="container lead my-3">update collection</h1>
+
+<div class="card">
+    <h5 class="m-2"><sup>collection</sup></h5>
+    <div class="card-body">
+    <div class="flex_start">
+    <ul class="list-group list-group-flush">
+    	<li class="list-group-item">
+    		<span class="badge text-bg-primary">completed</span> {{ .C.Completed }}
+    	</li>
+    	<li class="list-group-item">
+    	<span class="badge text-bg-light">id</span>{{ .C.Id }}
+    	<span class="badge text-bg-light">collection</span>{{ .C.Collection_id }}
+    	<span class="badge text-bg-light">owner</span>{{ .C.Owner }}
+    	</li>
+    </ul>
+    <ul class="list-group list-group-flush">
+    	<li class="list-group-item">
+    	<span class="badge text-bg-light">created</span>
+    	<time>
+    	{{ .C.Created_at.Format "2006-01-02 15:04:05" }}
+    	</time>
+    	</li>
+    	<li class="list-group-item">
+    	{{ if ne .C.Updated_at nil }}
+    	<sup>updated</sup> 
+    	<time>
+    	{{ .C.Updated_at.Format "2006-01-02 15:04:05" }}
+    	</time>
+    	{{ else }}
+    		there are no updates
+    	{{ end }}
+    	</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+<div class="card">
+    <h5 class="m-2"><sup>slider</sup></h5>
+    <div class="card-body">
+    <div class="flex_start">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <span class="badge text-bg-primary">completed</span> {{ .S.Completed }}
+            </li>
+            <li class="list-group-item">
+            <span class="badge text-bg-light">id</span>{{ .S.Id }}
+            
+            <span class="badge text-bg-light">coll path</span>{{ .S.Collection_id }}
+            <span class="badge text-bg-light">to collection</span>{{ .S.To_collection }}
+            <span class="badge text-bg-light">owner</span>{{ .S.Owner }}
+            </li>
+            {{ if ne .S.To_art nil }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">to art</sup>
+                : {{ .S.To_art }}
+            </li>
+            {{ end }}
+            {{ if ne .S.To_sch nil }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">to sch</sup>
+                : {{ .S.To_sch }}
+            </li>
+            {{ end }}
+            {{ if ne .S.To_prv_d nil }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">to prv_d</sup>
+                : {{ .S.To_prv_d }}
+            </li>
+            {{ end }}
+            {{ if ne .S.To_prv_h nil }}
+            <li class="list-group-item">
+                <sup class="badge text-bg-light">to prv_h</sup>
+                : {{ .S.To_prv_h }}
+            </li>
+            {{ end }}
+        </ul>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <span class="badge text-bg-light">title</span>{{ .S.Title }}
+            </li>
+            <li class="list-group-item">
+                <span class="badge text-bg-light">description</span>{{ .S.Description }}
+            </li>
+        </ul>
+        <ul class="list-group list-group-flush">
+            {{ if ne .S.Lt_t nil }}
+            {{ range .S.Lt_t }}
+            <li class="list-group-item">
+                <span class="badge text-bg-light">+ title +</span>
+                {{ . }}
+            </li>
+            {{ end }}
+            {{ end }}
+            {{ if ne .S.Lt_d nil }}
+            {{ range .S.Lt_d }}
+            <li class="list-group-item">
+                <span class="badge text-bg-light">+ description +</span>
+                {{ . }}
+            </li>
+            {{ end }}
+            {{ end }}
+        </ul>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+            <span class="badge text-bg-light">created</span>
+            <time>
+            {{ .S.Created_at.Format "2006-01-02 15:04:05" }}
+            </time>
+            </li>
+            <li class="list-group-item">
+            {{ if ne .S.Updated_at nil }}
+            <sup>updated</sup> 
+            <time>
+            {{ .S.Updated_at.Format "2006-01-02 15:04:05" }}
+            </time>
+            {{ else }}
+                there are no updates
+            {{ end }}
+            </li>
+        </ul>
+    </div>
+    </div>
+</div>
+
+
+<h2 class="lead my-2"><small>update slider</small></h2>
+<form class="card" method="POST">
+
+    <div class="m-3">
+        <sup class="float-start mb-2">completed</sup>
+        <input
+            type="checkbox"
+            name="completed"
+        />
+    </div>
+    <hr>
+    
+    <h5 class="m-2 border-bottom"><sup>list img</sup></h5>
+	<div class="collection">
+		{{ range .C.Pfile }}
+        <div class="card-body">
+        <div class="float-start">
+        <input type="hidden" name="img" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+        <input type="hidden" name="path" value="{{ . }}" />
+        <sup>append</sup>
+        </div>
+		<figure class="collection">
+			<img class="pfile" src="{{ . }}">
+			<figcaption></figcaption>
+		</figure>
+        </div>
+		{{ end }}
+	</div>
+
+	<div class="card-footer action-buttons">
+		<p>select a photo from the collection and create a slider</p>
+	<input type="submit" value="submit" class="btn btn-sm btn-outline-primary mt-2">
+	</div>
+
+    <input type="hidden" name="collection_id" value="{{ .S.Collection_id }}" />
+</form>
+	  
+{{ end }}

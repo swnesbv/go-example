@@ -19,6 +19,7 @@ type Slider struct {
 	Title         string
 	Description   string
 	Owner         int
+	To_collection int
 	To_art        *int
 	To_sch        *int
 	To_prv_d      *int

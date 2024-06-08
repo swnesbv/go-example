@@ -7,54 +7,60 @@
 	
 {{ range .List }}
 <div class="card">
+    <div class="card-body">
+    <div class="flex_start">
+    <ul class="list-group list-group-flush">
+    	<li class="list-group-item">
+    		<span class="badge text-bg-primary">completed</span> {{ .Completed }}
+    	</li>
+    	<li class="list-group-item">
+    	<span class="badge text-bg-light">id</span>{{ .Id }}
+    	<span class="badge text-bg-light">collection</span>{{ .Collection_id }}
+    	<span class="badge text-bg-light">owner</span>{{ .Owner }}
+    	</li>
+    </ul>
+    <ul class="list-group list-group-flush">
+    	<li class="list-group-item">
+    	<span class="badge text-bg-light">created</span>
+    	<time>
+    	{{ .Created_at.Format "2006-01-02 15:04:05" }}
+    	</time>
+    	</li>
+    	<li class="list-group-item">
+    	{{ if ne .Updated_at nil }}
+    	<sup>updated</sup> 
+    	<time>
+    	{{ .Updated_at.Format "2006-01-02 15:04:05" }}
+    	</time>
+    	{{ else }}
+    		there are no updates
+    	{{ end }}
+    	</li>
+    </ul>
+    </div>
+    </div>
+</div>
 
-<div class="card-body">
-<ul class="list-group list-group-flush">
-	<li class="list-group-item">
-		<span class="badge text-bg-primary">completed</span> {{ .Completed }}
-	</li>
-	<li class="list-group-item">
-	<span class="badge text-bg-light">id</span>{{ .Id }}
-	<span class="badge text-bg-light">collection</span>{{ .Collection_id }}
-	<span class="badge text-bg-light">owner</span>{{ .Owner }}
-	</li>
-</ul>
-<ul class="list-group list-group-flush">
-	<li class="list-group-item">
-	<span class="badge text-bg-light">created</span>
-	<time>
-	{{ .Created_at.Format "2006-01-02 15:04:05" }}
-	</time>
-	</li>
-	<li class="list-group-item">
-	{{ if ne .Updated_at nil }}
-	<sup>updated</sup> 
-	<time>
-	{{ .Updated_at.Format "2006-01-02 15:04:05" }}
-	</time>
-	{{ else }}
-		there are no updates
-	{{ end }}
-	</li>
-</ul>
-
-<h2 class="lead my-2"><small>list img</small></h2>
+<h2 class="lead my-2"><small>create slider</small></h2>
 
 <form class="card" method="POST">
+    <h5 class="m-2 border-bottom"><sup>list img</sup></h5>
 	<div class="collection">
 		{{ range .Pfile }}
+        <div class="card-body">
+        <div class="float-start">
+        <input type="hidden" name="img" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+        <input type="hidden" name="path" value="{{ . }}" />
+        <sup>append</sup>
+        </div>
+        </div>
 		<figure class="collection">
 			<img class="pfile" src="{{ . }}">
-			<figcaption>img</figcaption>
+			<figcaption></figcaption>
 		</figure>
-		  <div>
-            <input type="hidden" name="img" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
-		    <input type="hidden" name="path" value="{{ . }}" />
-		    <sup>append</sup>
-		  </div>
 		{{ end }}
 	</div>
-
+    <h5 class="m-2 border-bottom"><sup>create slider title description</sup></h5>
 	<div class="card-body">
 	<sup>title</sup>
 	<input required type="text" name="title" class="form-control">
@@ -63,19 +69,19 @@
 	<input type="hidden" name="collection_id" value="{{ .Collection_id }}" />
 	</div>
 
+    <input type="hidden" name="to_collection" value="{{ .Id }}">
+
     {{ if ne $.Art nil }}
     <div class="card-footer">
         <select
             name="to_art"
             class="form-control shadow-sm">
             <option value="">art select</option>
-
             {{ range $.Art }}
                 <option value="{{ .Id }}">
                     id {{ .Id }}
                 </option>
             {{ end }}
-
         </select>
     </div>
     {{ end }}
@@ -85,13 +91,11 @@
             name="to_sch"
             class="form-control shadow-sm">
             <option value="">sch select</option>
-
             {{ range $.Sch }}
                 <option value="{{ .Id }}">
                     id {{ .Id }}
                 </option>
             {{ end }}
-
         </select>
     </div>
     {{ end }}
@@ -101,13 +105,11 @@
             name="to_prv_d"
             class="form-control shadow-sm">
             <option value="">prv d select</option>
-
             {{ range $.PrvD }}
                 <option value="{{ .Id }}">
                     id {{ .Id }}
                 </option>
             {{ end }}
-
         </select>
     </div>
     {{ end }}
@@ -117,13 +119,11 @@
             name="to_prv_h"
             class="form-control shadow-sm">
             <option value="">prv h select</option>
-
             {{ range $.PrvH }}
                 <option value="{{ .Id }}">
                     id {{ .Id }}
                 </option>
             {{ end }}
-
         </select>
     </div>
     {{ end }}
@@ -149,8 +149,14 @@
 	</div>
 </form>
 
+<div class="card my-2">
+    <div class="card-footer">
+    <a class="btn btn-outline-danger btn-sm" href="/delete-collection?id={{ .Id }}" role="button">
+        <i class="bi bi-trash3"></i> &raquo;
+    </a>
+    </div>
 </div>
-</div>
+
 <hr>
 {{ end }}
 	  

@@ -40,7 +40,8 @@ func TokenSearch(w http.ResponseWriter, r *http.Request) (cls *ListData, err err
 	return cls, err
 }
 
-func RedirectToken(w http.ResponseWriter, r *http.Request) (cls *Claims, err error) {
+func RedirectToken(
+	w http.ResponseWriter, r *http.Request) (cls *Claims, err error) {
 
 	c, err := r.Cookie("Visitor")
 	if err != nil {
@@ -174,7 +175,7 @@ func BuildSend(w http.ResponseWriter, email string) (string, error) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, " Error: SignedString()..! : %+v\n", err)
+		fmt.Fprintf(w, " Error: SignedString..! : %+v\n", err)
 	}
 	return tokenstr, err
 }
@@ -191,7 +192,7 @@ func VerifySendToken(w http.ResponseWriter, veri string) (*Claims, error) {
 		fmt.Fprintf(w, "token nil..! : %+v\n", err)
 	}
 	if err != nil {
-		fmt.Fprintf(w, "Verify err: jwt.ParseWithClaims()..! : %+v\n", err)
+		fmt.Fprintf(w, "Verify err: jwt.ParseWithClaims..! : %+v\n", err)
 	}
 	return cls, err
 }

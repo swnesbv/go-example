@@ -18,17 +18,12 @@ import (
 func Creat(w http.ResponseWriter, r *http.Request) {
 
     cls,err := authtoken.OnToken(w,r)
-    if cls == nil {
-        return
-    }
-    if err != nil {
-        return
-    }
+    if cls == nil { return }
+    if err != nil { return }
 
     if r.Method == "GET" {
 
         tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/booking/creat.html", "./tpl/base.html" ))
-
         tpl.ExecuteTemplate(w, "base", nil)
     }
 
@@ -182,22 +177,15 @@ func PeriodHours(w http.ResponseWriter, r *http.Request) {
 func UpBkg(w http.ResponseWriter, r *http.Request) {
 
     id,err := options.IdUrl(w,r)
-    if err != nil {
-        return
-    }
+    if err != nil { return }
     cls,err := authtoken.SqlToken(w,r)
-    if cls == nil {
-        return
-    }
-    if err != nil {
-        return
-    }
+    if cls == nil { return }
+    if err != nil { return }
 
     conn := connect.ConnSql()
+
     i,err := idBkg(w, conn,id,cls)
-    if err != nil {
-        return
-    }
+    if err != nil { return }
 
     flag,err := options.ParseBool(r.FormValue("completed"))
     if err != nil {
@@ -209,7 +197,6 @@ func UpBkg(w http.ResponseWriter, r *http.Request) {
     if r.Method == "GET" {
 
         tpl := template.Must(template.ParseFiles( "./tpl/navbar.html", "./tpl/booking/update.html", "./tpl/base.html" ))
-
         tpl.ExecuteTemplate(w, "base", i)
     }
 
@@ -220,9 +207,9 @@ func UpBkg(w http.ResponseWriter, r *http.Request) {
         title       := r.FormValue("title")
         description := r.FormValue("description")
 
-        sqlstr := "UPDATE booking SET title=$3, description=$4, completed=$5, updated_at=$6 WHERE id=$1 AND owner=$2"
+        str := "UPDATE booking SET title=$3, description=$4, completed=$5, updated_at=$6 WHERE id=$1 AND owner=$2"
         
-        _, err := conn.Exec(sqlstr, id,owner,title,description,flag,time.Now())
+        _, err := conn.Exec(str, id,owner,title,description,flag,time.Now())
         
         if err != nil {
             fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)

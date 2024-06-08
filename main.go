@@ -114,6 +114,7 @@ func main() {
 	// slider..
 	http.HandleFunc("/add-collection", slider.CreatCollection)
 	http.HandleFunc("/all-collection", slider.CollectionAll)
+	http.HandleFunc("/update-collection", slider.UpColl)
 	http.HandleFunc("/add-slider", slider.CreatSlider)
 	http.HandleFunc("/all-slider", slider.AllSlider)
 	http.HandleFunc("/detail-slider", slider.DetSlider)

@@ -104,15 +104,15 @@
     <h5 class="m-2"><sup>update img collection</sup></h5>
     <div class="collection">
         {{ range .I.Pfile }}
-        <figure class="collection">
-            <img class="pfile" src="{{ . }}">
-            <figcaption>img</figcaption>
-        </figure>
         <div>
             <input type="hidden" name="del" value="0"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
             <input type="hidden" name="path" value="{{ . }}" />
             <sup>del</sup>
         </div>
+        <figure class="collection">
+            <img class="pfile" src="{{ . }}">
+            <figcaption>img</figcaption>
+        </figure>
         {{ end }}
     </div>
 

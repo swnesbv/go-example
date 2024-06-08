@@ -94,7 +94,8 @@ func qBkgBool(w http.ResponseWriter, conn *sql.DB) (rows *sql.Rows, err error) {
 }
 
 
-func qUsBkg(w http.ResponseWriter, conn *sql.DB, owner int) (rows *sql.Rows, err error) {
+func qUsBkg(
+    w http.ResponseWriter, conn *sql.DB, owner int) (rows *sql.Rows, err error) {
 
     rows,err = conn.Query("SELECT * FROM booking WHERE owner=$1", owner)
 

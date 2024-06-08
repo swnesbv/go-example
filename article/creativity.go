@@ -16,17 +16,12 @@ import (
 func Creativity(w http.ResponseWriter, r *http.Request) {
 
 	cls, err := authtoken.OnToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
 
 	if r.Method == "GET" {
 
 		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/art/creativity.html", "./tpl/base.html"))
-
 		tpl.ExecuteTemplate(w, "base", nil)
 	}
 
@@ -37,10 +32,9 @@ func Creativity(w http.ResponseWriter, r *http.Request) {
 		description := r.FormValue("description")
 
 		conn := connect.ConnSql()
-		sqlstr := "INSERT INTO article (title, description, owner, created_at) VALUES ($1,$2,$3,$4)"
+		str := "INSERT INTO article (title, description, owner, created_at) VALUES ($1,$2,$3,$4)"
 
-		_, err := conn.Exec(sqlstr, title, description, owner, time.Now())
-
+		_, err := conn.Exec(str, title, description, owner, time.Now())
 		if err != nil {
 			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
@@ -54,27 +48,19 @@ func Creativity(w http.ResponseWriter, r *http.Request) {
 func UpArt(w http.ResponseWriter, r *http.Request) {
 
 	id, err := options.IdUrl(w, r)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 	cls, err := authtoken.SqlToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
 
 	conn := connect.ConnSql()
 	art, err := authorArt(w, conn, id, cls)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	flag, err := options.ParseBool(r.FormValue("completed"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, " Error: ParseBool()..  : %+v\n", err)
+		fmt.Fprintf(w, " Error: ParseBool..  : %+v\n", err)
 		return
 	}
 
@@ -90,9 +76,9 @@ func UpArt(w http.ResponseWriter, r *http.Request) {
 		title := r.FormValue("title")
 		description := r.FormValue("description")
 
-		sqlstr := "UPDATE article SET title=$3, description=$4, completed=$5, updated_at=$6 WHERE id=$1 AND owner=$2"
+		str := "UPDATE article SET title=$3, description=$4, completed=$5, updated_at=$6 WHERE id=$1 AND owner=$2"
 
-		_, err := conn.Exec(sqlstr, id, owner, title, description, flag, time.Now())
+		_, err := conn.Exec(str, id, owner, title, description, flag, time.Now())
 		if err != nil {
 			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
@@ -106,17 +92,10 @@ func UpArt(w http.ResponseWriter, r *http.Request) {
 func DelArt(w http.ResponseWriter, r *http.Request) {
 
 	id, err := options.IdUrl(w, r)
-	if err != nil {
-		return
-	}
-
+	if err != nil { return }
 	cls, err := authtoken.OnToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
 
 	if r.Method == "GET" {
 
@@ -127,7 +106,6 @@ func DelArt(w http.ResponseWriter, r *http.Request) {
 		}
 
 		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/art/delete.html", "./tpl/base.html"))
-
 		tpl.ExecuteTemplate(w, "base", data)
 	}
 
@@ -144,10 +122,9 @@ func DelArt(w http.ResponseWriter, r *http.Request) {
 
 		owner := cls.User_id
 		conn := connect.ConnSql()
-		sqlstr := "DELETE FROM article WHERE id=$1 AND owner=$2"
+		str := "DELETE FROM article WHERE id=$1 AND owner=$2"
 
-		_, err := conn.Exec(sqlstr, id, owner)
-
+		_, err := conn.Exec(str, id, owner)
 		if err != nil {
 			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
@@ -161,28 +138,20 @@ func DelArt(w http.ResponseWriter, r *http.Request) {
 func ImgArt(w http.ResponseWriter, r *http.Request) {
 
 	id, err := options.IdUrl(w, r)
-	if err != nil {
-		return
-	}
-
+	if err != nil { return }
 	cls, err := authtoken.SqlToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
 
 	conn := connect.ConnSql()
+	owner := cls.User_id
+
 	i, err := authorArt(w, conn, id, cls)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	if r.Method == "GET" {
 
 		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/art/img.html", "./tpl/base.html"))
-
 		tpl.ExecuteTemplate(w, "base", i)
 	}
 
@@ -229,10 +198,9 @@ func ImgArt(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		sqlstr := "UPDATE article SET img=$3, updated_at=$4 WHERE id=$1 AND owner=$2"
-		owner := cls.User_id
-		_, err = conn.Exec(sqlstr, id, owner, fle, time.Now())
+		str := "UPDATE article SET img=$3, updated_at=$4 WHERE id=$1 AND owner=$2"
 
+		_, err = conn.Exec(str, id, owner, fle, time.Now())
 		if err != nil {
 			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return
@@ -246,28 +214,20 @@ func ImgArt(w http.ResponseWriter, r *http.Request) {
 func DelImgArt(w http.ResponseWriter, r *http.Request) {
 
 	id, err := options.IdUrl(w, r)
-	if err != nil {
-		return
-	}
-
+	if err != nil { return }
 	cls, err := authtoken.OnToken(w, r)
-	if cls == nil {
-		return
-	}
-	if err != nil {
-		return
-	}
+	if cls == nil { return }
+	if err != nil { return }
 
 	conn := connect.ConnSql()
+	owner := cls.User_id
+
 	i, err := authorArt(w, conn, id, cls)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	if r.Method == "GET" {
 
 		tpl := template.Must(template.ParseFiles("./tpl/navbar.html", "./tpl/art/imgdel.html", "./tpl/base.html"))
-
 		tpl.ExecuteTemplate(w, "base", i)
 	}
 
@@ -278,11 +238,9 @@ func DelImgArt(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("e.. ", e)
 		}
 
-		sqlstr := "UPDATE article SET img=$3, updated_at=$4 WHERE id=$1 AND owner=$2"
-
-		owner := cls.User_id
-		_, err = conn.Exec(sqlstr, id, owner, nil, time.Now())
-
+		str := "UPDATE article SET img=$3, updated_at=$4 WHERE id=$1 AND owner=$2"
+		
+		_, err = conn.Exec(str, id, owner, nil, time.Now())
 		if err != nil {
 			fmt.Fprintf(w, " Error: Exec..! : %+v\n", err)
 			return

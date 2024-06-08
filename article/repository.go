@@ -57,7 +57,7 @@ func qUsArt(w http.ResponseWriter, conn *sql.DB, owner int) (rows *sql.Rows, err
 	if err != nil {
 		switch {
 		case true:
-			fmt.Fprintf(w, "Error: Query()..! : %+v\n", err)
+			fmt.Fprintf(w, "Error: Query..! : %+v\n", err)
 			break
 		}
 		return
