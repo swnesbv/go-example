@@ -125,6 +125,17 @@
             {{ end }}
             </li>
         </ul>
+        <div>
+            <h5><sup>list img</sup></h5>
+            <div class="collection">
+                {{ range .S.Pfile }}
+                <figure class="collection">
+                    <img class="" src="{{ . }}">
+                    <figcaption></figcaption>
+                </figure>
+                {{ end }}
+            </div>
+        </div>
     </div>
     </div>
 </div>

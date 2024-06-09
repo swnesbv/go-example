@@ -1,67 +1,69 @@
 package schedule
 
 import (
-    "database/sql"
-    "fmt"
-    "time"
-    //"sync"
-    "runtime"
-    "net/http"
-    
-    "github.com/lib/pq"
+	"database/sql"
+	"fmt"
+	"time"
+	//"sync"
+	"net/http"
+	"runtime"
 
-    // "go_authentication/authtoken"
+	"github.com/lib/pq"
+	// "go_authentication/authtoken"
 )
 
+func Converter(w http.ResponseWriter, v string) time.Time {
 
-func Converter (w http.ResponseWriter, v string) time.Time {
+	loc, _ := time.LoadLocation("UTC")
+	to, _ := time.ParseInLocation("2006-01-02T15:04:05", v+":00", loc)
 
-    loc, _ := time.LoadLocation("UTC")
-    to, _ := time.ParseInLocation("2006-01-02T15:04:05",v + ":00", loc)
-
-    s := to.Format(time.TimeOnly)
-    ss, _ := time.Parse(time.TimeOnly, s)
-    return ss
+	s := to.Format(time.TimeOnly)
+	ss, _ := time.Parse(time.TimeOnly, s)
+	return ss
 }
-func psForm (w http.ResponseWriter, r *http.Request) (list []time.Time, err error) {
+func psForm(w http.ResponseWriter, r *http.Request) ([]time.Time, error) {
 
-    pserr := r.ParseForm()
-    if pserr != nil {
-        fmt.Fprintf(w, "Error ParseForm..! : %+v\n", pserr)
-        return
-    }
+	err := r.ParseForm()
+	if err != nil {
+		fmt.Fprintf(w, "Error ParseForm..! : %+v\n", err)
+	}
 
-    ps := r.Form["list"]
+	ps := r.Form["list"]
 
-    var v string
-    var ss time.Time
-    for _, v = range ps {
-        ss = Converter(w, v)
-        list = append(list, ss)
-    }
-    return list,err
+	on_off := make([]string, len(ps))
+	for k, v := range ps {
+		on_off[k] = v
+	}
+
+	list := make([]time.Time, 0, len(ps))
+	for k, v := range ps {
+		if on_off[k] != "" {
+			ss := Converter(w, v)
+			list = append(list, ss)
+		}
+	}
+	return list, err
 }
 
+func selection(hours, occupied []string) (slt []string) {
+	m := make(map[string]bool)
 
-func selection (hours,occupied []string) (slt []string) {
-    m := make(map[string]bool)
+	for _, i := range occupied {
+		m[i] = true
+	}
 
-    for _, i := range occupied {
-        m[i] = true
-    }
-
-    for _, i := range hours {
-        if _, ok := m[i]; !ok {
-            slt = append(slt, i)
-        }
-    }
-    fmt.Println(" slt..", slt)
-    return slt
+	for _, i := range hours {
+		if _, ok := m[i]; !ok {
+			slt = append(slt, i)
+		}
+	}
+	fmt.Println(" slt..", slt)
+	return slt
 }
 
 /*func allSelect (
     w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err error) {
-        
+
     start := time.Now()
     defer rows.Close()
     for rows.Next() {
@@ -76,8 +78,8 @@ func selection (hours,occupied []string) (slt []string) {
             pq.Array(&i.Hours),
             pq.Array(&i.Occupied),
             &i.Completed,
-            &i.Created_at, 
-            &i.Updated_at, 
+            &i.Created_at,
+            &i.Updated_at,
         )
         if err != nil {
             fmt.Fprintf(w, " Error Scan..! : %+v\n", err)
@@ -96,73 +98,72 @@ func selection (hours,occupied []string) (slt []string) {
 }*/
 
 func scanning(w http.ResponseWriter, rows *sql.Rows, ch chan *Schedule) {
-    i := new(Schedule)
-    err := rows.Scan(
-        &i.Id,
-        &i.Title,
-        &i.Description,
-        &i.Owner,
-        &i.St_hour,
-        &i.En_hour,
-        pq.Array(&i.Hours),
-        pq.Array(&i.Occupied),
-        &i.Completed,
-        &i.Created_at, 
-        &i.Updated_at, 
-    )
-    if err != nil {
-        fmt.Fprintf(w, " Error Scan..! : %+v\n", err)
-        return
-    }
-    ch <- i
+	i := new(Schedule)
+	err := rows.Scan(
+		&i.Id,
+		&i.Title,
+		&i.Description,
+		&i.Owner,
+		&i.St_hour,
+		&i.En_hour,
+		pq.Array(&i.Hours),
+		pq.Array(&i.Occupied),
+		&i.Completed,
+		&i.Created_at,
+		&i.Updated_at,
+	)
+	if err != nil {
+		fmt.Fprintf(w, " Error Scan..! : %+v\n", err)
+		return
+	}
+	ch <- i
 }
 func allSelect(w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err error) {
 
-    start := time.Now()
+	start := time.Now()
 
-    defer rows.Close()
+	defer rows.Close()
 
-    for rows.Next() {
-        ch := make(chan *Schedule)
-        go scanning(w, rows, ch)
-        c := <-ch
-        free := selection(c.Hours,c.Occupied)
-        c.Hours = free
-        list = append(list, c)
-    }
+	for rows.Next() {
+		ch := make(chan *Schedule)
+		go scanning(w, rows, ch)
+		c := <-ch
+		free := selection(c.Hours, c.Occupied)
+		c.Hours = free
+		list = append(list, c)
+	}
 
-    fmt.Println(" sel goroutine..", runtime.NumGoroutine())
-    elapsed := time.Since(start)
-    fmt.Println(" sel time..", elapsed)
+	fmt.Println(" sel goroutine..", runtime.NumGoroutine())
+	elapsed := time.Since(start)
+	fmt.Println(" sel time..", elapsed)
 
-    return list,err
+	return list, err
 }
-
 
 func allSch(w http.ResponseWriter, rows *sql.Rows) (list []*Schedule, err error) {
 
-    defer rows.Close()
-    for rows.Next() {
-        i := new(Schedule)
-        err = rows.Scan(
-            &i.Id,
-            &i.Title,
-            &i.Description,
-            &i.Owner,
-            &i.St_hour,
-            &i.En_hour,
-            pq.Array(&i.Hours),
-            pq.Array(&i.Occupied),
-            &i.Completed,
-            &i.Created_at, 
-            &i.Updated_at, 
-        )
-        if err != nil {
-            fmt.Fprintf(w, "Error Scan..! : %+v\n", err)
-            return
-        }
-        list = append(list, i)
-    }
-    fmt.Println(" allSch goroutine..", runtime.NumGoroutine())
-    return list,err
+	defer rows.Close()
+	for rows.Next() {
+		i := new(Schedule)
+		err = rows.Scan(
+			&i.Id,
+			&i.Title,
+			&i.Description,
+			&i.Owner,
+			&i.St_hour,
+			&i.En_hour,
+			pq.Array(&i.Hours),
+			pq.Array(&i.Occupied),
+			&i.Completed,
+			&i.Created_at,
+			&i.Updated_at,
+		)
+		if err != nil {
+			fmt.Fprintf(w, "Error Scan..! : %+v\n", err)
+			return
+		}
+		list = append(list, i)
+	}
+	fmt.Println(" allSch goroutine..", runtime.NumGoroutine())
+	return list, err
 }

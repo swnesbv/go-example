@@ -338,7 +338,6 @@ func psDelImg(w http.ResponseWriter, r *http.Request) ([]string, error) {
 	}
 
 	on_off := make([]bool, len(r.Form["del"]))
-	fmt.Println(" len on_off..", len(r.Form["del"]))
 	for k, v := range r.Form["del"] {
 		flag, _ := options.ParseBool(v)
 		on_off[k] = flag
@@ -384,7 +383,6 @@ func psFormI(
 		if _, err := io.Copy(img, readerFile); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-
 		list[k] = fle
 	}
 	return list, err
